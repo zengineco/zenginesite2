@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Zengine — We Are The Change</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Zengine — creative tech studio in South Florida. Hardware. Indie games. Digital platforms. We are the change." />
+  <!-- Content-Security-Policy: static-site friendly, hardened -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'nonce-zengine-1';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data:;
+    font-src 'self' data:;
+    object-src 'none';
+    base-uri 'self';
+    frame-ancestors 'none';
+    form-action 'self';
+    upgrade-insecure-requests
+  ">
+  <!-- Extra hardening (meta fallbacks; still add server headers—see bottom) -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="no-referrer-when-downgrade">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), usb=()">
+  <link rel="icon" href="data:image/svg+xml;utf8,
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+    <defs><linearGradient id='g' x1='0' x2='1'><stop stop-color='%237b7cfb'/><stop offset='1' stop-color='%2340f2ff'/></linearGradient></defs>
+    <rect rx='12' width='64' height='64' fill='%230b0f1a'/>
+    <path d='M12 44V20h12v16h18v8H12z' fill='url(%23g)'/>
+    <circle cx='46' cy='24' r='7' fill='url(%23g)'/>
+  </svg>" />
+  <style>
+    :root{
+      /* global theme inspired by your #10 image */
+      --bg:#0b0f1a; --bg-2:#11172c; --txt:#e7ecff; --muted:#9aa6c8;
+      --brand:#7b7cfb; --accent:#40f2ff; --hot:#ff8a00; --rose:#ff2bd6;
+      --glass:rgba(255,255,255,.06); --radius:16px;
+      --shadow:0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0; color:var(--txt); line-height:1.6;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1400px 800px at 15% 10%, rgba(123,124,251,.10), transparent 60%),
+        radial-gradient(1400px 800px at 85% 90%, rgba(64,242,255,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+    }
+    a{color:#a9c8ff;text-decoration:none}
+    a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+    img{max-width:100%;display:block}
+
+    /* NAV with prismatic rail (SVG data-url) */
+    header{position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{
+      background: url("data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 80' preserveAspectRatio='none'><defs><linearGradient id='bg' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='%230b0b1a'/><stop offset='100%' stop-color='%2314142c'/></linearGradient><linearGradient id='rail' x1='0%' y1='0' x2='100%' y2='0'><stop offset='0%' stop-color='%2300c2ff'/><stop offset='25%' stop-color='%237a5cff'/><stop offset='50%' stop-color='%23ff2bd6'/><stop offset='75%' stop-color='%23ff8a00'/><stop offset='100%' stop-color='%2300c2ff'/></linearGradient><linearGradient id='sh' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%2300c2ff' stop-opacity='.18'/><stop offset='100%' stop-color='%23ff2bd6' stop-opacity='.10'/></linearGradient></defs><rect width='1600' height='80' fill='url(%23bg)'/><g opacity='.35'><polygon fill='url(%23sh)' points='60,18 130,10 162,34 94,42'/><polygon fill='url(%23sh)' points='260,22 330,8 372,26 300,40'/><polygon fill='url(%23sh)' points='520,18 585,6 628,26 560,38'/><polygon fill='url(%23sh)' points='900,16 980,8 1020,30 940,38'/><polygon fill='url(%23sh)' points='1180,18 1250,6 1292,26 1224,40'/></g><rect x='0' y='78' width='1600' height='2' fill='url(%23rail)' opacity='.9'/></svg>") center/cover no-repeat;
+      backdrop-filter:saturate(120%) blur(8px);
+    }
+    .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:1rem;padding:.75rem 1rem}
+    .brand{display:flex;align-items:center;gap:.6rem}
+    .brand img{width:40px;height:40px;border-radius:10px;object-fit:cover;filter:drop-shadow(0 0 8px rgba(64,242,255,.35))}
+    .brand b{letter-spacing:.4px}
+    .menu{margin-left:auto;display:flex;gap:.3rem;flex-wrap:wrap}
+    .menu a{padding:.5rem .75rem;border-radius:10px}
+    .menu a[aria-current="page"], .menu a:hover{background:var(--glass);box-shadow:var(--shadow)}
+
+    main{max-width:1200px;margin:0 auto;padding:1rem}
+    .hero{
+      position:relative;min-height:58vh;border-radius:var(--radius);overflow:hidden;
+      display:grid;place-items:center;text-align:center;background:#0e1426 center/cover no-repeat;
+      box-shadow:var(--shadow)
+    }
+    .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.7))}
+    .hero .content{position:relative;padding:2rem}
+    .hero h1{font-size:clamp(1.9rem, 2.8vw + 1rem, 3.2rem);margin:.4rem 0 1rem}
+    .hero p{color:var(--muted);max-width:820px;margin:0 auto 1rem}
+    .btn{display:inline-block;border:1px solid rgba(255,255,255,.12);padding:.8rem 1rem;border-radius:12px;color:var(--txt);transition:transform .08s ease, background .2s}
+    .btn:hover{transform:translateY(-1px);background:var(--glass)}
+    .btn.primary{background:linear-gradient(90deg, var(--brand), var(--accent));color:#000;border-color:transparent;font-weight:700}
+
+    .section{margin:2.5rem 0}
+    .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+    .tile{background:var(--glass);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;cursor:pointer}
+    .tile .thumb{height:150px;background:#0e1426 center/cover no-repeat}
+    .tile .body{padding:.9rem}
+    .tile h3{margin:.2rem 0}
+    .tile p{margin:.2rem 0;color:var(--muted)}
+    @media (max-width:1000px){.tiles{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:560px){.tiles{grid-template-columns:1fr}}
+
+    /* teaser poster strip */
+    .teaser{
+      display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:center
+    }
+    .teaser .poster{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow)}
+    .soon{
+      font-family: 'Trebuchet MS', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      letter-spacing: .08em;
+      font-size:clamp(2.2rem, 5vw, 4rem);
+      text-align:center;
+      background:linear-gradient(90deg,#f3d49f,#ffcc80,#ffd24d,#ffa64d);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      text-shadow:0 .04em 0 rgba(0,0,0,.35);
+    }
+    .soon .o{position:relative;display:inline-block}
+    .soon .o::before,.soon .o::after{
+      content:"♦";position:absolute;inset:auto;top:55%;transform:translateY(-50%);font-size:.36em;color:#e4a74f
+    }
+    .soon .o::before{left:-.25em}.soon .o::after{right:-.25em}
+    @media (max-width:860px){.teaser{grid-template-columns:1fr}}
+
+    /* timeline, about, roles */
+    .timeline{list-style:none;padding:0;margin:1rem 0 0;border-left:2px dashed rgba(255,255,255,.12)}
+    .timeline li{position:relative;margin-left:1.2rem;padding:.4rem 0 1rem}
+    .timeline li::before{content:"";position:absolute;left:-10px;top:.55rem;width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,var(--brand),var(--accent));box-shadow:0 0 0 4px rgba(123,124,251,.15)}
+    .card{background:var(--glass);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1rem;box-shadow:var(--shadow)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media (max-width:860px){.grid-2{grid-template-columns:1fr}}
+
+    /* footer */
+    footer{max-width:1200px;margin:2rem auto 1rem;padding:1rem;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;gap:1rem}
+    .chip{display:inline-block;background:var(--glass);border:1px solid rgba(255,255,255,.08);padding:.35rem .6rem;border-radius:999px;color:var(--txt)}
+    
+    /* Router page shell + product themes */
+    .page{margin:2rem 0}
+    .proj-hero{position:relative;border-radius:16px;overflow:hidden;min-height:40vh;background:#0e1426 center/cover no-repeat;display:grid;place-items:center;text-align:center;box-shadow:var(--shadow)}
+    .proj-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.75))}
+    .proj-hero .inner{position:relative;padding:2rem}
+    .tags{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin:1rem 0}
+    .tag{font-size:.8rem;background:rgba(64,242,255,.12);border:1px solid rgba(64,242,255,.25);color:#b8fbff;padding:.2rem .6rem;border-radius:999px}
+
+    /* Countdown */
+    .countbox{display:flex;gap:.6rem;justify-content:center;margin:1rem 0;flex-wrap:wrap}
+    .countbox .c{min-width:90px;text-align:center;background:var(--glass);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.5rem}
+    .countbox .n{font-size:1.6rem;font-weight:800}
+
+    /* Easter-egg train bg (toggle with Konami code) */
+    .egg{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .4s ease;background:rgba(0,0,0,.65) url('img-train-bg.jpg') center/cover no-repeat}
+    .egg.show{opacity:.35}
+
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#/home">
+        <!-- 3) Idealized Z logo up top -->
+        <img src="img-z-ideal.png" alt="Zengine mark" />
+        <b>Zengine</b>
+      </a>
+      <nav class="menu" aria-label="Primary">
+        <a href="#/home" data-link>Home</a>
+        <a href="#/about" data-link>About</a>
+        <a href="#/projects" data-link>Projects</a>
+        <a href="#/manifesto" data-link>Manifesto</a>
+        <a href="#/credits" data-link>Credits</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- KONAMI easter-egg overlay (shows the train background) -->
+  <div id="egg" class="egg" aria-hidden="true"></div>
+
+  <main id="app" tabindex="-1" role="main" aria-live="polite"></main>
+
+  <footer>
+    <small>© <span id="year"></span> Zengine. All rights reserved.</small>
+    <div>
+      <a class="chip" href="mailto:team@zengine.site">team@zengine.site</a>
+      <a class="chip" href="https://zengine.shop" rel="noopener">Shop</a>
+    </div>
+  </footer>
+
+  <!-- =================== TEMPLATES =================== -->
+  <template id="tpl-home">
+    <section class="hero" style="background-image:url('img-hero-cosmic.jpg')">
+      <div class="content">
+        <h1>We are not waiting for change. <br/>We are the change.</h1>
+        <p>Zengine is a creative tech studio in South Florida building hardware, indie games, and digital platforms that connect people through play and purpose.</p>
+        <div style="margin-top:.5rem">
+          <a class="btn primary" href="#/projects">Explore</a>
+          <a class="btn" href="#/about">About Us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Teaser must be on front page -->
+    <section class="section teaser">
+      <a href="#/steed-trek-teaser" class="poster">
+        <!-- 8) Steed Trek teaser image with caption -->
+        <img src="img-steed-teaser.jpg" alt="Steed Trek teaser poster" />
+      </a>
+      <div class="card">
+        <div class="soon" aria-label="SOON">S<span class="o">O</span><span class="o">O</span>N.</div>
+        <p style="margin-top:.4rem;color:var(--muted)">A Knight’s Tail is saddling up. Trailer, devlogs, and playtests arriving in phases. Hit the teaser to see more.</p>
+        <p><a href="#/steed-trek-footage" class="btn">“Actual Gameplay Footage”* →</a></p>
+        <small style="color:var(--muted)">*</small>
+        <small style="color:var(--muted)"> cinematic cutscene; gameplay reveal follows.</small>
+      </div>
+    </section>
+
+    <!-- Icon grid: each image → a page -->
+    <section class="section">
+      <h2>Portals</h2>
+      <div class="tiles">
+        <!-- 1) Steed Trek game logo -->
+        <article class="tile" data-nav="#/project/steedtrek">
+          <div class="thumb" style="background-image:url('img-steed-logo.jpg')"></div>
+          <div class="body"><h3>Steed Trek</h3><p>Whimsical sci‑fi adventure. A Knight’s Tail.</p></div>
+        </article>
+
+        <!-- 4) RTN moon man → Chrono-Examiner -->
+        <article class="tile" data-nav="#/project/chrono">
+          <div class="thumb" style="background-image:url('img-moonman.png')"></div>
+          <div class="body"><h3>Chrono‑Examiner (RTN)</h3><p>Chronologizer & strategy backtester for retail traders.</p></div>
+        </article>
+
+        <!-- 5) Telegaming logo -->
+        <article class="tile" data-nav="#/project/telegaming">
+          <div class="thumb" style="background-image:url('img-telegaming.jpg')"></div>
+          <div class="body"><h3>TeleGaming</h3><p>Live rooms. Games. Crowd energy. Arcade‑meets‑broadcast.</p></div>
+        </article>
+
+        <!-- 6) PlumHUD logo -->
+        <article class="tile" data-nav="#/project/plumhud">
+          <div class="thumb" style="background-image:url('img-plumhud.png')"></div>
+          <div class="body"><h3>PlumHUD</h3><p>Clean real‑time dashboard — useful, smooth, approachable.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Short About (homepage-ready) -->
+    <section class="section card">
+      <h2>About Us</h2>
+      <p>Zengine is a South Florida–based creative tech studio dedicated to building innovative hardware, independent games, and digital platforms that connect people through play and purpose. From blockchain learning devices like Moonbeam to immersive projects like PlumHUD, Steed Trek, and FoosFriends, we create experiences that are imaginative, functional, and accessible. Guided by curiosity, kindness, and experimentation, Zengine transforms bold ideas into products and stories that inspire.</p>
+    </section>
+  </template>
+
+  <template id="tpl-about">
+    <section class="page">
+      <div class="grid-2">
+        <article class="card">
+          <h2>About the Business</h2>
+          <p><strong>Zengine (formerly ZenGen)</strong> is an emerging creative technology company at the intersection of custom hardware, software, and storytelling. While finalizing LLC formation in South Florida, the studio already operates through <a href="https://zengine.site" rel="noopener">zengine.site</a> and <a href="https://zengine.shop" rel="noopener">zengine.shop</a>.</p>
+          <h3>Mission &amp; Ethos</h3>
+          <p>We leverage creativity for usefulness, learning, and joy — blending entertainment with education, hardware with software, and imagination with purpose. Every product is designed to spark curiosity, empower users, and deliver real‑world value.</p>
+        </article>
+        <article class="card">
+          <h3>Products & Projects</h3>
+          <ul>
+            <li><strong>PlumHUD</strong> — streamlined, mobile‑first dashboard for real‑time monitoring & management.</li>
+            <li><strong>Moonbeam</strong> — small‑form Bitcoin “nerdminer” & blockchain learning device; cluster into LED “mining gardens.”</li>
+            <li><strong>Custom Hardware</strong> — peripherals, devices, 3D‑printed modules, ergonomic design.</li>
+          </ul>
+          <h4>Games in Development</h4>
+          <ul>
+            <li><strong>Steed Trek: A Knight’s Tail</strong> — whimsical adventure game combining exploration and narrative play.</li>
+            <li><strong>FoosFriends</strong> — physics‑driven foosball with evolving AI and turn‑based strategy.</li>
+            <li><strong>OpenMic Lounge</strong> — community hub blending performance with play.</li>
+            <li><strong>Arcade Moonshot</strong> — long‑term integrated arcade world; possible BTC challenges.</li>
+            <li><strong>Children’s Media</strong> — book + companion game; fast, accessible 3D franchise.</li>
+          </ul>
+        </article>
+      </div>
+
+      <article class="card" style="margin-top:1rem">
+        <h3>Professionalized Roles & Skills</h3>
+        <div class="grid-2">
+          <div>
+            <h4>Leadership & Business</h4>
+            <ul>
+              <li>Product development: idea → prototype → deploy</li>
+              <li>R&amp;D across hardware, blockchain, indie game design</li>
+              <li>Operations & logistics with lean resources</li>
+              <li>Digital marketing & brand identity</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Technical & Creative</h4>
+            <ul>
+              <li>Frontend dev (PlumHUD), indie gameplay, server integration</li>
+              <li>3D modeling/printing (Ender 3), PCB prototyping, ESP32/RPi/Arduino</li>
+              <li>Blockchain education — Moonbeam “mining gardens”</li>
+              <li>Story/worldbuilding for kids’ games & books</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" style="margin-top:1rem">
+        <h3>Brand Manifesto</h3>
+        <p>We are not a company waiting for change. <strong>We are the change.</strong> Zengine is a movement of invention, imagination, and momentum — where hardware, software, and storytelling collide to create experiences that didn’t exist yesterday, but feel inevitable today. We don’t just explore ideas; we build them, test them, and release them. <em>More useful. More playful. More possible.</em></p>
+      </article>
+    </section>
+  </template>
+
+  <template id="tpl-project">
+    <section class="page">
+      <div id="projHero" class="proj-hero"><div class="inner">
+        <img id="projLogo" alt="" style="max-width:220px;margin:0 auto 1rem;filter:drop-shadow(0 10px 25px rgba(0,0,0,.5))">
+        <h2 id="projTitle"></h2>
+        <p id="projDesc" style="color:var(--muted)"></p>
+        <div id="projTags" class="tags"></div>
+        <p id="projLinks"></p>
+      </div></div>
+      <article class="card" style="margin-top:1rem" id="projBody"></article>
+    </section>
+  </template>
+
+  <template id="tpl-teaser">
+    <section class="page">
+      <div class="grid-2">
+        <img src="img-steed-teaser.jpg" alt="Steed Trek teaser poster" class="card" />
+        <article class="card">
+          <div class="soon">S<span class="o">O</span><span class="o">O</span>N.</div>
+          <p>“A Knight’s Tail” is nearly ready to ride. Follow updates, devlogs, and <a href="#/steed-trek-footage">the cinematic cutscene</a>. Wishlist, mailing list, and test signups will appear here.</p>
+          <ul>
+            <li>Art direction: neon‑western, chess‑punk.</li>
+            <li>Platforms: PC first; web demo if feasible.</li>
+            <li>Community: Discord & devstreams planned.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-footage">
+    <section class="page">
+      <div class="proj-hero" style="background-image:url('img-steed-scene.jpg')">
+        <div class="inner">
+          <h2>“Actual Gameplay Footage”*</h2>
+          <p style="color:var(--muted)">*Cinematic cutscene. Gameplay reveal follows.</p>
+          <div id="countdown" class="countbox"></div>
+        </div>
+      </div>
+      <article class="card" style="margin-top:1rem">
+        <h3>What this is</h3>
+        <p>A moody in‑engine cinematic establishing the world: a knightly zebra exploring a techno‑chess labyrinth. It sets tone and lore; play footage is slated for a later reveal.</p>
+        <h3>Countdown target</h3>
+        <p id="targetDate" style="font-family:monospace"></p>
+      </article>
+    </section>
+  </template>
+
+  <template id="tpl-manifesto">
+    <section class="page card">
+      <h2>More useful. More playful. More possible.</h2>
+      <p>We are not a company waiting for change. <strong>We are the change.</strong> Zengine builds hardware, games, and platforms that move culture forward — not someday, <em>now</em>. Each release is a proof point: things don’t have to stay the same.</p>
+      <p>Progress with purpose. Imagination with impact. The world is already different — and we’re just getting started.</p>
+    </section>
+  </template>
+
+  <template id="tpl-credits">
+    <section class="page card" style="text-align:center">
+      <h2>Credits</h2>
+      <p>Zengine — four gamers who started from the floor (poor) to opening doors. Proving anyone can do it.</p>
+      <p>“Blah blah yada yada yada, roll credits.”</p>
+      <p>© <span id="year2"></span> Zengine</p>
+    </section>
+  </template>
+
+  <script nonce="zengine-1">
+  // ---------- Data ----------
+  const DATA = {
+    projects: {
+      steedtrek: {
+        id:'steedtrek',
+        title:'Steed Trek — A Knight’s Tail',
+        logo:'img-steed-logo.jpg',        // (1)
+        hero:'img-steed-logo.jpg',
+        desc:'Whimsical sci‑fi adventure. Neon‑western meets chess‑punk.',
+        tags:['Game','Adventure','Narrative','Indie'],
+        links:[{label:'Teaser', href:'#/steed-trek-teaser'},{label:'Cutscene Page', href:'#/steed-trek-footage'}],
+        body:`<p><strong>Steed Trek</strong> follows a knightly zebra across bizarre star rails and puzzle‑dungeons. Expect exploration, conversation, and stylish set‑pieces. Built with love and too much coffee.</p>`
+      },
+      chrono: {
+        id:'chrono',
+        title:'Chrono‑Examiner (RTN)',
+        logo:'img-moonman.png',           // (4)
+        hero:'img-moonman.png',
+        desc:'Chronologizer & backtester for retail traders — journal, analyze, iterate.',
+        tags:['App','Backtester','Finance'],
+        links:[{label:'Learn More', href:'#/project/chrono'}],
+        body:`<p>Prototype tool for building repeatable trade hypotheses, then stress‑testing them on multi‑window timelines. Clean visuals; exportable insights. RTN branding will evolve.</p>`
+      },
+      telegaming: {
+        id:'telegaming',
+        title:'TeleGaming',
+        logo:'img-telegaming.jpg',        // (5)
+        hero:'img-telegaming.jpg',
+        desc:'Live rooms. Games. Crowd energy. Arcade‑meets‑broadcast.',
+        tags:['Platform','Live','Social'],
+        links:[{label:'Learn More', href:'#/project/telegaming'}],
+        body:`<p>Spatial lobbies + spectatorship. Think party‑style tournaments, hosts, and audience‑driven twists. Built for creators and communities.</p>`
+      },
+      plumhud: {
+        id:'plumhud',
+        title:'PlumHUD',
+        logo:'img-plumhud.png',           // (6)
+        hero:'img-plumhud.png',
+        desc:'A sweet, streamlined real‑time dashboard — useful, smooth, approachable.',
+        tags:['App','Dashboard','Utility'],
+        links:[{label:'Learn More', href:'#/project/plumhud'}],
+        body:`<p>Mobile‑first HUD for monitoring metrics, devices or services. Pragmatic UX, zero clutter, ships fast.</p>`
+      }
+    },
+    // Front/back images for brand context:
+    hero:'img-hero-cosmic.jpg',           // (10) overall vibe
+    zIcon:'img-z-ideal.png',              // (3)
+    egg:'img-train-bg.jpg'                // (2) used as easter-egg background overlay
+  };
+
+  // ---------- Router ----------
+  const $ = (s,r=document)=>r.querySelector(s);
+  const app = $('#app');
+  const routes = {
+    '/home': renderHome,
+    '/about': renderAbout,
+    '/projects': renderProjects,
+    '/project': renderProject,
+    '/steed-trek-teaser': renderTeaser,
+    '/steed-trek-footage': renderFootage,
+    '/manifesto': renderManifesto,
+    '/credits': renderCredits
+  };
+  function navigate(){
+    const hash = location.hash || '#/home';
+    const path = hash.slice(1);                   // "/project/steedtrek?x=y"
+    const [raw, qs] = path.split('?');
+    if(raw.startsWith('/project/')){
+      const id = raw.split('/')[2];
+      routes['/project']({id, qs});
+      setActive(null);
+      return;
+    }
+    (routes[raw]||routes['/home'])();
+    setActive(raw);
+  }
+  function setActive(raw){
+    document.querySelectorAll('.menu a[data-link]').forEach(a=>{
+      a.setAttribute('aria-current', a.getAttribute('href')===`#${raw}`? 'page':'false');
+    });
+    requestAnimationFrame(()=>app.focus());
+  }
+  window.addEventListener('hashchange', navigate);
+  window.addEventListener('DOMContentLoaded', ()=>{
+    $('#year').textContent = new Date().getFullYear();
+    navigate();
+  });
+
+  // ---------- Views ----------
+  function renderHome(){
+    app.innerHTML = $('#tpl-home').innerHTML;
+    // tiles click
+    app.querySelectorAll('.tile[data-nav]').forEach(t=>{
+      t.addEventListener('click', ()=>location.hash = t.getAttribute('data-nav'));
+    });
+  }
+  function renderAbout(){ app.innerHTML = $('#tpl-about').innerHTML; }
+  function renderManifesto(){ app.innerHTML = $('#tpl-manifesto').innerHTML; }
+  function renderCredits(){
+    app.innerHTML = $('#tpl-credits').innerHTML;
+    $('#year2').textContent = new Date().getFullYear();
+  }
+
+  function renderProjects(){
+    // simple card list assembled from DATA.projects
+    const list = Object.values(DATA.projects);
+    let html = `<section class="page"><h2>Projects</h2><div class="tiles">`;
+    html += list.map(p=>`
+      <article class="tile" data-nav="#/project/${encodeURIComponent(p.id)}">
+        <div class="thumb" style="background-image:url('${escapeAttr(p.logo)}')"></div>
+        <div class="body"><h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.desc)}</p></div>
+      </article>
+    `).join('');
+    html += `</div></section>`;
+    app.innerHTML = html;
+    app.querySelectorAll('.tile').forEach(t=>t.addEventListener('click', ()=>location.hash=t.getAttribute('data-nav')));
+  }
+
+  function renderProject({id}){
+    const p = DATA.projects[id]; if(!p){ app.innerHTML = `<section class="page card"><p>Project not found.</p></section>`; return; }
+    app.innerHTML = $('#tpl-project').innerHTML;
+    $('#projHero').style.backgroundImage = `url('${escapeAttr(p.hero)}')`;
+    $('#projLogo').src = p.logo; $('#projLogo').alt = p.title + ' logo';
+    $('#projTitle').textContent = p.title;
+    $('#projDesc').textContent = p.desc;
+    $('#projTags').innerHTML = (p.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('');
+    $('#projLinks').innerHTML = (p.links||[]).map(l=>`<a class="btn" href="${escapeAttr(l.href)}">${escapeHtml(l.label)} →</a>`).join(' ');
+    $('#projBody').innerHTML = p.body || '';
+  }
+
+  function renderTeaser(){ app.innerHTML = $('#tpl-teaser').innerHTML; }
+
+  function renderFootage(){
+    app.innerHTML = $('#tpl-footage').innerHTML;
+    // Countdown to Jan 1, 2026 00:00:00 local
+    const target = new Date('2026-01-01T00:00:00');
+    $('#targetDate').textContent = target.toString();
+    const el = $('#countdown');
+    const tick = ()=>{
+      const now = new Date();
+      let diff = Math.max(0, target - now);
+      const d = Math.floor(diff/86400000); diff -= d*86400000;
+      const h = Math.floor(diff/3600000); diff -= h*3600000;
+      const m = Math.floor(diff/60000); diff -= m*60000;
+      const s = Math.floor(diff/1000);
+      el.innerHTML = ['Days', 'Hours','Minutes','Seconds']
+        .map((label,i)=>`<div class="c"><div class="n">${
+          [d,h,m,s][i].toString().padStart(2,'0')
+        }</div><div>${label}</div></div>`).join('');
+      if(target-now>0) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  // ---------- Utilities ----------
+  function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
+  function escapeAttr(s=''){ return String(s).replace(/"/g,'%22'); }
+
+  // Konami egg: ↑ ↑ ↓ ↓ ← → ← → B A (toggles train overlay)
+  (function konami(){
+    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    const buf = [];
+    window.addEventListener('keydown', e=>{
+      buf.push(e.key); buf.splice(-seq.length-1, buf.length-seq.length);
+      if(seq.every((k,i)=>buf[i]?.toLowerCase()===k.toLowerCase())){
+        document.getElementById('egg').classList.toggle('show');
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
