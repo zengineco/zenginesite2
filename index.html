@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Zengine — Digital Architect · Services Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Zengine — Digital Architect. 109+ services spanning web development, AI, legal, creative, real estate, and more. Florida & Texas. Building physical and digital worlds." />
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1'><stop stop-color='%2387ceeb'/><stop offset='1' stop-color='%23ff7f6e'/></linearGradient></defs><rect rx='12' width='64' height='64' fill='%23071828'/><path d='M12 44V20h12v16h18v8H12z' fill='url(%23g)'/><circle cx='46' cy='24' r='7' fill='url(%23g)'/></svg>" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+    :root {
+      --bg: #060f1a;
+      --bg-2: #081525;
+      --bg-card: rgba(255,255,255,.045);
+      --txt: #eef4ff;
+      --muted: #7a9dbf;
+      --muted2: #4a6a85;
+      --sky: #87ceeb;
+      --sky-dim: rgba(135,206,235,.15);
+      --coral: #ff7f6e;
+      --coral-dim: rgba(255,127,110,.12);
+      --peach: #ffb38a;
+      --orange: #ff8c42;
+      --mint: #6de8c8;
+      --gold: #f5c842;
+      --violet: #a78bfa;
+      --glass: rgba(255,255,255,.042);
+      --glass-border: rgba(255,255,255,.085);
+      --glass-hover: rgba(255,255,255,.075);
+      --radius: 20px;
+      --radius-sm: 13px;
+      --radius-xs: 8px;
+      --shadow: 0 8px 32px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+      --shadow-lift: 0 20px 60px rgba(0,0,0,.6), 0 4px 16px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.07);
+      --glow-sky: 0 0 30px rgba(135,206,235,.2);
+      --glow-coral: 0 0 30px rgba(255,127,110,.2);
+      --font-display: 'Syne', 'Georgia', serif;
+      --font-body: 'DM Sans', 'Georgia', ui-serif, serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      color: var(--txt);
+      line-height: 1.65;
+      font-family: var(--font-body);
+      font-size: 15px;
+      background:
+        radial-gradient(ellipse 1400px 700px at -5% -5%, rgba(135,206,235,.09) 0%, transparent 55%),
+        radial-gradient(ellipse 1000px 800px at 105% 90%, rgba(255,127,110,.08) 0%, transparent 55%),
+        radial-gradient(ellipse 600px 500px at 50% 40%, rgba(109,232,200,.03) 0%, transparent 60%),
+        linear-gradient(170deg, var(--bg) 0%, #091a2e 45%, var(--bg-2) 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    a { color: var(--sky); text-decoration: none; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; border-radius: 4px; }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.2; }
+    p { margin-top: 0; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(135,206,235,.2); border-radius: 3px; }
+
+    /* ═══════════════ NAV ═══════════════ */
+    header { position: sticky; top: 0; z-index: 100; }
+    .nav-wrap {
+      background: rgba(6,15,26,.88);
+      backdrop-filter: saturate(160%) blur(16px);
+      border-bottom: 1px solid rgba(135,206,235,.1);
+    }
+    /* Prismatic rail */
+    .nav-rail {
+      height: 3px;
+      background: linear-gradient(90deg, var(--sky) 0%, var(--mint) 20%, var(--coral) 45%, var(--peach) 65%, var(--orange) 82%, var(--sky) 100%);
+      background-size: 200% 100%;
+      animation: railShift 8s linear infinite;
+    }
+    @keyframes railShift { to { background-position: 200% 0; } }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center; gap: .75rem;
+      padding: .65rem 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .55rem; }
+    .brand img {
+      width: 36px; height: 36px; border-radius: 10px; object-fit: cover;
+      filter: drop-shadow(0 0 10px rgba(135,206,235,.4));
+      transition: filter .3s;
+    }
+    .brand img:hover { filter: drop-shadow(0 0 18px rgba(255,127,110,.55)); }
+    .brand b { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; letter-spacing: .5px; }
+    .nav-menu { margin-left: auto; display: flex; gap: .15rem; flex-wrap: wrap; align-items: center; }
+    .nav-menu a {
+      padding: .4rem .65rem; border-radius: 9px; color: var(--muted);
+      font-family: var(--font-display); font-size: .82rem; font-weight: 600;
+      transition: color .2s, background .2s;
+      white-space: nowrap;
+    }
+    .nav-menu a[aria-current="page"],
+    .nav-menu a:hover { color: var(--txt); background: var(--glass); }
+    .nav-menu .btn-nav {
+      background: linear-gradient(100deg, var(--coral), var(--orange));
+      color: #fff; border-radius: 9px; padding: .38rem .8rem;
+      font-family: var(--font-display); font-size: .82rem; font-weight: 700;
+      transition: transform .12s, box-shadow .2s;
+    }
+    .nav-menu .btn-nav:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,127,110,.35); }
+
+    /* ═══════════════ MAIN ═══════════════ */
+    main { max-width: 1280px; margin: 0 auto; padding: 1rem; }
+
+    /* ═══════════════ HERO ═══════════════ */
+    .hero {
+      position: relative; border-radius: var(--radius); overflow: hidden;
+      min-height: 58vh; display: grid; place-items: center; text-align: center;
+      border: 1px solid rgba(135,206,235,.12);
+      box-shadow: var(--shadow-lift);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #061220 0%, #0d2040 40%, #091828 100%);
+    }
+    /* Circuit grid overlay */
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(135,206,235,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(135,206,235,.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 85% 85% at 50% 55%, black 30%, transparent 80%);
+    }
+    /* Floating orbs */
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none;
+    }
+    .hero-orb-1 { width: 400px; height: 400px; background: rgba(135,206,235,.07); top: -100px; left: -50px; animation: orbFloat 12s ease-in-out infinite; }
+    .hero-orb-2 { width: 350px; height: 350px; background: rgba(255,127,110,.07); bottom: -80px; right: -30px; animation: orbFloat 15s ease-in-out infinite reverse; }
+    .hero-orb-3 { width: 200px; height: 200px; background: rgba(109,232,200,.05); top: 30%; left: 60%; animation: orbFloat 18s ease-in-out infinite 3s; }
+    @keyframes orbFloat { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(20px,-20px) scale(1.05); } }
+
+    .hero-content { position: relative; z-index: 1; padding: 2.5rem 1.5rem; max-width: 780px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: var(--font-display); font-size: .72rem; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--sky);
+      background: rgba(135,206,235,.1); border: 1px solid rgba(135,206,235,.22);
+      padding: .3rem .9rem; border-radius: 999px; margin-bottom: 1.1rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 4vw + .5rem, 3.8rem);
+      font-weight: 800; margin-bottom: 1rem;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(95deg, var(--sky) 0%, var(--mint) 40%, var(--coral) 80%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 580px; margin: 0 auto 1.5rem; }
+    .hero-btns { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .72rem 1.25rem; border-radius: var(--radius-sm);
+      font-family: var(--font-display); font-size: .88rem; font-weight: 700;
+      border: 1px solid var(--glass-border); color: var(--txt);
+      background: var(--glass); cursor: pointer;
+      transition: transform .12s, background .2s, box-shadow .2s;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); background: var(--glass-hover); box-shadow: var(--shadow-lift); }
+    .btn.primary {
+      background: linear-gradient(100deg, var(--coral), var(--orange));
+      border-color: transparent; color: #fff;
+      box-shadow: 0 4px 20px rgba(255,127,110,.28);
+    }
+    .btn.primary:hover { box-shadow: 0 8px 32px rgba(255,127,110,.45); }
+    .btn.sky {
+      background: linear-gradient(100deg, var(--sky), var(--mint));
+      border-color: transparent; color: #060f1a;
+      box-shadow: 0 4px 20px rgba(135,206,235,.22);
+    }
+    .btn.sky:hover { box-shadow: 0 8px 32px rgba(135,206,235,.38); }
+    .btn.ghost { background: transparent; color: var(--muted); }
+    .btn.ghost:hover { color: var(--txt); background: var(--glass); }
+
+    /* ═══════════════ SECTION ═══════════════ */
+    .section { margin: 2.25rem 0; }
+    .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+    .section-header h2 { margin: 0; font-size: clamp(1.25rem, 2vw, 1.65rem); font-weight: 800; white-space: nowrap; }
+    .section-header .line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(135,206,235,.25), transparent); min-width: 20px; }
+
+    /* ═══════════════ CARDS ═══════════════ */
+    .card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 1.35rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow .25s, border-color .25s, transform .15s;
+    }
+    .card:hover { box-shadow: var(--shadow-lift); }
+    .card.coral:hover { border-color: rgba(255,127,110,.22); box-shadow: var(--shadow-lift), 0 0 40px rgba(255,127,110,.07); }
+    .card.sky-hover:hover { border-color: rgba(135,206,235,.22); }
+
+    /* ═══════════════ STATS ROW ═══════════════ */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+    .stat-box {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: 1rem; text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .15s, border-color .2s;
+    }
+    .stat-box:hover { transform: translateY(-2px); border-color: rgba(135,206,235,.22); }
+    .stat-num {
+      font-family: var(--font-display); font-size: 1.7rem; font-weight: 800;
+      background: linear-gradient(90deg, var(--sky), var(--mint));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .stat-label { font-size: .76rem; color: var(--muted); font-family: var(--font-display); margin-top: .2rem; font-weight: 600; letter-spacing: .05em; }
+
+    /* ═══════════════ TILES ═══════════════ */
+    .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; }
+    .tile {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); overflow: hidden; cursor: pointer;
+      transition: transform .18s, box-shadow .2s, border-color .2s;
+    }
+    .tile:hover { transform: translateY(-5px); box-shadow: var(--shadow-lift); border-color: rgba(135,206,235,.2); }
+    .tile .thumb { height: 150px; background: #0d1e30 center/cover no-repeat; position: relative; }
+    .tile .thumb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,15,26,.8), transparent 60%); }
+    .tile .tbody { padding: .9rem; }
+    .tile h3 { font-family: var(--font-display); font-size: .92rem; font-weight: 700; margin-bottom: .3rem; }
+    .tile p { color: var(--muted); font-size: .82rem; line-height: 1.5; }
+
+    /* ═══════════════ PIPELINE ═══════════════ */
+    .pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+    .pipe-step {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 1.1rem;
+      box-shadow: var(--shadow);
+      transition: transform .15s, box-shadow .2s;
+    }
+    .pipe-step:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+    .pipe-num {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800; font-size: .82rem;
+      margin-bottom: .7rem;
+    }
+    .n1 { background: rgba(135,206,235,.13); color: var(--sky); border: 1px solid rgba(135,206,235,.3); }
+    .n2 { background: rgba(109,232,200,.13); color: var(--mint); border: 1px solid rgba(109,232,200,.3); }
+    .n3 { background: rgba(255,179,138,.13); color: var(--peach); border: 1px solid rgba(255,179,138,.3); }
+    .n4 { background: rgba(255,127,110,.13); color: var(--coral); border: 1px solid rgba(255,127,110,.3); }
+    .pipe-step h4 { font-family: var(--font-display); font-size: .92rem; font-weight: 700; margin-bottom: .45rem; }
+    .pipe-step ul { padding-left: 1.1rem; color: var(--muted); font-size: .8rem; line-height: 1.65; }
+
+    /* ═══════════════ GRID HELPERS ═══════════════ */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .9rem; }
+
+    /* ═══════════════ MATRIX ═══════════════ */
+    .matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; }
+    .matrix-cell {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: 1.05rem;
+      transition: transform .15s, border-color .2s;
+    }
+    .matrix-cell:hover { transform: translateY(-2px); border-color: rgba(135,206,235,.22); }
+    .matrix-cell .icon { font-size: 1.45rem; margin-bottom: .5rem; }
+    .matrix-cell h4 { font-family: var(--font-display); font-size: .88rem; font-weight: 700; color: var(--sky); margin-bottom: .3rem; }
+    .matrix-cell p { color: var(--muted); font-size: .8rem; line-height: 1.5; }
+
+    /* ═══════════════ TEASER ═══════════════ */
+    .teaser { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; }
+    .teaser .poster { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--glass-border); box-shadow: var(--shadow-lift); }
+    .soon {
+      font-family: var(--font-display); letter-spacing: .06em;
+      font-size: clamp(2.2rem, 5vw, 4.2rem); font-weight: 800;
+      text-align: center;
+      background: linear-gradient(95deg, var(--coral), var(--peach), var(--orange));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .soon .o { position: relative; display: inline-block; }
+    .soon .o::before, .soon .o::after { content: "♦"; position: absolute; top: 55%; transform: translateY(-50%); font-size: .33em; color: var(--coral); }
+    .soon .o::before { left: -.22em; } .soon .o::after { right: -.22em; }
+
+    /* ═══════════════ POSITION GRID ═══════════════ */
+    .position-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; }
+    .pos-pill {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: .9rem .8rem;
+      text-align: center; font-family: var(--font-body); font-size: .82rem;
+      transition: transform .15s, background .2s, border-color .2s;
+      cursor: default;
+    }
+    .pos-pill:hover { transform: translateY(-2px); background: rgba(135,206,235,.07); border-color: rgba(135,206,235,.22); }
+    .pos-pill .pill-icon { font-size: 1.35rem; display: block; margin-bottom: .35rem; }
+    .pos-pill small { color: var(--muted); display: block; margin-top: .15rem; font-size: .76rem; }
+
+    /* ═══════════════ MANIFESTO ═══════════════ */
+    .manifesto-pull {
+      font-size: clamp(1.2rem, 2vw, 1.65rem);
+      font-style: italic; font-family: var(--font-display);
+      color: var(--txt); border-left: 3px solid var(--coral);
+      padding-left: 1.2rem; margin: 1.35rem 0; line-height: 1.45;
+    }
+    .manifesto-pull.sky { border-color: var(--sky); }
+
+    /* ═══════════════ ICP LIST ═══════════════ */
+    .icp-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+    .icp-list li { display: flex; align-items: flex-start; gap: .7rem; font-size: .9rem; }
+    .icp-list li::before { content: "→"; color: var(--coral); font-weight: 700; flex-shrink: 0; }
+
+    /* ═══════════════ TAGS / CHIPS ═══════════════ */
+    .tags { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; margin: .75rem 0; }
+    .tag { font-size: .75rem; background: rgba(135,206,235,.1); border: 1px solid rgba(135,206,235,.2); color: #b8e8ff; padding: .18rem .6rem; border-radius: 999px; font-family: var(--font-display); font-weight: 600; }
+    .chip { display: inline-block; background: var(--glass); border: 1px solid var(--glass-border); padding: .32rem .7rem; border-radius: 999px; color: var(--txt); font-family: var(--font-display); font-size: .82rem; font-weight: 600; transition: background .2s; }
+    .chip:hover { background: rgba(255,255,255,.1); }
+
+    /* ═══════════════ PROJ HERO ═══════════════ */
+    .proj-hero { position: relative; border-radius: var(--radius); overflow: hidden; min-height: 38vh; background: #0d1e30 center/cover no-repeat; display: grid; place-items: center; text-align: center; box-shadow: var(--shadow-lift); border: 1px solid var(--glass-border); }
+    .proj-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(6,15,26,.88)); }
+    .proj-hero .inner { position: relative; padding: 2rem 1.5rem; }
+
+    /* ═══════════════ COUNTDOWN ═══════════════ */
+    .countbox { display: flex; gap: .65rem; justify-content: center; margin: 1rem 0; flex-wrap: wrap; }
+    .countbox .c { min-width: 76px; text-align: center; background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: .6rem; }
+    .countbox .n { font-family: var(--font-display); font-size: 1.55rem; font-weight: 800; color: var(--sky); }
+    .countbox .lbl { font-size: .68rem; color: var(--muted); font-family: var(--font-display); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-top: .1rem; }
+
+    /* ═══════════════ CTA BLOCK ═══════════════ */
+    .cta-block {
+      background: linear-gradient(135deg, rgba(135,206,235,.07), rgba(255,127,110,.07));
+      border: 1px solid rgba(135,206,235,.16); border-radius: var(--radius);
+      padding: 2.25rem 1.5rem; text-align: center; box-shadow: var(--shadow-lift);
+    }
+    .cta-block h2 { font-size: clamp(1.3rem, 2.5vw, 2rem); margin-bottom: .75rem; }
+    .cta-block p { color: var(--muted); max-width: 520px; margin: 0 auto 1.5rem; }
+
+    /* ═══════════════════════════════════════
+       SERVICES PORTAL — CROWN JEWEL
+    ═══════════════════════════════════════ */
+
+    /* Portal nav tabs */
+    .portal-tabs {
+      display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .portal-tab {
+      display: flex; align-items: center; gap: .4rem;
+      padding: .5rem .95rem; border-radius: 999px;
+      font-family: var(--font-display); font-size: .8rem; font-weight: 700;
+      border: 1px solid var(--glass-border); background: var(--glass);
+      color: var(--muted); cursor: pointer;
+      transition: all .2s;
+    }
+    .portal-tab:hover { color: var(--txt); background: var(--glass-hover); }
+    .portal-tab.active { color: var(--txt); background: rgba(135,206,235,.12); border-color: rgba(135,206,235,.35); box-shadow: 0 0 20px rgba(135,206,235,.12); }
+    .portal-tab.active-coral { background: rgba(255,127,110,.12); border-color: rgba(255,127,110,.35); color: var(--coral); }
+    .portal-tab.active-mint { background: rgba(109,232,200,.12); border-color: rgba(109,232,200,.35); color: var(--mint); }
+    .portal-tab.active-gold { background: rgba(245,200,66,.12); border-color: rgba(245,200,66,.35); color: var(--gold); }
+    .portal-tab.active-violet { background: rgba(167,139,250,.12); border-color: rgba(167,139,250,.35); color: var(--violet); }
+    .portal-tab .tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; padding: 0 5px;
+      background: rgba(255,255,255,.1); border-radius: 999px;
+      font-size: .7rem; font-weight: 800;
+    }
+
+    /* Portal panel */
+    .portal-panel { display: none; animation: fadeUp .3s ease; }
+    .portal-panel.visible { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Portal header banner */
+    .portal-banner {
+      border-radius: var(--radius); padding: 1.4rem 1.5rem; margin-bottom: 1.25rem;
+      border: 1px solid var(--glass-border); position: relative; overflow: hidden;
+    }
+    .portal-banner::before {
+      content: attr(data-icon);
+      position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%);
+      font-size: 5rem; opacity: .07; pointer-events: none;
+    }
+    .portal-banner.blue { background: linear-gradient(135deg, rgba(135,206,235,.1), rgba(6,15,26,0)); border-color: rgba(135,206,235,.2); }
+    .portal-banner.red { background: linear-gradient(135deg, rgba(255,127,110,.1), rgba(6,15,26,0)); border-color: rgba(255,127,110,.2); }
+    .portal-banner.green { background: linear-gradient(135deg, rgba(109,232,200,.1), rgba(6,15,26,0)); border-color: rgba(109,232,200,.2); }
+    .portal-banner.gold { background: linear-gradient(135deg, rgba(245,200,66,.1), rgba(6,15,26,0)); border-color: rgba(245,200,66,.2); }
+    .portal-banner.violet { background: linear-gradient(135deg, rgba(167,139,250,.1), rgba(6,15,26,0)); border-color: rgba(167,139,250,.2); }
+    .portal-banner h3 { font-family: var(--font-display); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 800; margin-bottom: .4rem; }
+    .portal-banner p { color: var(--muted); font-size: .88rem; margin: 0; max-width: 580px; }
+
+    /* Service card grid */
+    .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+    .svc-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: 1rem 1.1rem;
+      transition: transform .15s, border-color .2s, background .2s;
+      cursor: default; position: relative;
+    }
+    .svc-card:hover { transform: translateY(-3px); background: var(--glass-hover); }
+    .svc-card.hover-sky:hover { border-color: rgba(135,206,235,.28); }
+    .svc-card.hover-coral:hover { border-color: rgba(255,127,110,.28); }
+    .svc-card.hover-mint:hover { border-color: rgba(109,232,200,.28); }
+    .svc-card.hover-gold:hover { border-color: rgba(245,200,66,.28); }
+    .svc-card.hover-violet:hover { border-color: rgba(167,139,250,.28); }
+    .svc-title {
+      font-family: var(--font-display); font-size: .9rem; font-weight: 700;
+      margin-bottom: .35rem; display: flex; align-items: flex-start; gap: .5rem;
+    }
+    .svc-title .svc-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: -.05rem; }
+    .svc-meta { font-size: .77rem; color: var(--muted); line-height: 1.5; }
+    .svc-badge {
+      display: inline-block; font-size: .65rem; font-family: var(--font-display); font-weight: 800;
+      padding: .1rem .45rem; border-radius: 999px; margin-top: .4rem;
+      text-transform: uppercase; letter-spacing: .08em;
+    }
+    .badge-sky { background: rgba(135,206,235,.15); color: var(--sky); }
+    .badge-coral { background: rgba(255,127,110,.15); color: var(--coral); }
+    .badge-mint { background: rgba(109,232,200,.15); color: var(--mint); }
+    .badge-gold { background: rgba(245,200,66,.15); color: var(--gold); }
+    .badge-violet { background: rgba(167,139,250,.15); color: var(--violet); }
+    .badge-hot { background: linear-gradient(90deg, var(--coral), var(--orange)); color: #fff; }
+
+    /* Featured flagship card */
+    .flagship-card {
+      background: linear-gradient(135deg, rgba(255,127,110,.1), rgba(135,206,235,.06));
+      border: 1px solid rgba(255,127,110,.25); border-radius: var(--radius);
+      padding: 1.5rem; margin-bottom: 1.25rem; position: relative; overflow: hidden;
+      box-shadow: 0 8px 40px rgba(255,127,110,.1);
+    }
+    .flagship-card::after {
+      content: "⭐ FLAGSHIP";
+      position: absolute; top: 1rem; right: 1.25rem;
+      font-family: var(--font-display); font-size: .68rem; font-weight: 800;
+      letter-spacing: .12em;
+      background: linear-gradient(90deg, var(--coral), var(--orange));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .flagship-card h3 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; margin-bottom: .5rem; }
+    .flagship-features { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .85rem; }
+    .flagship-feat {
+      background: rgba(255,127,110,.1); border: 1px solid rgba(255,127,110,.2);
+      border-radius: 9px; padding: .5rem .85rem; font-size: .82rem;
+    }
+    .flagship-feat::before { content: "✓ "; color: var(--mint); font-weight: 800; }
+
+    /* Bundle tiers */
+    .tiers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin-top: 1rem; }
+    .tier-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 1.25rem 1rem;
+      text-align: center; transition: transform .15s, box-shadow .2s;
+    }
+    .tier-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+    .tier-card.featured { border-color: rgba(135,206,235,.35); background: rgba(135,206,235,.07); }
+    .tier-name { font-family: var(--font-display); font-weight: 800; font-size: 1rem; margin-bottom: .3rem; }
+    .tier-price { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; margin: .4rem 0; }
+    .tier-desc { color: var(--muted); font-size: .78rem; line-height: 1.5; }
+    .tier-card ul { list-style: none; text-align: left; margin: .75rem 0 0; padding: 0; font-size: .78rem; color: var(--muted); display: flex; flex-direction: column; gap: .35rem; }
+    .tier-card ul li::before { content: "✓ "; color: var(--mint); font-weight: 800; }
+
+    /* Search bar */
+    .search-wrap { position: relative; margin-bottom: 1.25rem; }
+    .search-wrap input {
+      width: 100%; background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: .75rem 1rem .75rem 2.75rem;
+      color: var(--txt); font-family: var(--font-body); font-size: .9rem;
+      transition: border-color .2s, box-shadow .2s; outline: none;
+    }
+    .search-wrap input:focus { border-color: rgba(135,206,235,.35); box-shadow: 0 0 0 3px rgba(135,206,235,.08); }
+    .search-wrap input::placeholder { color: var(--muted2); }
+    .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .9rem; pointer-events: none; }
+
+    /* Vertical portal list (for all services view) */
+    .all-services-list { display: flex; flex-direction: column; gap: 2rem; }
+    .portal-group h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; margin-bottom: .85rem; display: flex; align-items: center; gap: .6rem; }
+    .portal-group h3 .group-badge { font-size: .7rem; padding: .2rem .6rem; border-radius: 999px; font-weight: 800; }
+
+    /* ═══════════════ FOOTER ═══════════════ */
+    footer { max-width: 1280px; margin: 2.5rem auto 1.5rem; padding: 1.5rem 1rem 1rem; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+    /* ═══════════════ UTILITIES ═══════════════ */
+    .mono { font-family: 'Courier New', monospace; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    .page { margin: 1.5rem 0; }
+
+    /* ═══════════════ RESPONSIVE ═══════════════ */
+    @media (max-width: 960px) {
+      .tiles { grid-template-columns: repeat(2, 1fr); }
+      .pipeline { grid-template-columns: 1fr 1fr; }
+      .matrix { grid-template-columns: 1fr 1fr; }
+      .service-grid { grid-template-columns: 1fr 1fr; }
+      .tiers-grid { grid-template-columns: 1fr 1fr; }
+      .teaser { grid-template-columns: 1fr; }
+      .position-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      main { padding: .75rem; }
+      .hero { min-height: 50vh; border-radius: 16px; }
+      .hero-content { padding: 2rem .75rem; }
+      .card { padding: 1rem; border-radius: 16px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .tiles { grid-template-columns: 1fr 1fr; gap: .7rem; }
+      .tile .thumb { height: 110px; }
+      .pipeline { grid-template-columns: 1fr; }
+      .service-grid { grid-template-columns: 1fr; }
+      .tiers-grid { grid-template-columns: 1fr 1fr; }
+      .section { margin: 1.65rem 0; }
+      .portal-tabs { gap: .35rem; }
+      .portal-tab { font-size: .74rem; padding: .42rem .8rem; }
+      .flagship-features { flex-direction: column; }
+      .position-grid { grid-template-columns: 1fr 1fr; }
+      .matrix { grid-template-columns: 1fr; }
+      .cta-block { padding: 1.5rem 1rem; }
+    }
+    @media (max-width: 400px) {
+      .tiers-grid { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="nav-rail"></div>
+    <div class="nav-inner">
+      <a class="brand" href="#/home" aria-label="Zengine home">
+        <img src="img-z-ideal.png" alt="Zengine mark" />
+        <b>Zengine</b>
+      </a>
+      <nav class="nav-menu" aria-label="Primary navigation">
+        <a href="#/home" data-link>Home</a>
+        <a href="#/about" data-link>About</a>
+        <a href="#/services" data-link>Services</a>
+        <a href="#/projects" data-link>Projects</a>
+        <a href="#/manifesto" data-link>Manifesto</a>
+        <a href="#/credits" data-link>Credits</a>
+        <a href="/cdn-cgi/l/email-protection#f78392969ab78d9299909e9992d9849e8392" class="btn-nav">Get Started →</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main id="app" tabindex="-1" role="main" aria-live="polite"></main>
+
+<footer>
+  <div class="footer-inner">
+    <small style="color:var(--muted); font-family: var(--font-display); font-size: .8rem;">© <span id="year"></span> Zengine. Florida &amp; Texas. Serving clients globally.</small>
+    <div class="footer-links">
+      <a class="chip" href="/cdn-cgi/l/email-protection#f480919599b48e919a939d9a91da879d8091"><span class="__cf_email__" data-cfemail="2a5e4f4b476a504f444d43444f0459435e4f">[email&#160;protected]</span></a>
+      <a class="chip" href="https://zengine.shop" rel="noopener noreferrer">Shop ↗</a>
+      <a class="chip" href="#/services">Services</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════
+     TEMPLATES
+════════════════════════════════════ -->
+
+<!-- HOME -->
+<template id="tpl-home">
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Digital Growth Consultancy · Creative Tech Studio</span>
+    <h1>We Are Not Waiting For Change.<br/><span class="grad">We Are The Change.</span></h1>
+    <p>Zengine helps designers, developers, game studios, and small businesses transform stuck ideas into structured, launch-ready experiences — with integrity intact.</p>
+    <div class="hero-btns">
+      <a class="btn primary" href="#/services">109+ Services →</a>
+      <a class="btn sky" href="#/projects">Projects</a>
+      <a class="btn ghost" href="#/about">About Us</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card sky-hover">
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">109+</div><div class="stat-label">Services Offered</div></div>
+      <div class="stat-box"><div class="stat-num">11</div><div class="stat-label">Active Projects</div></div>
+      <div class="stat-box"><div class="stat-num">FL·TX</div><div class="stat-label">Based · Global Reach</div></div>
+    </div>
+    <p style="text-align:center; color:var(--muted); margin:1rem 0 0; font-size:.88rem;">Two lifelong gaming & digital media collaborators. One disciplined growth practice. Serving creators, developers, and small businesses globally.</p>
+  </div>
+</section>
+
+<section class="section teaser">
+  <a href="#/steed-trek-teaser" class="poster">
+    <img src="img-steed-teaser.jpg" alt="Steed Trek — A Knight's Tail teaser poster" />
+  </a>
+  <div class="card coral">
+    <div class="soon" aria-label="SOON">S<span class="o">O</span><span class="o">O</span>N.</div>
+    <p style="margin-top:.5rem; color:var(--muted)">A Knight's Tail is saddling up. Trailer, devlogs, and playtests arriving in phases.</p>
+    <p><a href="#/steed-trek-footage" class="btn primary">"Actual Gameplay Footage"* →</a></p>
+    <small style="color:var(--muted2); font-size:.76rem">*Cinematic cutscene — gameplay reveal follows.</small>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header"><h2>Projects & Portals</h2><div class="line"></div></div>
+  <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Click any project to explore the full details.</p>
+  <div class="tiles" id="home-tiles"></div>
+</section>
+
+<section class="section">
+  <div class="section-header"><h2>What We Do</h2><div class="line"></div></div>
+  <div class="position-grid">
+    <div class="pos-pill"><span class="pill-icon">🌐</span>Website Development<small>Small business focus</small></div>
+    <div class="pos-pill"><span class="pill-icon">🎮</span>Game Design Consulting<small>Realism & immersion</small></div>
+    <div class="pos-pill"><span class="pill-icon">📊</span>Growth Systems<small>Diagnose → Scale</small></div>
+    <div class="pos-pill"><span class="pill-icon">⚙️</span>Compliance & Legal Docs<small>Fast, affordable precision</small></div>
+  </div>
+  <div style="text-align:center; margin-top:1rem">
+    <a class="btn sky" href="#/services">Explore All 109+ Services →</a>
+  </div>
+</section>
+
+<section class="section card coral">
+  <div class="section-header"><h2>About Us</h2><div class="line"></div></div>
+  <p>Zengine is a South Florida–based creative tech studio and digital growth consultancy dedicated to building innovative hardware, independent games, digital platforms, and structured growth systems that connect people through play and purpose.</p>
+  <p>From blockchain learning devices like <strong>Moonbeam</strong> to immersive projects like <strong>PlumHUD</strong>, <strong>Steed Trek</strong>, and <strong>FoosFriends</strong> — and from website development for small businesses to compliance consulting and paid media strategy — we create experiences and systems that are imaginative, functional, and accessible.</p>
+  <div style="margin-top:1rem; display:flex; gap:.6rem; flex-wrap:wrap">
+    <a class="btn" href="#/about">Full Story →</a>
+    <a class="btn sky" href="#/services">Our Services →</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="cta-block">
+    <h2>Ready to build something real?</h2>
+    <p>Currently seeking our first major flagship client. If your creative project or small business is ready to grow with structure and integrity, let's talk.</p>
+    <a class="btn primary" href="/cdn-cgi/l/email-protection#502435313d102a353e37393e357e23392435">Start the Conversation →</a>
+  </div>
+</section>
+</template>
+
+<!-- ABOUT -->
+<template id="tpl-about">
+<section class="page">
+  <div class="section-header"><h2>About Zengine</h2><div class="line"></div></div>
+  <div class="grid-2">
+    <article class="card sky-hover">
+      <h3>The Business</h3>
+      <p><strong>Zengine</strong> is an emerging creative technology company and digital growth consultancy at the intersection of custom hardware, software, storytelling, and strategic growth systems.</p>
+      <p>Operating through <a href="https://zengine.site" rel="noopener">zengine.site</a> and <a href="https://zengine.shop" rel="noopener">zengine.shop</a>, based in South Florida.</p>
+      <h4 style="margin:.85rem 0 .4rem; font-family:var(--font-display)">Mission & Ethos</h4>
+      <p>We leverage creativity for usefulness, learning, and joy — blending entertainment with education, hardware with software, and imagination with purpose.</p>
+      <p style="color:var(--muted); font-size:.88rem">📍 Based in Florida & Texas · Serving clients globally</p>
+    </article>
+    <article class="card coral">
+      <h3>Origin Story</h3>
+      <p>Two friends. Years immersed in gaming, digital art, and media culture — not as spectators, but as students of craft.</p>
+      <p>What began as late-night conversations analyzing mechanics, design choices, and emotional triggers evolved into a consultancy focused on elevating creative work with strategic clarity.</p>
+      <div class="manifesto-pull">"We care deeply about digital art — and we approach it with discipline, not ego."</div>
+      <p style="color:var(--muted); font-size:.88rem">Saturday night creative hobby → disciplined professional growth practice.</p>
+    </article>
+  </div>
+
+  <article class="card sky-hover" style="margin-top:1rem">
+    <h3>Our Philosophy</h3>
+    <div class="grid-2">
+      <div>
+        <p><strong>We serve the client.</strong><br/>But we design for the consumer.</p>
+        <div class="manifesto-pull sky" style="font-size:1.05rem">"Will this increase meaningful engagement while preserving the integrity of the experience?"</div>
+        <p style="color:var(--muted)">If the answer is no, we don't pursue it.</p>
+      </div>
+      <div>
+        <h4 style="margin:0 0 .65rem; font-family:var(--font-display)">Who We Serve Best</h4>
+        <ul class="icp-list">
+          <li>A game developer building a realistic simulation</li>
+          <li>A creative founder protecting the integrity of their world</li>
+          <li>A designer who wants refinement without dilution</li>
+          <li>A digital creator who values depth over noise</li>
+          <li>A small business owner who needs a real web presence</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <article class="card" style="margin-top:1rem">
+    <h3>Products & Projects</h3>
+    <div class="grid-2">
+      <div>
+        <h4 style="font-family:var(--font-display); margin:0 0 .5rem">Hardware & Tools</h4>
+        <ul>
+          <li><strong>PlumHUD</strong> — streamlined mobile-first dashboard for real-time monitoring.</li>
+          <li><strong>Moonbeam</strong> — Bitcoin "nerdminer" & blockchain learning device.</li>
+          <li><strong>Custom Hardware</strong> — peripherals, 3D-printed modules, ergonomic design.</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:var(--font-display); margin:0 0 .5rem">Games in Development</h4>
+        <ul>
+          <li><strong>Steed Trek: A Knight's Tail</strong> — whimsical sci-fi adventure.</li>
+          <li><strong>FoosFriends</strong> — physics-driven foosball with evolving AI.</li>
+          <li><strong>OpenMic Lounge</strong> — community hub blending performance with play.</li>
+          <li><strong>Arcade Moonshot</strong> — long-term integrated arcade world.</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+</section>
+</template>
+
+<!-- SERVICES PORTAL -->
+<template id="tpl-services">
+<section class="page">
+  <div class="section-header"><h2>Services Portal</h2><div class="line"></div></div>
+  <p style="color:var(--muted); margin-bottom:1.5rem; max-width:620px; font-size:.9rem">109+ services across 8 portals. From website development and AI automation to legal compliance, real estate media, and game consulting. Zengine is your Digital Architect.</p>
+
+  <!-- FLAGSHIP WEB DEV -->
+  <div class="flagship-card">
+    <h3>🌐 Website Development for Small Businesses</h3>
+    <p style="color:var(--muted); font-size:.9rem; max-width:540px">Our flagship service. Clean, fast, mobile-optimized websites for local businesses — from restaurants and salons to freelancers and service providers. Professional presence, delivered affordably.</p>
+    <div class="flagship-features">
+      <div class="flagship-feat">Mobile-first design</div>
+      <div class="flagship-feat">SEO & performance tuned</div>
+      <div class="flagship-feat">Fast turnaround</div>
+      <div class="flagship-feat">Local business specialists</div>
+      <div class="flagship-feat">Ongoing maintenance</div>
+    </div>
+    <div style="margin-top:1rem">
+      <a class="btn primary" href="/cdn-cgi/l/email-protection#631706020e2319060d040a0d064d100a1706">Get Your Website →</a>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="svcSearch" placeholder="Search 109+ services... (e.g. SEO, notary, game design)" autocomplete="off" />
+  </div>
+  <div id="searchResults" style="display:none; margin-bottom:1rem"></div>
+
+  <!-- PORTAL TABS -->
+  <div class="portal-tabs" id="portalTabs"></div>
+
+  <!-- PORTAL PANELS -->
+  <div id="portalPanels"></div>
+
+  <!-- TIERS -->
+  <div class="section-header" style="margin-top:2rem"><h2>Engagement Tiers</h2><div class="line"></div></div>
+  <p style="color:var(--muted); font-size:.88rem; margin-bottom:1rem">From quick-start builds to full-stack Digital Architect retainers.</p>
+  <div class="tiers-grid">
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--muted)">Starter</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--muted),var(--sky));-webkit-background-clip:text;background-clip:text;color:transparent">Essentials</div>
+      <div class="tier-desc">Single-service delivery. Perfect for businesses that need one thing done right.</div>
+      <ul><li>1 core service</li><li>Fixed deliverable</li><li>Fast turnaround</li><li>Email support</li></ul>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-name" style="color:var(--sky)">Builder</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--sky),var(--mint));-webkit-background-clip:text;background-clip:text;color:transparent">Growth</div>
+      <div class="tier-desc">Multi-service bundles for businesses ready to expand their digital presence.</div>
+      <ul><li>3–5 services bundled</li><li>Strategy session included</li><li>Monthly check-ins</li><li>Priority support</li></ul>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--coral)">Architect</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--coral),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent">Systems</div>
+      <div class="tier-desc">Full-stack growth engine. 10+ services integrated into a unified growth machine.</div>
+      <ul><li>10+ services integrated</li><li>Dedicated strategist</li><li>Quarterly roadmaps</li><li>KPI dashboarding</li></ul>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--gold)">Master</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--gold),var(--peach));-webkit-background-clip:text;background-clip:text;color:transparent">Retainer</div>
+      <div class="tier-desc">Digital Architect Subscription. Ongoing builds, campaigns, and systems — monthly.</div>
+      <ul><li>Unlimited scope</li><li>First-in queue priority</li><li>AI-augmented ops</li><li>Revenue-sharing options</li></ul>
+    </div>
+  </div>
+
+  <div class="cta-block" style="margin-top:2rem">
+    <h2>Let's Build Your Growth Engine</h2>
+    <p>We're actively seeking our first major flagship client. Reach out — no pitch deck required.</p>
+    <a class="btn primary" href="/cdn-cgi/l/email-protection#235746424e6359464d444a4d460d504a5746">Get in Touch →</a>
+  </div>
+</section>
+</template>
+
+<!-- PROJECTS -->
+<template id="tpl-projects">
+<section class="page">
+  <div class="section-header"><h2>Projects</h2><div class="line"></div></div>
+  <div class="tiles" id="proj-tiles"></div>
+</section>
+</template>
+
+<!-- PROJECT DETAIL -->
+<template id="tpl-project">
+<section class="page">
+  <!-- Full-bleed logo showcase -->
+  <div id="projHeroWrap" style="position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--glass-border);box-shadow:var(--shadow-lift);margin-bottom:1rem;">
+    <!-- Blurred background layer -->
+    <div id="projBgBlur" style="position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(32px) saturate(120%);opacity:.35;transform:scale(1.1);"></div>
+    <!-- Dark overlay -->
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,15,26,.35) 0%,rgba(6,15,26,.85) 100%);"></div>
+    <!-- Content -->
+    <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5rem 1.5rem;min-height:50vh;">
+      <img id="projLogo" alt="" style="max-width:min(280px,60vw);max-height:260px;width:auto;height:auto;object-fit:contain;margin:0 auto 1.5rem;filter:drop-shadow(0 12px 40px rgba(0,0,0,.7));border-radius:16px;">
+      <h2 id="projTitle" style="font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2.4rem);font-weight:800;margin-bottom:.6rem;"></h2>
+      <p id="projDesc" style="color:var(--muted);max-width:520px;font-size:.95rem;margin-bottom:.85rem;"></p>
+      <div id="projTags" class="tags" style="justify-content:center;margin-bottom:.85rem;"></div>
+      <div id="projLinks" style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;"></div>
+    </div>
+  </div>
+  <article class="card sky-hover" id="projBody"></article>
+  <div style="margin-top:1rem;text-align:center;">
+    <a class="btn ghost" href="#/projects">← Back to All Projects</a>
+  </div>
+</section>
+</template>
+
+<!-- TEASER -->
+<template id="tpl-teaser">
+<section class="page">
+  <div class="grid-2">
+    <img src="img-steed-teaser.jpg" alt="Steed Trek teaser poster" style="border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--shadow-lift)" />
+    <article class="card coral">
+      <div class="soon">S<span class="o">O</span><span class="o">O</span>N.</div>
+      <p style="margin-top:.6rem">"A Knight's Tail" is nearly ready to ride. Follow updates, devlogs, and <a href="#/steed-trek-footage">the cinematic cutscene</a>.</p>
+      <ul style="margin:.5rem 0 0; padding-left:1.1rem; color:var(--muted); font-size:.9rem; line-height:1.7">
+        <li>Art direction: neon-western, chess-punk</li>
+        <li>Platforms: PC first; web demo if feasible</li>
+        <li>Community: Discord & devstreams planned</li>
+      </ul>
+    </article>
+  </div>
+</section>
+</template>
+
+<!-- FOOTAGE -->
+<template id="tpl-footage">
+<section class="page">
+  <div class="proj-hero" style="background-image:url('img-steed-scene.jpg')">
+    <div class="inner">
+      <h2 style="font-family:var(--font-display)">"Actual Gameplay Footage"*</h2>
+      <p style="color:var(--muted)">*Cinematic cutscene. Gameplay reveal follows.</p>
+      <div id="countdown" class="countbox"></div>
+    </div>
+  </div>
+  <article class="card" style="margin-top:1rem">
+    <h3 style="font-family:var(--font-display)">What this is</h3>
+    <p>A moody in-engine cinematic establishing the world: a knightly zebra exploring a techno-chess labyrinth. Sets tone and lore; play footage slated for a later reveal.</p>
+    <p class="mono" id="targetDate" style="color:var(--muted); font-size:.85rem"></p>
+  </article>
+</section>
+</template>
+
+<!-- MANIFESTO -->
+<template id="tpl-manifesto">
+<section class="page">
+  <div class="card" style="max-width:740px;margin:0 auto">
+    <span style="font-family:var(--font-display);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);font-weight:700">Our Manifesto</span>
+    <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);margin:.5rem 0 1.5rem;font-family:var(--font-display)">More useful. More playful. More possible.</h2>
+    <div class="manifesto-pull">We are not a company waiting for change. We are the change.</div>
+    <p>Zengine builds hardware, games, platforms, and growth systems that move culture forward — not someday, <em>now</em>. Each release is a proof point: things don't have to stay the same.</p>
+    <h3 style="font-family:var(--font-display);margin:1.25rem 0 .65rem">What we actually believe</h3>
+    <p>Creative integrity is not a soft concept. It's an engineering constraint. The moment you compromise the core of a project to hit a metric, you've destroyed the thing that made the metric worth hitting.</p>
+    <p>We act as a calibrated third-party lens — bringing structure, realism, and controlled scalability to creative projects without compromising their artistic core. We don't overpower vision. We refine and amplify it.</p>
+    <h3 style="font-family:var(--font-display);margin:1.25rem 0 .65rem">The operating principle</h3>
+    <div class="manifesto-pull sky" style="font-size:1.05rem">"Will this increase meaningful engagement while preserving the integrity of the experience?"</div>
+    <p style="color:var(--muted)">If yes: we build it. If no: we don't pursue it. That's not a constraint. That's a competitive advantage.</p>
+    <h3 style="font-family:var(--font-display);margin:1.25rem 0 .65rem">Where we're going</h3>
+    <p>Zengine will evolve beyond consultancy into hardware and technology development — building tools that support immersive, realistic, and scalable digital experiences.</p>
+    <p><strong>The world is already different — and we're just getting started.</strong></p>
+  </div>
+</section>
+</template>
+
+<!-- CREDITS -->
+<template id="tpl-credits">
+<section class="page card" style="text-align:center;max-width:560px;margin:0 auto">
+  <h2 style="font-family:var(--font-display)">Credits</h2>
+  <p>Zengine — built by two gamers who started from the floor to opening doors. Proving anyone can do it.</p>
+  <p style="color:var(--muted)">"Blah blah yada yada yada, roll credits."</p>
+  <p style="color:var(--muted);font-size:.88rem">Florida & Texas · Serving clients globally</p>
+  <div style="margin-top:1rem;display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">
+    <a class="chip" href="https://zengine.site" rel="noopener">zengine.site</a>
+    <a class="chip" href="https://zengine.shop" rel="noopener">zengine.shop</a>
+    <a class="chip" href="/cdn-cgi/l/email-protection#780c1d191538021d161f11161d560b110c1d"><span class="__cf_email__" data-cfemail="eb9f8e8a86ab918e858c82858ec598829f8e">[email&#160;protected]</span></a>
+  </div>
+  <p style="margin-top:1.5rem;color:var(--muted);font-size:.82rem">© <span id="year2"></span> Zengine. All rights reserved.</p>
+</section>
+</template>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ════════════════════════════════════
+// DATA
+// ════════════════════════════════════
+const PROJECTS = {
+  steedtrek:{
+    id:'steedtrek',
+    title:"Steed Trek — A Knight's Tail",
+    logo:'img-steed-logo.jpg',
+    hero:'img-steed-logo.jpg',
+    desc:"Whimsical sci-fi adventure. Neon-western meets chess-punk.",
+    tags:['Game','Adventure','Narrative','Indie'],
+    links:[{label:'Teaser',href:'#/steed-trek-teaser'},{label:'Cutscene',href:'#/steed-trek-footage'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">About the Game</h3>
+<p><strong>Steed Trek: A Knight's Tail</strong> follows a knightly zebra across bizarre star rails and techno-chess labyrinths in a universe where medieval chivalry collides with neon-lit science fiction. Exploration, conversation, and stylish set-pieces define every encounter.</p>
+<p style="color:var(--muted);margin-top:.75rem">Art direction: neon-western chess-punk · Platforms: PC first, web demo planned · Community: Discord & devstreams incoming.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎮 Indie Game</span>
+  <span style="background:rgba(255,127,110,.1);border:1px solid rgba(255,127,110,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🌌 Sci-Fi Adventure</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">♟ Chess-Punk Aesthetic</span>
+</div>`
+  },
+  retailtrader:{
+    id:'retailtrader',
+    title:'Retail Trader',
+    logo:'img-moonman.png',
+    hero:'img-moonman.png',
+    desc:'Full-suite market terminal. Real-time data, backtesting, and trade journaling — Bloomberg for the independent trader.',
+    tags:['Terminal','Finance','Backtester','Analytics'],
+    links:[{label:'Learn More',href:'#/project/retailtrader'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">The Trader's Command Center</h3>
+<p><strong>Retail Trader</strong> is a full-suite market terminal built for the independent investor. Think Bloomberg Terminal — but designed for retail: clean, fast, and purpose-built for the way real traders actually work.</p>
+<p style="color:var(--muted);margin-top:.75rem">Chronologize your trade history, build repeatable hypotheses, and stress-test them across multi-window timelines. Every chart, every journal entry, every backtest in one unified environment.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📊 Market Terminal</span>
+  <span style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔄 Strategy Backtester</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📓 Trade Journal</span>
+</div>`
+  },
+  telegaming:{
+    id:'telegaming',
+    title:'TeleGaming',
+    logo:'img-telegaming.jpg',
+    hero:'img-telegaming.jpg',
+    desc:'Live rooms. Games. Crowd energy. Arcade-meets-broadcast.',
+    tags:['Platform','Live','Social','Gaming'],
+    links:[{label:'Learn More',href:'#/project/telegaming'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Where the Crowd Becomes the Game</h3>
+<p><strong>TeleGaming</strong> is a live social gaming platform where spatial lobbies, spectator energy, and real-time crowd participation collide. Think arcade hall meets broadcast studio — anyone can host, anyone can watch, and the audience can change the outcome.</p>
+<p style="color:var(--muted);margin-top:.75rem">Party-style tournaments, hosted sessions, audience-driven twists, and live leaderboards. Built for creators and communities who want more than a chat box.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎮 Live Gaming</span>
+  <span style="background:rgba(255,127,110,.1);border:1px solid rgba(255,127,110,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📡 Broadcast Platform</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">👥 Crowd Interaction</span>
+</div>`
+  },
+  plumhud:{
+    id:'plumhud',
+    title:'PlumHUD',
+    logo:'img-plumhud.png',
+    hero:'img-plumhud.png',
+    desc:'Streamlined real-time dashboard — useful, smooth, approachable.',
+    tags:['App','Dashboard','Utility','Hardware'],
+    links:[{label:'Learn More',href:'#/project/plumhud'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Data at a Glance</h3>
+<p><strong>PlumHUD</strong> is a mobile-first real-time dashboard engineered for monitoring metrics, devices, and live system overlays without the clutter. Pragmatic UX — every element earns its place on screen.</p>
+<p style="color:var(--muted);margin-top:.75rem">Pairs natively with <strong>Moonberry Pi</strong> hardware for embedded and compact deployments. Designed for dashboards, control panels, and live data environments where clarity is everything.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📊 Live Dashboard</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔌 Hardware-Ready</span>
+  <span style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📱 Mobile-First</span>
+</div>`
+  },
+  streamsniper:{
+    id:'streamsniper',
+    title:'Stream Sniper',
+    logo:'ChatGPT_Image_Sep_2__2025__12_00_27_AM.png',
+    hero:'ChatGPT_Image_Sep_2__2025__12_00_27_AM.png',
+    desc:'Autonomous stream detection & capture. Never miss a live moment again.',
+    tags:['Hardware','Streaming','Automation','Archive'],
+    links:[{label:'Learn More',href:'#/project/streamsniper'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Always-On Stream Intelligence</h3>
+<p><strong>Stream Sniper</strong> is a standalone hardware unit that monitors specific creators and automatically activates the moment a favorite streamer goes live — no apps open, no manual oversight, no missed content.</p>
+<p style="color:var(--muted);margin-top:.75rem">Runs continuously in low-power mode, quietly polling supported platforms, then transitioning instantly into capture mode when a live signal is detected. The result: a personal, always-on archive system for live content.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎯 Auto-Detection</span>
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">💾 Local Recording</span>
+  <span style="background:rgba(255,127,110,.1);border:1px solid rgba(255,127,110,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">⚡ Always-On Hardware</span>
+</div>`
+  },
+  moonberrypi:{
+    id:'moonberrypi',
+    title:'Moonberry Pi',
+    logo:'b0205791-f019-4f7a-b21a-9f394c78caf2.png',
+    hero:'b0205791-f019-4f7a-b21a-9f394c78caf2.png',
+    desc:'Raspberry Pi hardware layer built for PlumHUD. Compact, modular, always-on.',
+    tags:['Hardware','Raspberry Pi','Dashboard','Embedded'],
+    links:[{label:'Learn More',href:'#/project/moonberrypi'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">The Hardware Behind the HUD</h3>
+<p><strong>Moonberry Pi</strong> is a Raspberry Pi-based hardware platform engineered to integrate seamlessly with PlumHUD software. It serves as a lightweight, modular bridge between physical hardware and real-time data visualization environments.</p>
+<p style="color:var(--muted);margin-top:.75rem">Deploy PlumHUD in compact, embedded, or mobile setups without heavy infrastructure. Native compatibility, consistent performance, and a form factor small enough to go anywhere.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(255,127,110,.1);border:1px solid rgba(255,127,110,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🍓 Raspberry Pi Native</span>
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📊 PlumHUD Ready</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔋 Low-Power Design</span>
+</div>`
+  },
+  micdrop:{
+    id:'micdrop',
+    title:'MicDrop',
+    logo:'mic-drop-logo.png',
+    hero:'mic-drop-logo.png',
+    desc:'Public comedy forum & interactive performance platform. Where jokes land — or bomb — in real time.',
+    tags:['Platform','Comedy','Social','Interactive'],
+    links:[{label:'Learn More',href:'#/project/micdrop'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">The Stage is Open</h3>
+<p><strong>MicDrop</strong> is a digital comedy forum where jokes, bits, and crowd reactions collide. It functions as a public performance space where comedians post material, audiences respond in real time, and the best content rises through engagement — not algorithms.</p>
+<p style="color:var(--muted);margin-top:.75rem">Timing, delivery, and reaction matter here. Whether testing new material, hosting themed prompts, or running live sessions — MicDrop blends social feedback with the raw energy of an open mic night.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(255,127,110,.1);border:1px solid rgba(255,127,110,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎤 Live Performance</span>
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">😂 Comedy Forum</span>
+  <span style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📣 Crowd Scoring</span>
+</div>`
+  },
+  wildlettuce:{
+    id:'wildlettuce',
+    title:'Wild Lettuce Pi',
+    logo:'ChatGPT_Image_Aug_30__2025__05_35_13_PM.png',
+    hero:'ChatGPT_Image_Aug_30__2025__05_35_13_PM.png',
+    desc:'Automated digital growth system. Strategic scheduling, engagement analysis, organic expansion — powered by Raspberry Pi 5.',
+    tags:['Hardware','Automation','Growth','Raspberry Pi'],
+    links:[{label:'Learn More',href:'#/project/wildlettuce'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Grow Smarter, Not Louder</h3>
+<p><strong>Wild Lettuce Pi</strong> is an automation-driven engagement system built on Raspberry Pi 5 hardware. Its "growth" is entirely digital — nurturing online presence, consistency, and reach through strategic automation that mirrors natural audience development.</p>
+<p style="color:var(--muted);margin-top:.75rem">Schedules posts, monitors engagement signals, and responds intelligently based on predefined strategies. No brute-force spam — gradual, believable expansion that builds audiences the right way.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🌿 Organic Growth Engine</span>
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">⚙️ RPi 5 Powered</span>
+  <span style="background:rgba(255,127,110,.1);border:1px solid rgba(255,127,110,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📅 Smart Scheduling</span>
+</div>`
+  },
+  piforge:{
+    id:'piforge',
+    title:'PiForge',
+    logo:'Screenshot_2025-08-23_152928.png',
+    hero:'Screenshot_2025-08-23_152928.png',
+    desc:'DIY operating system customization platform. Deep control made approachable, fast, and powerful.',
+    tags:['Software','OS','Customization','DIY'],
+    links:[{label:'Learn More',href:'#/project/piforge'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Forge Your System</h3>
+<p><strong>PiForge</strong> is a feature-rich environment that makes operating system customization approachable, powerful, and fast. It removes the friction traditionally associated with OS modification, replacing manual scripting with a guided interface that still preserves deep control.</p>
+<p style="color:var(--muted);margin-top:.75rem">Beginners configure workflows without touching a terminal. Advanced users push deeper without hitting ceilings. PiForge bridges the gap between accessibility and expert capability.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔧 OS Customization</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">⚡ Streamlined Automation</span>
+  <span style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🧩 Modular & Extensible</span>
+</div>`
+  },
+  rhubarbpi:{
+    id:'rhubarbpi',
+    title:'Rhubarb Pi',
+    logo:'3741acce-5282-4312-89e1-de853706321d.png',
+    hero:'3741acce-5282-4312-89e1-de853706321d.png',
+    desc:'Deceptive honeypot security system. Looks vulnerable. Bites back.',
+    tags:['Security','Hardware','Honeypot','Cyber'],
+    links:[{label:'Learn More',href:'#/project/rhubarbpi'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Sweet on the Outside. Sour Within.</h3>
+<p><strong>Rhubarb Pi</strong> is a security honeypot that weaponizes expectation. It presents itself as an attractive, vulnerable target — while quietly monitoring, logging, and analyzing every intrusion attempt behind the scenes.</p>
+<p style="color:var(--muted);margin-top:.75rem">Like its namesake, what appears sweet is intentionally sour. Attackers are drawn in, distracted, and studied, revealing attack vectors, behavioral patterns, and threat signatures without ever touching real assets.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(255,127,110,.1);border:1px solid rgba(255,127,110,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🕵️ Honeypot Detection</span>
+  <span style="background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📋 Behavioral Logging</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🛡️ Low-Cost Security Layer</span>
+</div>`
+  },
+  lamp:{
+    id:'lamp',
+    title:'LAMP — Large Area Multiverse Protocol',
+    logo:'Untitled.png',
+    hero:'Untitled.png',
+    desc:'Proximity-based social metaverse. Move through shared digital spaces like you would the real world.',
+    tags:['Platform','Metaverse','Social','Spatial'],
+    links:[{label:'Learn More',href:'#/project/lamp'}],
+    body:`<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Presence Over Presence</h3>
+<p><strong>LAMP</strong> is a proximity-driven virtual environment where your location in the space determines what you see, hear, and who you meet. Unlike traditional chat platforms, users exist in shared digital rooms where visibility, audio range, and interaction depend on distance and movement — just like the real world.</p>
+<p style="color:var(--muted);margin-top:.75rem">Walk into a conversation. Watch a movie together in a virtual cinema. Browse a virtual storefront as a group. Spontaneous social discovery at internet scale — with optional privacy controls so you set the terms of your presence.</p>
+<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+  <span style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🌐 Spatial Metaverse</span>
+  <span style="background:rgba(135,206,235,.1);border:1px solid rgba(135,206,235,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔊 Proximity Audio</span>
+  <span style="background:rgba(109,232,200,.1);border:1px solid rgba(109,232,200,.2);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎬 Shared Experiences</span>
+</div>`
+  }
+};
+
+// ════════════════════════════════════
+// SERVICES DATA — 8 PORTALS
+// ════════════════════════════════════
+const PORTALS = [
+  {
+    id: 'web',
+    label: 'Web & Digital',
+    icon: '🌐',
+    color: 'sky',
+    tabClass: '',
+    bannerClass: 'blue',
+    hoverClass: 'hover-sky',
+    badgeClass: 'badge-sky',
+    desc: 'Website builds, SEO, conversion optimization, and digital infrastructure — the backbone of any modern business presence.',
+    services: [
+      {icon:'🖥️', title:'Website Development (Small Business)', meta:'Custom mobile-first sites from landing pages to full portals. Our flagship. Fast, clean, professional.', badge:'Flagship', badgeClass:'badge-hot'},
+      {icon:'🔍', title:'SEO-Optimized Blog Architecture', meta:'Intent-based organic traffic engine. Siloed content structure + on-page optimizations for crawlers.'},
+      {icon:'⚡', title:'Site Speed Optimization', meta:'Technical performance & caching overhaul. Before/after Core Web Vitals improvements.'},
+      {icon:'📋', title:'Digital Asset Health Audit', meta:'50-point diagnostic covering UX, SEO, speed, and security. Prioritized fix roadmap.'},
+      {icon:'🔗', title:'Subdomain Portfolio Architecture', meta:'GitHub-to-live domain bridge. Branded subdomains replacing static PDFs.'},
+      {icon:'🗺️', title:'Landing Page Conversion Optimization', meta:'Psychology-driven one-action flows. Reworked hooks, objections handled, high-conversion layouts.'},
+      {icon:'🏢', title:'Google Business Profile Management', meta:'Local search & review dominance. Verified profile + weekly updates, response templates.'},
+      {icon:'🔧', title:'Web Hosting & Server Maintenance', meta:'99.9% uptime, backups, optimized hosting. Infrastructure stability for real businesses.'},
+      {icon:'🧹', title:'Site Content Remediation (Code Cleanup)', meta:'Bloat removal & performance overhaul. Clean, minified files + improved Core Web Vitals.'},
+      {icon:'🌍', title:'Local SEO Keyword Mapping', meta:'Geo-targeted search domination. Keyword map + on-page/off-page strategy.'},
+      {icon:'📧', title:'Email Deliverability Fixes', meta:'Spam rescue & inbox placement. DKIM/SPF/DMARC + warmup plan for newsletters.'},
+      {icon:'🔄', title:'Website Migration Services', meta:'Safe platform-to-platform transfer. Zero-downtime migration + post-checks.'},
+      {icon:'🗃️', title:'Domain Portfolio Management', meta:'URL acquisition & appraisal. Portfolio audit + buy/sell recommendations.'},
+      {icon:'📱', title:'Google Street View Business Integration', meta:'Local discovery enhancement. Street-view mapped interiors to boost map engagement.'},
+      {icon:'🏪', title:'Shopify Build & Optimization', meta:'Conversion e-commerce architecture. Ties into ads + CRO for complete funnel coverage.'},
+      {icon:'🛒', title:'Marketplace Optimization (Amazon/Etsy)', meta:'Ranking & conversion boost. Optimized product pages for higher visibility.'},
+    ]
+  },
+  {
+    id: 'growth',
+    label: 'Growth & AI',
+    icon: '📈',
+    color: 'mint',
+    tabClass: '',
+    bannerClass: 'green',
+    hoverClass: 'hover-mint',
+    badgeClass: 'badge-mint',
+    desc: 'AI integration, marketing automation, paid media, analytics, and growth systems that scale your operation without adding headcount.',
+    services: [
+      {icon:'🤖', title:'Custom Prompt Engineering & Playbooks', meta:'LLM instruction logic & constraint engineering. Libraries of "golden" prompts for consistent results.'},
+      {icon:'⚙️', title:'AI Workflow Automation (Zapier/Make)', meta:'Inter-app connectivity. Automated chains — lead → CRM → follow-up. 80% less manual work.'},
+      {icon:'🦾', title:'Simple AI Agent Build', meta:'Task-specific autonomous logic. Prompt-driven agents running independently 24/7.'},
+      {icon:'♻️', title:'AI Content Repurposing Engine', meta:'One asset → 10+ repurposed pieces across Reels, X threads, TikToks, newsletters, carousels.'},
+      {icon:'🕵️', title:'Competitor Intelligence Package', meta:'Real-time market gap & sentiment analysis. Pricing shifts, content gaps, weakness mapping.'},
+      {icon:'📑', title:'AI-Driven Business Plan Generation', meta:'20–30 page professional plans with exec summary, SWOT, market analysis, financial projections.'},
+      {icon:'📢', title:'Paid Media Strategy (Search/Social/Programmatic)', meta:'Campaign activation and creative iteration cycles across all major digital channels.'},
+      {icon:'🔄', title:'Conversion Rate Optimization (CRO)', meta:'Audits, A/B testing frameworks, user flow analysis, conversion rate growth modeling.'},
+      {icon:'📊', title:'P&L Dashboarding', meta:'Visual revenue & KPI analytics. Real-time interactive dashboard — margins, burn rate, forecasts.'},
+      {icon:'📉', title:'Sales Funnel Audit', meta:'Friction point & leak detection. Report with fixes + prioritized roadmap for revenue recovery.'},
+      {icon:'📩', title:'Newsletter System Setup (Beehiiv/Substack)', meta:'Owned audience retention funnel. Automated platform + welcome sequences, segmentation.'},
+      {icon:'💬', title:'SMS Marketing Funnels', meta:'High-open-rate text campaign architecture. Welcome, nurture, promo sequences — 98%+ open rates.'},
+      {icon:'🎯', title:'Ad Creative Concepting', meta:'5–10 ad concepts for Meta/Google. Copy, visuals, targeting notes to lower CPC, boost ROAS.'},
+      {icon:'📐', title:'Growth Forecasting & Budget Modeling', meta:'Predictive performance modeling. Budget scaling based on marginal return.'},
+      {icon:'🧠', title:'Prompt Library Licensing', meta:'White-label AI instruction packs. Branded, licensed prompt sets for resale or internal use.'},
+      {icon:'📡', title:'Trend Sentiment Tracking', meta:'Real-time social shift monitoring. Weekly reports on rising trends, sentiment, volume.'},
+      {icon:'🔎', title:'Lead Research & Enrichment', meta:'Prospect profiling & outreach prep. Enriched spreadsheets with emails, LinkedIn, pain points.'},
+    ]
+  },
+  {
+    id: 'legal',
+    label: 'Legal & Compliance',
+    icon: '⚖️',
+    color: 'sky',
+    tabClass: '',
+    bannerClass: 'blue',
+    hoverClass: 'hover-sky',
+    badgeClass: 'badge-sky',
+    desc: 'Independent legal document preparation, e-notary, registered agent services, bookkeeping, and compliance management for creators and entrepreneurs.',
+    services: [
+      {icon:'📄', title:'Independent Legal Document Preparation', meta:'Submission-ready Pro Se forms, contracts, LLCs, trademarks — no $5k+ attorney bills.'},
+      {icon:'✍️', title:'Remote Notary Public (E-Notary)', meta:'Secure biometric identity verification & remote signing. Legally binding with audit trail.'},
+      {icon:'🏢', title:'Virtual Registered Agent Services', meta:'Corporate privacy & compliance proxy. Dedicated FL address keeping personal info off records.'},
+      {icon:'🔍', title:'Regulatory Compliance Review', meta:'Plain-language gap analysis report + recommended rewrites for T&Cs, policies, and docs.'},
+      {icon:'📅', title:'Annual Corporate Filing Management', meta:'Recurring good standing automation. State annual reports, franchise taxes, renewals.'},
+      {icon:'📜', title:'Operating Agreement Engineering', meta:'Governance & dispute-proof mapping. Custom LLC/Corp agreements with built-in protections.'},
+      {icon:'🔐', title:'Non-Disclosure Agreement (NDA) Vaulting', meta:'IP protection & enforceability shield. Tailored, enforceable NDAs — mutual or one-way.'},
+      {icon:'📒', title:'Certified Bookkeeping (General Ledger)', meta:'Financial data integrity & reconciliation. Balanced monthly ledgers, categorized transactions.'},
+      {icon:'⚠️', title:'Legal Disclaimer Drafting', meta:'Site-specific liability protection. Custom disclaimers (medical, financial, IP) for pages.'},
+      {icon:'🎓', title:'Legal Transcription', meta:'Audio to text with legal terminology fluency. Legal transcription at premium-tier rates.'},
+      {icon:'📋', title:'Compliance Consultant', meta:'Annual filings, permit renewals, state-specific "good standing" for small businesses & nonprofits.'},
+    ]
+  },
+  {
+    id: 'creative',
+    label: 'Creative & Design',
+    icon: '🎨',
+    color: 'coral',
+    tabClass: '',
+    bannerClass: 'red',
+    hoverClass: 'hover-coral',
+    badgeClass: 'badge-coral',
+    desc: 'Brand identity, content creation, AI image libraries, faceless YouTube strategy, presentation design, and full creative system development.',
+    services: [
+      {icon:'✏️', title:'Brand Identity Design (Logo & System)', meta:'Full kit: logos, color palette, typography, icons, mood board, usage guide. Digital-first polish.'},
+      {icon:'📋', title:'CV/Resume Architecture', meta:'ATS-optimized personal branding. Keyword-rich resume + visual variants for different roles.'},
+      {icon:'💼', title:'LinkedIn Profile Optimization', meta:'Rewritten headline/bio/experience, custom banner, featured section, keyword strategy.'},
+      {icon:'📹', title:'Faceless Scripting & YouTube Strategy', meta:'Hook library, bridges, CTAs + upload roadmap, thumbnail ideas, SEO titles. No on-camera required.'},
+      {icon:'🎞️', title:'Presentation Design (Decks)', meta:'Polished 20–40 slide decks. One-idea-per-slide flow, visuals, speaker notes that actually persuade.'},
+      {icon:'📦', title:'Digital Product Packaging', meta:'eBooks, template packs, checklist suites, mini-course outlines. Turn know-how into passive income.'},
+      {icon:'🖼️', title:'AI Image Prompt Libraries', meta:'Niche-specific visual asset generation prompts for Midjourney/Stable Diffusion. Consistent output.'},
+      {icon:'✍️', title:'Ghost-Writing (LinkedIn/X)', meta:'Executive thought leadership content. Ready-to-post threads/articles in your exact voice.'},
+      {icon:'🎙️', title:'Podcast-to-Shorts Conversion', meta:'5–15 edited shorts with captions, hooks, B-roll suggestions from one podcast episode.'},
+      {icon:'🔊', title:'Personal Brand Voice Frameworks', meta:'Voice bible with tone, phrasing, dos/don\'ts + sample posts. Scales content without losing authenticity.'},
+      {icon:'🗣️', title:'Brand Persona Archetypes', meta:'Psychological voice & visual profiling. Archetype map + content/design guidelines.'},
+      {icon:'📊', title:'Content Sentiment Audits', meta:'Audience reaction & tone mapping. Report on sentiment trends, misalignments, improvements.'},
+      {icon:'🎬', title:'Influencer Media Kits', meta:'Branded PDF/digital kits with stats, case studies, rates, and testimonials for sponsorship outreach.'},
+      {icon:'📚', title:'White-Label Educational Toolkit', meta:'Branded knowledge scalability. Checklists, worksheets, guides, mini-courses clients can resell.'},
+      {icon:'📱', title:'Webinar Scripting & Hooking', meta:'Full script (hook, story, value, CTA) + slide cues for high-retention live events.'},
+    ]
+  },
+  {
+    id: 'realestate',
+    label: 'Real Estate Media',
+    icon: '🏠',
+    color: 'peach',
+    tabClass: '',
+    bannerClass: 'gold',
+    hoverClass: 'hover-gold',
+    badgeClass: 'badge-gold',
+    desc: 'HDR photography, cinematic walkthroughs, drone aerials, 3D virtual tours, and Airbnb-optimized shoot packages for agents, builders, and property owners.',
+    services: [
+      {icon:'📷', title:'Real Estate Photography (HDR)', meta:'MLS-ready edited interior/exterior image sets. You translate space into emotion like game-world design.', badge:'Popular', badgeClass:'badge-gold'},
+      {icon:'🎬', title:'Real Estate Videography (Walkthrough)', meta:'60–120 sec cinematic walkthrough optimized for Zillow/Reels. Movement sells immersion.'},
+      {icon:'🚁', title:'Drone Aerial Property Capture', meta:'FAA-compliant 4K aerial photos/video. Expands perceived property scale — premium listing edge.'},
+      {icon:'🏛️', title:'3D Matterport-Style Virtual Tour Setup', meta:'Spatial digital twin capture. Clickable 3D walk-throughs converting passive viewers into explorers.'},
+      {icon:'🛋️', title:'Short-Term Rental Optimization Shoot', meta:'Airbnb conversion imagery. Listing-optimized photo + copy combo. You sell experience, not square footage.'},
+      {icon:'📸', title:'Realtor Personal Brand Shoot', meta:'Authority positioning visual kit. Headshots + lifestyle + banner-ready images.'},
+      {icon:'📐', title:'Real Estate Floor Plan Digitization', meta:'Measured layout conversion. Physical measurements → digital floor plan PDF. Enhances listings dramatically.'},
+      {icon:'🏗️', title:'Construction Progress Documentation', meta:'Timeline visual archiving. Before/after portfolio + milestone albums for builders.'},
+      {icon:'🏡', title:'Builder Portfolio Development Package', meta:'Visual authority portfolio system. Full online portfolio + image set for architects & contractors.'},
+      {icon:'🗺️', title:'Small Business Location Photography', meta:'Google-ready images for GBP. Improves local ranking + trust instantly.'},
+      {icon:'🏘️', title:'Real Estate Property Description Engine', meta:'Lifestyle-focused high-conversion listing copy. Emotionally resonant, SEO-optimized descriptions.'},
+    ]
+  },
+  {
+    id: 'production',
+    label: 'Production & Events',
+    icon: '🎥',
+    color: 'coral',
+    tabClass: '',
+    bannerClass: 'red',
+    hoverClass: 'hover-coral',
+    badgeClass: 'badge-coral',
+    desc: 'Product photography, micro-commercials, event coverage, before/after transformations, and e-commerce visual assets that convert.',
+    services: [
+      {icon:'📦', title:'Product Photography (Local E-Commerce)', meta:'Conversion-focused product capture. White-background + lifestyle photos tied into ad creative.'},
+      {icon:'🔄', title:'360° Product Spin Capture', meta:'Interactive retail visualization. Web-ready rotating product assets that enhance perceived quality.'},
+      {icon:'🎭', title:'Event Photography (Tech/Creator/Real Estate)', meta:'Social amplification capture. Edited highlight album within 48 hours — speed matters.'},
+      {icon:'📺', title:'Micro-Commercial Production', meta:'30–60 second local ad production. Social-ready ads paired with paid media execution.'},
+      {icon:'🔀', title:'Before/After Transformation Shoots', meta:'Visual proof marketing. Split-comparison assets — high-converting sales collateral.'},
+      {icon:'🛍️', title:'Packaging Photography + Render Integration', meta:'Combined photography and 3D render for product packaging. Elevates brand presentation.'},
+      {icon:'📊', title:'Product Launch Roadmap', meta:'30–60 day hype & sales calendar. Phased plan — tease, build-up, launch, post-launch.'},
+      {icon:'💻', title:'E-commerce Product Description Audit', meta:'Benefit-first CRO. Rewritten descriptions + bullet points, FAQs, social proof placement.'},
+    ]
+  },
+  {
+    id: 'systems',
+    label: 'Systems & Ops',
+    icon: '⚙️',
+    color: 'violet',
+    tabClass: '',
+    bannerClass: 'violet',
+    hoverClass: 'hover-violet',
+    badgeClass: 'badge-violet',
+    desc: 'Project management, workspace architecture, database ops, customer service systems, reputation management, and SaaS stack audits.',
+    services: [
+      {icon:'📋', title:'Notion Workspace Architecture', meta:'Custom Notion hub with databases, templates, and automations. Centralize ops and boost team efficiency.'},
+      {icon:'🗄️', title:'Airtable Database Management', meta:'Relational data tracking & automation. Optimized bases with interfaces for CRM/inventory.'},
+      {icon:'📱', title:'Project Management Coordination', meta:'Trello, Asana, Monday.com — keeping small creative teams on track, on budget, on time.'},
+      {icon:'💬', title:'Customer Service Flow Scripting', meta:'Logic trees for support automation. Flowcharts + scripts for chatbots/Zapier/email.'},
+      {icon:'⭐', title:'Online Review Acquisition System', meta:'Automated feedback loop. SMS/email review flow to increase 5-star frequency.'},
+      {icon:'🛡️', title:'Crisis Messaging Strategy', meta:'Public narrative containment. Response framework to protect brand perception.'},
+      {icon:'📡', title:'Reputation Monitoring Dashboard Setup', meta:'Brand sentiment tracking. Monitoring dashboard to prevent surprise backlash.'},
+      {icon:'💰', title:'Digital Decluttering (SaaS Audit)', meta:'Subscription & tool rationalization. Cost-saving report cutting $500–$2000/month waste.'},
+      {icon:'📚', title:'Training Manual Development', meta:'SOP & onboarding documentation. Step-by-step manuals with visuals/checklists.'},
+      {icon:'📐', title:'Course Module Architecture', meta:'Structured online learning build. Module breakdown, lesson templates, quizzes, progression logic.'},
+      {icon:'📖', title:'E-book Formatting (KDP)', meta:'Technical publishing setup for Amazon. KDP-ready files for professional self-publishing.'},
+      {icon:'🕵️', title:'Ghost-Management (High-Net-Worth)', meta:'Discreet executive assistance & portfolio oversight. Handled emails, scheduling in "dark mode."'},
+      {icon:'📝', title:'AI Prompt Engineer/Optimization', meta:'Help businesses refine how they use AI for internal reports, customer responses, and workflows.'},
+      {icon:'💻', title:'SWOT Intelligence Reports', meta:'Competitive vulnerability deep-dive. Detailed SWOT matrix with evidence-based threats/opportunities.'},
+    ]
+  },
+  {
+    id: 'game',
+    label: 'Game & Experience',
+    icon: '🎮',
+    color: 'mint',
+    tabClass: '',
+    bannerClass: 'green',
+    hoverClass: 'hover-mint',
+    badgeClass: 'badge-mint',
+    desc: 'Simulation realism consulting, immersive experience architecture, creator monetization, game launch strategy, and community systems for indie developers.',
+    services: [
+      {icon:'🎯', title:'Game Scenario Design Refinement', meta:'Simulation realism consulting. Narrative coherence, mechanic refinement, immersion audits.'},
+      {icon:'🏪', title:'Immersive Retail Layout Optimization', meta:'Consumer flow architecture. Game-world flow logic applied to physical retail environments.'},
+      {icon:'🎪', title:'Pop-Up Activation Design', meta:'High-impact temporary experience architecture. Setup blueprint + promo assets. Rapid deployment.'},
+      {icon:'🏛️', title:'Interactive Showroom Design Consulting', meta:'Physical-to-digital hybrid experience. Experience roadmap for retail-as-exploration.'},
+      {icon:'🎰', title:'Trade Show Booth Optimization', meta:'Attention capture strategy. Engagement flow plan that converts foot traffic.'},
+      {icon:'🎮', title:'Creative Systems Audit', meta:'Deep audit of engagement loops, narrative realism, mechanic integrity, and competitive gaps.'},
+      {icon:'📺', title:'Patreon / Membership Architecture', meta:'Recurring creator revenue structuring. Tier design, content calendar, community engagement systems.'},
+      {icon:'🚀', title:'Game Kickstarter Launch Strategy', meta:'Campaign planning, backer tiers, stretch goals, day-one momentum building.'},
+      {icon:'💬', title:'Discord Community System Build', meta:'Roles, bots, engagement loops, and moderation systems for thriving game communities.'},
+      {icon:'📊', title:'Creator Analytics Dashboard', meta:'Custom KPI tracking for content creators. Growth metrics, revenue attribution, audience insights.'},
+      {icon:'💎', title:'Digital Collectible / NFT Strategy (Utility-Based)', meta:'Non-hype utility collectibles. Real-world access, game unlocks, community ownership.'},
+      {icon:'🖨️', title:'3D Printing Prototype-as-a-Service', meta:'Physical product prototypes for local inventors. Ender 3-powered. Idea to object.'},
+      {icon:'🖼️', title:'Product Rapid Mockup Visualization', meta:'Fast concept renders for product ideas. Digital-to-physical bridge before committing to production.'},
+      {icon:'⚙️', title:'CAD-to-Marketing Render Conversion', meta:'Technical drawings transformed into polished marketing-ready visual assets.'},
+      {icon:'🌐', title:'Resume-as-a-Service (RaaS)', meta:'Living interactive web portfolio. Dynamic subdomain with GitHub sync. Obsoletes static PDFs.'},
+    ]
+  },
+];
+
+// ════════════════════════════════════
+// ROUTER
+// ════════════════════════════════════
+const app = document.getElementById('app');
+
+const routes = {
+  '/home': renderHome,
+  '/about': renderAbout,
+  '/services': renderServices,
+  '/projects': renderProjects,
+  '/project': renderProject,
+  '/steed-trek-teaser': renderTeaser,
+  '/steed-trek-footage': renderFootage,
+  '/manifesto': renderManifesto,
+  '/credits': renderCredits
+};
+
+function navigate() {
+  const hash = location.hash || '#/home';
+  const path = hash.slice(1);
+  const [raw] = path.split('?');
+  if (raw.startsWith('/project/')) {
+    renderProject({ id: raw.split('/')[2] });
+    setActive(null);
+    return;
+  }
+  (routes[raw] || routes['/home'])();
+  setActive(raw);
+  window.scrollTo(0, 0);
+  app.focus();
+}
+
+function setActive(raw) {
+  document.querySelectorAll('.nav-menu a[data-link]').forEach(a => {
+    a.setAttribute('aria-current', a.getAttribute('href') === `#${raw}` ? 'page' : 'false');
+  });
+}
+
+window.addEventListener('hashchange', navigate);
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('year').textContent = new Date().getFullYear();
+  navigate();
+});
+
+// ════════════════════════════════════
+// VIEWS
+// ════════════════════════════════════
+function renderHome() {
+  app.innerHTML = document.getElementById('tpl-home').innerHTML;
+  const tiles = document.getElementById('home-tiles');
+  tiles.innerHTML = Object.values(PROJECTS).map(p => `
+    <article class="tile" data-nav="#/project/${escH(p.id)}" title="View ${escH(p.title)}">
+      <div class="thumb" style="background-image:url('${p.logo}');background-size:contain;background-repeat:no-repeat;background-color:#0a1828;"></div>
+      <div class="tbody"><h3>${escH(p.title)}</h3><p>${escH(p.desc)}</p></div>
+    </article>
+  `).join('');
+  tiles.querySelectorAll('.tile').forEach(t => {
+    t.addEventListener('click', () => location.hash = t.dataset.nav);
+  });
+}
+
+function renderAbout() { app.innerHTML = document.getElementById('tpl-about').innerHTML; }
+function renderManifesto() { app.innerHTML = document.getElementById('tpl-manifesto').innerHTML; }
+function renderCredits() {
+  app.innerHTML = document.getElementById('tpl-credits').innerHTML;
+  document.getElementById('year2').textContent = new Date().getFullYear();
+}
+function renderTeaser() { app.innerHTML = document.getElementById('tpl-teaser').innerHTML; }
+
+function renderProjects() {
+  app.innerHTML = document.getElementById('tpl-projects').innerHTML;
+  const el = document.getElementById('proj-tiles');
+  el.innerHTML = Object.values(PROJECTS).map(p => `
+    <article class="tile" data-nav="#/project/${escH(p.id)}" title="View ${escH(p.title)}">
+      <div class="thumb" style="background-image:url('${p.logo}');background-size:contain;background-repeat:no-repeat;background-color:#0a1828;"></div>
+      <div class="tbody"><h3>${escH(p.title)}</h3><p>${escH(p.desc)}</p></div>
+    </article>
+  `).join('');
+  el.querySelectorAll('.tile').forEach(t => t.addEventListener('click', () => location.hash = t.dataset.nav));
+}
+
+function renderProject({ id }) {
+  const p = PROJECTS[id];
+  if (!p) { app.innerHTML = '<section class="page card"><p>Project not found. <a href="#/projects" class="btn sky" style="display:inline-flex;margin-top:.75rem">← All Projects</a></p></section>'; return; }
+  app.innerHTML = document.getElementById('tpl-project').innerHTML;
+
+  // Blurred background uses same src as logo
+  const bgBlur = document.getElementById('projBgBlur');
+  if (bgBlur) bgBlur.style.backgroundImage = `url('${p.hero}')`;
+
+  const logo = document.getElementById('projLogo');
+  if (logo) { logo.src = p.logo; logo.alt = p.title + ' logo'; }
+
+  const titleEl = document.getElementById('projTitle');
+  if (titleEl) titleEl.textContent = p.title;
+
+  const descEl = document.getElementById('projDesc');
+  if (descEl) descEl.textContent = p.desc;
+
+  const tagsEl = document.getElementById('projTags');
+  if (tagsEl) tagsEl.innerHTML = (p.tags||[]).map(t => `<span class="tag">${escH(t)}</span>`).join('');
+
+  const linksEl = document.getElementById('projLinks');
+  if (linksEl) linksEl.innerHTML = (p.links||[]).map(l => `<a class="btn sky" href="${escH(l.href)}">${escH(l.label)} →</a>`).join('');
+
+  const bodyEl = document.getElementById('projBody');
+  if (bodyEl) bodyEl.innerHTML = p.body || '';
+}
+
+function renderFootage() {
+  app.innerHTML = document.getElementById('tpl-footage').innerHTML;
+  const target = new Date('2026-06-01T00:00:00');
+  document.getElementById('targetDate').textContent = 'Target reveal: ' + target.toDateString();
+  const el = document.getElementById('countdown');
+  const tick = () => {
+    let diff = Math.max(0, target - new Date());
+    const d=Math.floor(diff/86400000); diff-=d*86400000;
+    const h=Math.floor(diff/3600000); diff-=h*3600000;
+    const m=Math.floor(diff/60000); diff-=m*60000;
+    const s=Math.floor(diff/1000);
+    el.innerHTML = [['Days',d],['Hours',h],['Mins',m],['Secs',s]].map(([l,v])=>`<div class="c"><div class="n">${String(v).padStart(2,'0')}</div><div class="lbl">${l}</div></div>`).join('');
+    if (target - new Date() > 0) setTimeout(tick, 1000);
+  };
+  tick();
+}
+
+// ════════════════════════════════════
+// SERVICES PORTAL
+// ════════════════════════════════════
+function renderServices() {
+  app.innerHTML = document.getElementById('tpl-services').innerHTML;
+
+  const tabsEl = document.getElementById('portalTabs');
+  const panelsEl = document.getElementById('portalPanels');
+  let activePortal = PORTALS[0].id;
+
+  // Build tabs
+  tabsEl.innerHTML = PORTALS.map((p, i) => `
+    <button class="portal-tab${i===0?' active':''}" data-portal="${p.id}" aria-pressed="${i===0}">
+      <span>${p.icon}</span> ${p.label}
+      <span class="tab-count">${p.services.length}</span>
+    </button>
+  `).join('');
+
+  // Build all panels
+  panelsEl.innerHTML = PORTALS.map((p, i) => `
+    <div class="portal-panel${i===0?' visible':''}" id="panel-${p.id}">
+      <div class="portal-banner ${p.bannerClass}" data-icon="${p.icon}">
+        <h3>${p.icon} ${p.label}</h3>
+        <p>${p.desc}</p>
+      </div>
+      <div class="service-grid">
+        ${p.services.map(s => `
+          <div class="svc-card ${p.hoverClass}">
+            <div class="svc-title"><span class="svc-icon">${s.icon}</span>${escH(s.title)}</div>
+            <div class="svc-meta">${escH(s.meta)}</div>
+            ${s.badge ? `<span class="svc-badge ${s.badgeClass||p.badgeClass}">${s.badge}</span>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  // Tab click
+  tabsEl.addEventListener('click', e => {
+    const btn = e.target.closest('.portal-tab');
+    if (!btn) return;
+    const id = btn.dataset.portal;
+    if (id === activePortal) return;
+    activePortal = id;
+
+    tabsEl.querySelectorAll('.portal-tab').forEach(t => {
+      t.classList.remove('active', 'active-coral', 'active-mint', 'active-gold', 'active-violet');
+      t.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
+
+    panelsEl.querySelectorAll('.portal-panel').forEach(p => p.classList.remove('visible'));
+    const panel = document.getElementById('panel-' + id);
+    if (panel) panel.classList.add('visible');
+  });
+
+  // Search
+  const searchInput = document.getElementById('svcSearch');
+  const searchResults = document.getElementById('searchResults');
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    if (!q) {
+      searchResults.style.display = 'none';
+      tabsEl.style.display = '';
+      panelsEl.style.display = '';
+      return;
+    }
+    tabsEl.style.display = 'none';
+    panelsEl.style.display = 'none';
+    searchResults.style.display = '';
+
+    const matches = [];
+    PORTALS.forEach(portal => {
+      portal.services.forEach(svc => {
+        if (svc.title.toLowerCase().includes(q) || svc.meta.toLowerCase().includes(q)) {
+          matches.push({ portal, svc });
+        }
+      });
+    });
+
+    if (matches.length === 0) {
+      searchResults.innerHTML = `<div class="card" style="text-align:center;padding:2rem"><p style="color:var(--muted)">No services found for "<strong>${escH(q)}</strong>"</p><a class="btn sky" href="mailto:team@zengine.site">Request a Custom Service →</a></div>`;
+    } else {
+      searchResults.innerHTML = `
+        <p style="color:var(--muted);font-size:.84rem;margin-bottom:.85rem">${matches.length} service${matches.length!==1?'s':''} matching "<strong style="color:var(--txt)">${escH(q)}</strong>"</p>
+        <div class="service-grid">
+          ${matches.map(({portal,svc}) => `
+            <div class="svc-card ${portal.hoverClass}">
+              <div style="font-size:.68rem;color:var(--muted);font-family:var(--font-display);font-weight:700;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.08em">${portal.icon} ${portal.label}</div>
+              <div class="svc-title"><span class="svc-icon">${svc.icon}</span>${escH(svc.title)}</div>
+              <div class="svc-meta">${escH(svc.meta)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+  });
+
+  // Clear search when clicking a tab
+  tabsEl.addEventListener('click', () => {
+    searchInput.value = '';
+    searchResults.style.display = 'none';
+    tabsEl.style.display = '';
+    panelsEl.style.display = '';
+  });
+}
+
+// ════════════════════════════════════
+// UTILS
+// ════════════════════════════════════
+function escH(s='') {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// Konami
+(function(){
+  const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  const buf = [];
+  let eggActive = false;
+  window.addEventListener('keydown', e => {
+    buf.push(e.key);
+    buf.splice(-seq.length - 1, buf.length - seq.length);
+    if (seq.every((k, i) => buf[i]?.toLowerCase() === k.toLowerCase())) {
+      eggActive = !eggActive;
+      if (eggActive) {
+        document.title = '🎮 ZENGINE UNLOCKED — We Are The Change';
+        document.body.style.transition = 'filter .4s';
+        document.body.style.filter = 'hue-rotate(180deg) saturate(150%)';
+        setTimeout(() => {
+          document.body.style.filter = '';
+          document.title = 'Zengine — Digital Architect · Services Portal';
+          eggActive = false;
+        }, 2000);
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
