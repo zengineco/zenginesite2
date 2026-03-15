@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vince Gonzalez — Product Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+/* ===== WORKFLOW STACK =====
+   File: vince_atlas_portfolio.html
+   Brand: Zengine (Vincent Gonzalez)
+   Version: 1.0.0
+   Layout: RESPONSIVE (mobile-first)
+   Browser: MODERN-BROWSERS
+   Author: Vincent Gonzalez | © 2026 Zengine™ | www.zengine.site
+   ========================= */
+
+:root {
+  --bg:        #07000f;
+  --bg2:       #0e0820;
+  --bg3:       #140d2a;
+  --surface:   #1a1030;
+  --surface2:  #221540;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.14);
+  --gold:      #d4a017;
+  --gold2:     #f0c040;
+  --cyan:      #00e5cc;
+  --cyan2:     #6ffff0;
+  --text:      #e8e0f8;
+  --muted:     #8a7faa;
+  --muted2:    #5c5278;
+  --shipped:   #00c97a;
+  --wip:       #f0a500;
+  --concept:   #6a5e8a;
+  --font-head: 'Bebas Neue', Impact, fantasy;
+  --font-body: 'Barlow Condensed', Arial Narrow, sans-serif;
+  --font-mono: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ===== SCANLINE OVERLAY ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ===== GRID NOISE BG ===== */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,204,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,204,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6rem 2rem 4rem;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-glow {
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(0,229,204,0.08) 0%, rgba(120,60,220,0.06) 40%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.1s forwards;
+}
+
+.hero-title {
+  font-family: var(--font-head);
+  font-size: clamp(60px, 10vw, 130px);
+  line-height: 0.9;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.25s forwards;
+}
+
+.hero-title span {
+  color: var(--gold);
+  display: block;
+}
+
+.hero-subtitle {
+  font-family: var(--font-head);
+  font-size: clamp(18px, 3vw, 32px);
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.4s forwards;
+}
+
+.hero-desc {
+  max-width: 580px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.7;
+  border-left: 2px solid var(--gold);
+  padding-left: 1rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.55s forwards;
+}
+
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.7s forwards;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-num {
+  font-family: var(--font-head);
+  font-size: 42px;
+  color: var(--cyan);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--muted2);
+  text-transform: uppercase;
+}
+
+.hero-brands {
+  position: absolute;
+  right: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  opacity: 0;
+  animation: fadeIn 1s 1s forwards;
+}
+
+.brand-badge {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-align: center;
+}
+
+.brand-badge .brand-name {
+  font-family: var(--font-head);
+  font-size: 20px;
+  color: var(--text);
+  display: block;
+  letter-spacing: 0.05em;
+}
+
+.brand-badge.zengine .brand-name { color: var(--cyan); }
+.brand-badge.sympolar .brand-name { color: var(--gold); }
+
+/* ===== SCROLL ARROW ===== */
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: fadeIn 1s 1.5s forwards;
+  cursor: pointer;
+}
+
+.scroll-hint span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--muted2);
+  text-transform: uppercase;
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 1.5px solid var(--muted2);
+  border-bottom: 1.5px solid var(--muted2);
+  transform: rotate(45deg);
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+/* ===== CONTROLS SECTION ===== */
+.controls-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(7,0,15,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.controls-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--muted2);
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+
+.filter-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 5px 14px;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+
+.filter-pill:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.filter-pill.active {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.filter-pill[data-f="shipped"].active  { background: var(--shipped); border-color: var(--shipped); color: var(--bg); }
+.filter-pill[data-f="wip"].active      { background: var(--wip);     border-color: var(--wip);     color: var(--bg); }
+.filter-pill[data-f="idea"].active     { background: var(--concept);  border-color: var(--concept); color: var(--text); }
+
+.count-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted2);
+  white-space: nowrap;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 2rem 6rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===== SECTION ===== */
+.section {
+  margin-bottom: 4rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+  font-family: var(--font-head);
+  font-size: 28px;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted2);
+  letter-spacing: 0.1em;
+}
+
+/* ===== CARD GRID ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+/* ===== PROJECT CARD ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background 0.2s;
+}
+
+.card[data-status="shipped"]::before { background: var(--shipped); }
+.card[data-status="wip"]::before     { background: var(--wip); }
+.card[data-status="idea"]::before    { background: var(--muted2); }
+
+.card:hover {
+  border-color: var(--border2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,229,204,0.06);
+}
+
+/* ===== CARD IMAGE ===== */
+.card-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--bg3);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+
+.card-image img[src=""] {
+  display: none;
+}
+
+.card-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--bg3);
+}
+
+.card-placeholder-icon {
+  font-family: var(--font-head);
+  font-size: 36px;
+  color: var(--muted2);
+  opacity: 0.4;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+.card-placeholder-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted2);
+  opacity: 0.4;
+  text-transform: uppercase;
+}
+
+/* Subtle animated grid on placeholder */
+.card-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,204,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,204,0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ===== CARD BODY ===== */
+.card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.card-name {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.status-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-shipped { background: rgba(0,201,122,0.12); color: var(--shipped); border: 1px solid rgba(0,201,122,0.25); }
+.status-wip     { background: rgba(240,165,0,0.12);  color: var(--wip);     border: 1px solid rgba(240,165,0,0.25); }
+.status-idea    { background: rgba(106,94,138,0.15); color: #9988cc;        border: 1px solid rgba(106,94,138,0.3); }
+
+.card-desc {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.04);
+  color: var(--muted2);
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+}
+
+.tag.brand-zengine  { color: rgba(0,229,204,0.6); border-color: rgba(0,229,204,0.15); background: rgba(0,229,204,0.04); }
+.tag.brand-sympolar { color: rgba(212,160,23,0.7); border-color: rgba(212,160,23,0.2); background: rgba(212,160,23,0.04); }
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 3rem;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted2);
+  letter-spacing: 0.1em;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  text-align: center;
+}
+
+.footer-watermark {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--muted2);
+  text-transform: uppercase;
+}
+
+.footer-watermark a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: rotate(45deg) translateY(0); }
+  50%       { transform: rotate(45deg) translateY(4px); }
+}
+
+/* Cards fade in on load */
+.card {
+  opacity: 0;
+  animation: fadeUp 0.4s forwards;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .hero-brands { display: none; }
+  .hero { padding: 5rem 1.5rem 3rem; }
+}
+
+@media (max-width: 600px) {
+  .controls-bar { padding: 0.6rem 1rem; }
+  main { padding: 2rem 1rem 4rem; }
+  .card-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hero-title { font-size: 52px; }
+}
+
+@media (max-width: 420px) {
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-eyebrow">// Product Atlas v1.0.0 — Full Build History</div>
+
+  <h1 class="hero-title">
+    Vincent<br>
+    <span>Gonzalez</span>
+  </h1>
+
+  <div class="hero-subtitle">Technical Lead · Builder · Creator</div>
+
+  <p class="hero-desc">
+    Technical co-founder of SymPolar LLC and solo operator of Zengine — a personal
+    brand for games, apps, and hardware. Full-stack from embedded Linux to browser
+    game engines. Every build follows strict delivery standards: no truncation,
+    no silent changes, no placeholder logic.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num" id="stat-total">53</span>
+      <span class="stat-label">Total Projects</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-shipped" style="color:var(--shipped)">21</span>
+      <span class="stat-label">Shipped</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-wip" style="color:var(--wip)">13</span>
+      <span class="stat-label">In Progress</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-concept" style="color:#9988cc">19</span>
+      <span class="stat-label">Concepts</span>
+    </div>
+  </div>
+
+  <div class="hero-brands">
+    <div class="brand-badge zengine">
+      <span class="brand-name">ZENGINE</span>
+      Games · Apps · Hardware
+    </div>
+    <div class="brand-badge sympolar">
+      <span class="brand-name">SYMPOLAR</span>
+      Web Design · Hosting
+    </div>
+  </div>
+
+  <div class="scroll-hint" onclick="document.querySelector('.controls-bar').scrollIntoView({behavior:'smooth'})">
+    <span>Explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ===== STICKY CONTROLS ===== -->
+<div class="controls-bar" id="controls">
+  <span class="controls-label">Filter:</span>
+  <button class="filter-pill active" data-f="all">All</button>
+  <button class="filter-pill" data-f="shipped">Shipped</button>
+  <button class="filter-pill" data-f="wip">In Progress</button>
+  <button class="filter-pill" data-f="idea">Concept</button>
+  <button class="filter-pill" data-f="games">Games</button>
+  <button class="filter-pill" data-f="saas">SaaS / Tools</button>
+  <button class="filter-pill" data-f="hardware">Hardware</button>
+  <button class="filter-pill" data-f="sympolar">SymPolar</button>
+  <button class="filter-pill" data-f="creative">Creative</button>
+  <span class="count-badge" id="count-badge">53 projects</span>
+</div>
+
+<!-- ===== MAIN ===== -->
+<main id="main-board"></main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-watermark">
+    <a href="https://www.zengine.site" target="_blank" rel="noopener noreferrer">www.zengine.site</a>
+    &nbsp;·&nbsp; © 2026 Zengine™ &nbsp;·&nbsp; Vincent Gonzalez
+    &nbsp;·&nbsp; <a href="https://www.sympolar.com" target="_blank" rel="noopener noreferrer">www.sympolar.com</a>
+    &nbsp;·&nbsp; © 2026 SymPolar LLC™
+  </div>
+</footer>
+
+<script>
+/* ===== PROJECT DATA =====
+   To add an image: set the `img` property to a relative or absolute path.
+   Example: img: "assets/stacker.png"
+   Leave as empty string for placeholder display.
+   ====================== */
+
+const PROJECTS = [
+  // ─── GAMES & SIMULATIONS ───
+  {
+    name: "STACKER / Wall Class",
+    desc: "Physics-based FedEx trailer loading simulator. COG meter, BRICK LOCK, Panic Load mode, and full avalanche collapse mechanics.",
+    status: "wip", cat: "games",
+    tags: ["Zengine","Canvas","Physics","Training"],
+    img: ""
+  },
+  {
+    name: "LOAD METHODS Simulator",
+    desc: "Freight loading training simulator. Rotation fixes, unique per-box color seeding, realistic piece pools, and infinite truck play.",
+    status: "shipped", cat: "games",
+    tags: ["Zengine","Training","Canvas","Simulation"],
+    img: ""
+  },
+  {
+    name: "Steed Trek (ST1–ST3)",
+    desc: "Knight's Tour puzzle trilogy across 30 levels. BFS validator, sentry rooks, fog of war, gravity flips, and boss mechanics.",
+    status: "shipped", cat: "games",
+    tags: ["Zengine","Puzzle","HTML","BFS"],
+    img: ""
+  },
+  {
+    name: "KnightSprint++",
+    desc: "Multiplayer Knight's Tour variant with AI strategies: Mobility Maximizer, Aggressive Blocker, Balanced. Serializable state.",
+    status: "shipped", cat: "games",
+    tags: ["Zengine","Multiplayer","AI","GitHub Pages"],
+    img: ""
+  },
+  {
+    name: "Zen Travels",
+    desc: "Original Knight's Tour SPA prototype with Warnsdorff hint system, emoji piece selector, and GitHub-native leaderboard.",
+    status: "shipped", cat: "games",
+    tags: ["Zengine","SPA","Puzzle"],
+    img: ""
+  },
+  {
+    name: "Zengine Chess SPA",
+    desc: "Firebase-powered real-time two-player chess with full legal move enforcement, spectator support, deep links, and live chat.",
+    status: "shipped", cat: "games",
+    tags: ["Zengine","Firebase","Realtime","Chess"],
+    img: ""
+  },
+  {
+    name: "Showdown Saloon",
+    desc: "LLM poker spectator app where AI players compete. Broadcast queue engine, chip animations, GitHub Actions hand ledger.",
+    status: "shipped", cat: "games",
+    tags: ["Zengine","LLM","Poker","Spectator"],
+    img: ""
+  },
+  {
+    name: "Wanna Bet?",
+    desc: "12-game synchronized spectator casino app styled as a 1990s Wendy's-converted-casino. Mulberry32 PRNG, zero backend.",
+    status: "shipped", cat: "games",
+    tags: ["Zengine","GitHub Pages","PRNG","Casino"],
+    img: ""
+  },
+  {
+    name: "Mini Links / Mini-Pool Alpha",
+    desc: "Arcade mini-golf/billiards hybrid with emoji ball customization, animatronic obstacles, loops, jumps, and moving hazards.",
+    status: "wip", cat: "games",
+    tags: ["Zengine","Canvas","Arcade"],
+    img: ""
+  },
+  {
+    name: "AstroTrap",
+    desc: "Rogue asteroid harvester with vertical/horizontal beam mechanics, power-up system, and dynamic field obstacles.",
+    status: "wip", cat: "games",
+    tags: ["Zengine","Rogue","Arcade"],
+    img: ""
+  },
+  {
+    name: "GlideFury / Windsurf",
+    desc: "Forward-scrolling hang glider survival game reworked into a chill ninja windsurfer with wave-riding and bullseye landing.",
+    status: "wip", cat: "games",
+    tags: ["Zengine","Scroller","Survival"],
+    img: ""
+  },
+  {
+    name: "Sk8 Tide",
+    desc: "SkiFree spiritual successor — downhill skateboarding into ocean surfing with a Sasquatch chase sequence between levels.",
+    status: "wip", cat: "games",
+    tags: ["Zengine","Two-level","Arcade","Chase"],
+    img: ""
+  },
+  {
+    name: "FoosFriends",
+    desc: "Turn-based foosball strategy game with AI opponent in development.",
+    status: "wip", cat: "games",
+    tags: ["Zengine","Turn-based","Strategy"],
+    img: ""
+  },
+  {
+    name: "Knight's Law",
+    desc: "Rules-based strategy game iterating beyond the Knight's Tour format into full board-control mechanics.",
+    status: "idea", cat: "games",
+    tags: ["Zengine","Strategy","Board Game"],
+    img: ""
+  },
+  {
+    name: "Slide Striker",
+    desc: "Digital Slide Soccer clone focusing on physics-based puck and player movement.",
+    status: "idea", cat: "games",
+    tags: ["Zengine","Physics","Sports"],
+    img: ""
+  },
+
+  // ─── SAAS & TOOLS ───
+  {
+    name: "LeadSeer",
+    desc: "Google Places API lead-gen tool identifying local businesses without a web presence. Electron + React desktop app, dark navy/cyan/gold design.",
+    status: "shipped", cat: "saas",
+    tags: ["Zengine","Electron","Google Places","Lead Gen"],
+    img: ""
+  },
+  {
+    name: "Zyngyn Affiliate Generator",
+    desc: "Gemini 2.0 Flash–powered tool producing expert-voiced top-5 product review pages with live Google Search grounding. ~20 pages/day.",
+    status: "shipped", cat: "saas",
+    tags: ["Zengine","Gemini","SEO","Affiliate"],
+    img: ""
+  },
+  {
+    name: "PROMPT Discord Bot",
+    desc: "Cards Against Humanity–style Discord game around AI prompts. Anonymous submission, voting, rotating dealer, 150 prompt cards.",
+    status: "shipped", cat: "saas",
+    tags: ["Zengine","Discord","Bot","Game"],
+    img: ""
+  },
+  {
+    name: "Zengine Leaderboard SPA",
+    desc: "Supabase-powered retro arcade leaderboard with Orbitron/VT323 fonts and full scanline overlay.",
+    status: "shipped", cat: "saas",
+    tags: ["Zengine","Supabase","Retro","Leaderboard"],
+    img: ""
+  },
+  {
+    name: "Zengine SPA / Services Portal",
+    desc: "Main Zengine site with hash-router, Konami code easter egg, prismatic nav rail, project portals, and services capability matrix.",
+    status: "shipped", cat: "saas",
+    tags: ["Zengine","SPA","Brand","Portal"],
+    img: ""
+  },
+  {
+    name: "Windows 3.1 App Wrapper",
+    desc: "React template rendering any app inside a retro windowed Windows 3.1 chrome. Built to run LeadSeer as a standalone.",
+    status: "shipped", cat: "saas",
+    tags: ["Zengine","React","Retro","Template"],
+    img: ""
+  },
+  {
+    name: "DooBedder Dashboard",
+    desc: "Content aggregation and analytics platform concept for managing cross-platform creator activity: YouTube, TikTok, Instagram.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Analytics","Creator","Dashboard"],
+    img: ""
+  },
+  {
+    name: "DooBedder's Revenge Terminal",
+    desc: "Economics-first retail trader dashboard with Observatory heatmaps, Studio chart surface, and Commander AI notes panel.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Trading","Dashboard","Finance"],
+    img: ""
+  },
+  {
+    name: "Chrono-Examiner",
+    desc: "Trading backtester — platform and tool infrastructure referenced in the Zengine portal architecture.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Trading","Backtester"],
+    img: ""
+  },
+  {
+    name: "ESP32 Mining Dashboard",
+    desc: "Mobile/web dashboard for managing ESP32 DuinoCoin mining fleet with auto network scanning.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Crypto","Dashboard"],
+    img: ""
+  },
+  {
+    name: "Merge Mining Optimizer",
+    desc: "Profitability calculator and merge mining optimization system for micro mining clusters.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Crypto","SaaS","Mining"],
+    img: ""
+  },
+  {
+    name: "Gambling Data Scraper",
+    desc: "Data intelligence tool monitoring gambling activity for unusual patterns and potential money laundering indicators.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Data","BI","Intelligence"],
+    img: ""
+  },
+  {
+    name: "MicDrop",
+    desc: "Minimalist social site concept with rare avatar system, social login, and crypto wallet login.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Social","Web3","Community"],
+    img: ""
+  },
+  {
+    name: "PlumHUD",
+    desc: "Dashboard platform referenced across Zengine portals and navigation as a forthcoming hub product.",
+    status: "idea", cat: "saas",
+    tags: ["Zengine","Dashboard","HUD"],
+    img: ""
+  },
+
+  // ─── HARDWARE & IOT ───
+  {
+    name: "StreamSniper (Pi 5)",
+    desc: "Raspberry Pi 5 appliance monitoring a Twitch channel, waking display on live, fullscreen playback via streamlink + cvlc. systemd service, one-command installer.",
+    status: "shipped", cat: "hardware",
+    tags: ["Zengine","Pi5","IoT","Twitch"],
+    img: ""
+  },
+  {
+    name: "StreamSniper (N100 Linux)",
+    desc: "Separate N100 mini PC Linux version of StreamSniper, parallel to the Raspberry Pi 5 build.",
+    status: "shipped", cat: "hardware",
+    tags: ["Zengine","Linux","IoT","Twitch"],
+    img: ""
+  },
+  {
+    name: "ESP32 DuinoCoin Fleet",
+    desc: "Plug-and-play microcontroller crypto miner network with firmware deployment pipeline.",
+    status: "wip", cat: "hardware",
+    tags: ["Zengine","ESP32","Crypto","Mining"],
+    img: ""
+  },
+  {
+    name: "ADS7830 Device Platform",
+    desc: "Modular electronics prototype platform with TFT display — foundation for future Zengine hardware products.",
+    status: "wip", cat: "hardware",
+    tags: ["Zengine","Electronics","ESP32","Platform"],
+    img: ""
+  },
+  {
+    name: "TwitchStreamLite",
+    desc: "Dedicated compact display device concept for Twitch live stream notifications.",
+    status: "idea", cat: "hardware",
+    tags: ["Zengine","Display","IoT","Twitch"],
+    img: ""
+  },
+  {
+    name: "ESP32 Inventory Scanner",
+    desc: "Visual quick-scan inventory system with local LLM, offline-first, camera-based edge AI device.",
+    status: "idea", cat: "hardware",
+    tags: ["Zengine","ESP32","Edge AI","Inventory"],
+    img: ""
+  },
+  {
+    name: "Pi Automation Hub",
+    desc: "Self-hosted automation hub with Flask API, built on Raspberry Pi 5.",
+    status: "idea", cat: "hardware",
+    tags: ["Zengine","Pi5","Automation","API"],
+    img: ""
+  },
+  {
+    name: "Pi Router Server",
+    desc: "Router and server stack using Raspberry Pi 5 for home/office edge networking.",
+    status: "idea", cat: "hardware",
+    tags: ["Zengine","Networking","Pi5","Server"],
+    img: ""
+  },
+  {
+    name: "Moonbeam",
+    desc: "Bitcoin learner and miner hardware device — referenced in Zengine site copy as a coming hardware product.",
+    status: "idea", cat: "hardware",
+    tags: ["Zengine","Crypto","Device","Bitcoin"],
+    img: ""
+  },
+  {
+    name: "Ooga Horn",
+    desc: "Portable programmable novelty horn device.",
+    status: "idea", cat: "hardware",
+    tags: ["Zengine","Hardware","Novelty","Audio"],
+    img: ""
+  },
+
+  // ─── SYMPOLAR LLC ───
+  {
+    name: "SymPolar.com SPA",
+    desc: "Full agency single-page application. Dark glassmorphism aesthetic, pricing cards, team section, FAQ accordion, and glossary.",
+    status: "shipped", cat: "sympolar",
+    tags: ["SymPolar","SPA","Agency","Web Design"],
+    img: ""
+  },
+  {
+    name: "SymPolar Client Intake Form",
+    desc: "Multi-section progressive intake form with Google Form file upload pipeline, mailto fallback, and E-SIGN legal agreement.",
+    status: "shipped", cat: "sympolar",
+    tags: ["SymPolar","Forms","GAS","Legal"],
+    img: ""
+  },
+  {
+    name: "SymPolar Overview Deck",
+    desc: "PowerPoint overview presentation deck for client and partner pitches.",
+    status: "shipped", cat: "sympolar",
+    tags: ["SymPolar","Deck","Sales","PPTX"],
+    img: ""
+  },
+  {
+    name: "PortalPros",
+    desc: "Early SymPolar-precursor website kit with 25-question multi-step intake form and complete deployment documentation.",
+    status: "shipped", cat: "sympolar",
+    tags: ["SymPolar","Legacy","Intake","Kit"],
+    img: ""
+  },
+  {
+    name: "Contractor Agreement",
+    desc: "Rewritten independent contractor agreement for SymPolar LLC. Cleaner language, concise structure, workflow-friendly formatting.",
+    status: "shipped", cat: "sympolar",
+    tags: ["SymPolar","Legal","Ops","Document"],
+    img: ""
+  },
+  {
+    name: "Digital Curb Appeal Framework",
+    desc: "Sales checklist and marketing toolkit for selling websites to local businesses: contractors, restaurants, tattoo shops, and more.",
+    status: "shipped", cat: "sympolar",
+    tags: ["SymPolar","Marketing","Sales","Local Biz"],
+    img: ""
+  },
+  {
+    name: "SymPolar Business OS",
+    desc: "Google Sheets–based automated business operating system. Commissions, invoicing, dashboards, and sales pipeline automation.",
+    status: "wip", cat: "sympolar",
+    tags: ["SymPolar","Sheets","Automation","Ops"],
+    img: ""
+  },
+  {
+    name: "SymPolar Biz-Intel DB",
+    desc: "Centralized business intelligence database for client records, revenue analytics, and lead tracking.",
+    status: "idea", cat: "sympolar",
+    tags: ["SymPolar","Database","Analytics","BI"],
+    img: ""
+  },
+
+  // ─── CREATIVE & UTILITY ───
+  {
+    name: "PIXEL STAFF",
+    desc: "Browser-based NES pixel art music composition app. Infinite scrolling piano roll, 96-row range, WAV and .m4r ringtone export.",
+    status: "shipped", cat: "creative",
+    tags: ["Zengine","Music","WebAudio","NES"],
+    img: ""
+  },
+  {
+    name: "Key-J",
+    desc: "Electron app mapping every keystroke to live musical notes. Live treble clef canvas, 6 play styles, WAV export, and Melody Lock.",
+    status: "shipped", cat: "creative",
+    tags: ["Zengine","Electron","Music","Keystroke"],
+    img: ""
+  },
+  {
+    name: "WordForge",
+    desc: "Word game with custom renderer and full dark/light mode theme toggle system.",
+    status: "wip", cat: "creative",
+    tags: ["Zengine","Word Game","Renderer","Theme"],
+    img: ""
+  },
+  {
+    name: "Freeform Music Notation App",
+    desc: "No time signatures — pro-grade notation tool designed for unconventional and experimental compositions.",
+    status: "idea", cat: "creative",
+    tags: ["Zengine","Music","Notation","SaaS"],
+    img: ""
+  },
+  {
+    name: "Cast Sketch",
+    desc: "Offline-first creative sketching tool concept designed for creators without internet dependency.",
+    status: "idea", cat: "creative",
+    tags: ["Zengine","Creative","Offline","Sketch"],
+    img: ""
+  },
+  {
+    name: "POTica Branding",
+    desc: "Digital framework and branding assets for a cannabis-infused dessert product line.",
+    status: "idea", cat: "creative",
+    tags: ["Branding","Cannabis","CPG","Design"],
+    img: ""
+  },
+];
+
+// ─── SECTION DEFINITIONS ───
+const SECTIONS = [
+  { key: "games",    label: "Games & Simulations" },
+  { key: "saas",     label: "SaaS, Tools & Portals" },
+  { key: "hardware", label: "Hardware & IoT" },
+  { key: "sympolar", label: "SymPolar LLC" },
+  { key: "creative", label: "Creative & Utility" },
+];
+
+const STATUS_CLASS = { shipped: "status-shipped", wip: "status-wip", idea: "status-idea" };
+const STATUS_LABEL = { shipped: "Shipped", wip: "In Progress", idea: "Concept" };
+
+let activeFilter = "all";
+
+function getInitials(name) {
+  return name.split(/[\s\/\-]+/).slice(0,2).map(w => w[0]).join('').toUpperCase();
+}
+
+function buildCard(p, delay) {
+  const statusClass = STATUS_CLASS[p.status];
+  const statusLabel = STATUS_LABEL[p.status];
+  const initials = getInitials(p.name);
+
+  const tagsHtml = p.tags.map(t => {
+    const cls = t === "Zengine" ? "tag brand-zengine" : t === "SymPolar" ? "tag brand-sympolar" : "tag";
+    return `<span class="${cls}">${t}</span>`;
+  }).join('');
+
+  const imgHtml = p.img
+    ? `<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">`
+    : '';
+
+  return `
+    <div class="card" data-status="${p.status}" data-cat="${p.cat}" style="animation-delay:${delay}ms">
+      <div class="card-image">
+        ${imgHtml}
+        <div class="card-placeholder">
+          <div class="card-placeholder-icon">${initials}</div>
+          <div class="card-placeholder-label">Image Pending</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-name">${p.name}</div>
+          <span class="status-badge ${statusClass}">${statusLabel}</span>
+        </div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-tags">${tagsHtml}</div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const board = document.getElementById('main-board');
+  const countBadge = document.getElementById('count-badge');
+  let total = 0;
+  let html = '';
+
+  SECTIONS.forEach(sec => {
+    let cards = PROJECTS.filter(p => p.cat === sec.key);
+
+    // Apply filter
+    if (activeFilter === 'shipped') cards = cards.filter(p => p.status === 'shipped');
+    else if (activeFilter === 'wip')  cards = cards.filter(p => p.status === 'wip');
+    else if (activeFilter === 'idea') cards = cards.filter(p => p.status === 'idea');
+    else if (['games','saas','hardware','sympolar','creative'].includes(activeFilter)) {
+      if (activeFilter !== sec.key) return;
+    }
+
+    if (!cards.length) return;
+    total += cards.length;
+
+    html += `
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">${sec.label}</h2>
+          <div class="section-line"></div>
+          <span class="section-count">${cards.length} build${cards.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="card-grid">
+          ${cards.map((p, i) => buildCard(p, i * 40)).join('')}
+        </div>
+      </section>`;
+  });
+
+  if (!total) {
+    html = `<div class="card-grid"><div class="empty-state">// NO PROJECTS MATCH THIS FILTER</div></div>`;
+  }
+
+  board.innerHTML = html;
+  countBadge.textContent = total + ' project' + (total !== 1 ? 's' : '');
+}
+
+// ─── FILTER CONTROLS ───
+document.getElementById('controls').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-pill');
+  if (!btn) return;
+  activeFilter = btn.dataset.f;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+});
+
+// ─── INIT ───
+render();
+
+// ─── LIVE STATS ───
+const shipped = PROJECTS.filter(p => p.status === 'shipped').length;
+const wip     = PROJECTS.filter(p => p.status === 'wip').length;
+const concept = PROJECTS.filter(p => p.status === 'idea').length;
+document.getElementById('stat-total').textContent   = PROJECTS.length;
+document.getElementById('stat-shipped').textContent = shipped;
+document.getElementById('stat-wip').textContent     = wip;
+document.getElementById('stat-concept').textContent = concept;
+</script>
+
+</body>
+</html>
