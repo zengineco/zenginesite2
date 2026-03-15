@@ -1,0 +1,7 @@
+Hero section — full-screen with your name in giant Bebas Neue, live stat counters (auto-calculated from the data), the Zengine/SymPolar brand badges, and a scanline + grid overlay for that terminal aesthetic.
+Sticky filter bar — stays at the top as you scroll, filters by status (Shipped / In Progress / Concept) or by vertical, with a live project count that updates.
+All 53 projects — every card has a 16:9 image slot at the top. Right now they show a stylized placeholder with your initials and "Image Pending." When you're ready to add images, just find this line in the data block and fill it in:
+jsimg: ""  →  img: "assets/stacker.png"
+That's the only change needed per project — the rest handles itself.
+Adding an image: drop your screenshots/art into a folder called assets/ next to the HTML file, then update img: "" to img: "assets/yourfile.png" for each project. The card will automatically show the image and hide the placeholder.
+The page is fully self-contained — one file, no build step, deploy anywhere.
