@@ -1,0 +1,2329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+  /* ===== LAST STABLE: v1.1.0 — 2026-03-15 — Prismatic glass rebrand + portfolio page + gaming mouse fix ===== */
+
+  /* ===== WORKFLOW STACK =====
+     File:           zengine_v1.2.0.html
+     Brand:          Zengine™
+     Author:         Vincent Gonzalez | © 2026 Zengine™ | www.zengine.site
+     Version:        v1.2.0
+     Boot Order:     1. CSS vars + fonts  2. DOM ready  3. navigate()  4. setActive()  5. renderHome()
+     Section Map:    <head> CSS/vars       ln ~1–380
+                     Templates             ln ~381–900
+                     PROJECTS DATA         ln ~901–1000
+                     PORTFOLIO DATA        ln ~1001–1200
+                     SERVICES DATA         ln ~1201–1400
+                     ROUTER                ln ~1401–1450
+                     VIEWS                 ln ~1451–1700
+                     UTILITIES             ln ~1701–1730
+     External Deps:  Google Fonts CDN (Syne, DM Sans)
+                     AdSense (ca-pub-8826956454892311)
+     Layout Target:  1280px max, responsive to 320px
+     Browser Target: Modern evergreen (Chrome 100+, Firefox 100+, Safari 15+)
+  ===== END WORKFLOW STACK ===== */
+  -->
+  <!--
+  /* ===== ASSET MANIFEST =====
+     Fonts:
+       https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap
+     Images (external files — must exist alongside this HTML):
+       img-z-ideal.png          — Zengine nav brand mark (use ZG crystal monogram if available)
+       img-steed-logo.jpg       — Steed Trek project logo/hero
+       img-telegaming.jpg       — TeleGaming project logo/hero
+       img-plumhud.png          — PlumHUD project logo/hero
+       findleads.png            — LeadSeer project logo/hero
+       img-moonman.png          — Retail Trader project logo/hero
+       mic-drop-logo.png        — MicDrop project logo/hero
+       Untitled.png             — LAMP project logo/hero
+       ChatGPT_Image_Sep_2__2025__12_00_27_AM.png  — Stream Sniper hero
+       b0205791-f019-4f7a-b21a-9f394c78caf2.png    — Moonberry Pi hero
+       ChatGPT_Image_Aug_30__2025__05_35_13_PM.png — Wild Lettuce Pi hero
+       Screenshot_2025-08-23_152928.png             — PiForge hero
+       3741acce-5282-4312-89e1-de853706321d.png     — Rhubarb Pi hero
+     Scripts (CDN):
+       // NONE — vanilla JS only
+     Audio:
+       // NONE
+     AdSense:
+       ca-pub-8826956454892311
+  ===== END ASSET MANIFEST ===== */
+  -->
+  <meta name="google-adsense-account" content="ca-pub-8826956454892311">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8826956454892311" crossorigin="anonymous"></script>
+  <meta charset="utf-8" />
+  <title>Zengine™ — Digital Architect · Apps · Games · Hardware</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Zengine™ — Creative technology studio building apps, games, and hardware. Home of the Zengin.es Arcade Metaversery: digital hangouts, open mic auditoria, and multiplayer originals." />
+  <!-- Favicon: ZG crystal monogram SVG approximation -->
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='p' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23e0e8f0'/><stop offset='0.3' stop-color='%23b8d4ff'/><stop offset='0.6' stop-color='%23c8b8ff'/><stop offset='1' stop-color='%23a0d8ef'/></linearGradient></defs><rect rx='10' width='64' height='64' fill='%230a0a10'/><path d='M10 14h32l-24 16h16v6H10v-6l24-16H10z' fill='url(%23p)' opacity='.9'/><path d='M38 34h16v4H44v4h10v4H38v-4h10v-4H38z' fill='url(%23p)' opacity='.9'/></svg>" />
+  <style>
+    /* ============================================================
+       FONT IMPORT — must be absolute first line of <style>
+       Fallback chains per permanent ruleset:
+         Syne    → Impact, fantasy
+         DM Sans → Georgia, ui-serif, serif
+    ============================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+    /* ============================================================
+       ZG CRYSTAL DESIGN SYSTEM v1.2.0
+       Pulled directly from ZG crystal monogram photo:
+         - Near-black background matching the photo bg (#0a0b0f)
+         - Chrome/silver glass surfaces — the letterform material
+         - Cyan/ice-blue primary accent — the cool cast of the crystal
+         - Prismatic rainbow ONLY as a controlled streak detail
+           (nav rail, section accents, hover moments) — not splattered
+         - Emojis provide all warmth — no competing warm palette
+    ============================================================ */
+    :root {
+      /* Core backgrounds — matches ZG photo background exactly */
+      --bg:       #0a0b0f;
+      --bg-2:     #0d0e14;
+      --bg-3:     #111318;
+      --txt:      #e4edf5;
+      --muted:    #6878a0;
+      --muted2:   #38435a;
+
+      /* Cyan / ice-blue — primary accent, the crystal's cool cast */
+      --cyan:       #7dd8f0;
+      --cyan-dim:   #4ab8d8;
+      --cyan-pale:  #a8e8f8;
+      --cyan-glow:  rgba(125,216,240,.18);
+      --cyan-edge:  rgba(125,216,240,.22);
+
+      /* Chrome / silver — the glass surface material */
+      --chrome:      #c4d0e4;
+      --chrome-mid:  #7888a8;
+      --chrome-dim:  #38445c;
+      --chrome-edge: rgba(196,208,228,.14);
+      --chrome-glow: rgba(196,208,228,.06);
+
+      /* Prismatic streak — controlled single-burst rainbow */
+      /* Used ONLY on: nav rail, section header rule, hover accent moments */
+      --prism-streak: linear-gradient(90deg,
+        var(--cyan) 0%, var(--chrome-mid) 14%, var(--cyan-pale) 28%,
+        var(--cyan) 42%, #7dd8f0 56%, var(--chrome) 72%,
+        var(--chrome-mid) 86%, var(--cyan) 100%
+      );
+
+      /* Glass surfaces — very dark tinted */
+      --glass:        rgba(196,208,228,.038);
+      --glass-border: rgba(196,208,228,.09);
+      --glass-hover:  rgba(196,208,228,.07);
+      --glass-shine:  rgba(255,255,255,.05);
+
+      /* Radius */
+      --radius:    20px;
+      --radius-sm: 13px;
+
+      /* Shadows */
+      --shadow:      0 8px 32px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.04);
+      --shadow-lift: 0 20px 60px rgba(0,0,0,.85), 0 4px 20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05);
+      --shadow-cyan: 0 8px 32px rgba(125,216,240,.14);
+
+      /* Typography */
+      --font-display: 'Syne', Impact, fantasy;
+      --font-body:    'DM Sans', Georgia, ui-serif, serif;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      color: var(--txt);
+      line-height: 1.65;
+      font-family: var(--font-body);
+      font-size: 15px;
+      background:
+        radial-gradient(ellipse 1400px 800px at -8% -5%,  rgba(125,216,240,.05) 0%, transparent 55%),
+        radial-gradient(ellipse 1000px 700px at 108% 95%, rgba(125,216,240,.04) 0%, transparent 55%),
+        radial-gradient(ellipse 600px 500px at 50% 42%,   rgba(196,208,228,.02) 0%, transparent 60%),
+        linear-gradient(170deg, var(--bg) 0%, #0c0e14 50%, var(--bg-2) 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    a { color: var(--chrome); text-decoration: none; }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.2; }
+    p { margin-top: 0; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(125,216,240,.25);
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    header { position: sticky; top: 0; z-index: 100; }
+    .nav-wrap {
+      background: rgba(9,9,15,.92);
+      backdrop-filter: saturate(140%) blur(20px);
+      border-bottom: 1px solid var(--chrome-edge);
+    }
+    /* Prismatic rail — controlled streak, low opacity */
+    .nav-rail {
+      height: 2px;
+      background: var(--prism-streak);
+      background-size: 200% 100%;
+      opacity: .7;
+      animation: railShift 8s linear infinite;
+    }
+    @keyframes railShift { to { background-position: 200% 0; } }
+
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .6rem 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; }
+    .brand img {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      filter: drop-shadow(0 0 12px rgba(125,216,240,.28));
+      transition: filter .3s;
+    }
+    .brand img:hover { filter: drop-shadow(0 0 20px rgba(125,216,240,.35)); }
+    /* ZG fallback mark — crystal Z rendered in SVG if image missing */
+    .brand-zg {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: #0d0d18;
+      border: 1px solid var(--chrome-edge);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: .9rem;
+      background: linear-gradient(135deg, var(--cyan-dim), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 8px rgba(125,216,240,.32));
+    }
+    .brand b {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: .5px;
+      background: linear-gradient(90deg, var(--chrome), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .nav-menu { margin-left: auto; display: flex; gap: .1rem; flex-wrap: wrap; align-items: center; }
+    .nav-menu a {
+      padding: .36rem .6rem;
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: var(--font-display);
+      font-size: .78rem;
+      font-weight: 600;
+      transition: color .2s, background .2s;
+      white-space: nowrap;
+    }
+    .nav-menu a[aria-current="page"],
+    .nav-menu a:hover { color: var(--txt); background: var(--glass); }
+
+    .btn-nav-portfolio {
+      background: linear-gradient(100deg, var(--cyan-dim), var(--cyan));
+      color: #0a0b0f;
+      border-radius: 8px;
+      padding: .36rem .8rem;
+      font-weight: 700;
+      font-size: .78rem;
+      transition: transform .12s, box-shadow .2s;
+    }
+    .btn-nav-portfolio:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(125,216,240,.3);
+      color: #0a0b0f;
+    }
+    .btn-nav-arcade {
+      background: linear-gradient(100deg, var(--chrome-dim), var(--chrome));
+      color: #0a0b0f;
+      border-radius: 8px;
+      padding: .36rem .8rem;
+      font-weight: 700;
+      font-size: .78rem;
+      transition: transform .12s, box-shadow .2s;
+    }
+    .btn-nav-arcade:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(196,208,228,.25);
+      color: #0a0b0f;
+    }
+
+    /* ============================================================
+       AD SLOT
+    ============================================================ */
+    .ad-slot {
+      max-width: 1280px;
+      margin: 0 auto;
+      text-align: center;
+      padding: .5rem 1rem;
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    main { max-width: 1280px; margin: 0 auto; padding: 1rem; }
+    .page { margin: 1.5rem 0; }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      min-height: 60vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px solid var(--chrome-edge);
+      box-shadow: var(--shadow-lift);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #07070e 0%, #0f0f22 50%, #0a0a14 100%);
+    }
+    /* Crystal grid lines */
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,212,232,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,212,232,.025) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(ellipse 90% 85% at 50% 55%, black 25%, transparent 75%);
+    }
+    /* Prismatic refraction orbs */
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+    .hero-orb-1 { width:500px; height:500px; background: radial-gradient(circle, rgba(125,216,240,.055) 0%, transparent 70%); top:-150px; left:-100px; animation: orbFloat 14s ease-in-out infinite; }
+    .hero-orb-2 { width:400px; height:400px; background: radial-gradient(circle, rgba(196,208,228,.04) 0%, transparent 70%); bottom:-100px; right:-50px; animation: orbFloat 17s ease-in-out infinite reverse; }
+    .hero-orb-3 { width:250px; height:250px; background: radial-gradient(circle, rgba(125,216,240,.035) 0%, transparent 70%); top:35%; left:58%; animation: orbFloat 20s ease-in-out infinite 4s; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      50%       { transform: translate(24px,-24px) scale(1.06); }
+    }
+    .hero-content { position: relative; z-index: 1; padding: 2.5rem 1.5rem; max-width: 860px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: var(--font-display);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--chrome);
+      background: rgba(200,212,232,.07);
+      border: 1px solid var(--chrome-edge);
+      padding: .3rem .9rem;
+      border-radius: 999px;
+      margin-bottom: 1.1rem;
+    }
+    .hero h1 { font-size: clamp(2rem, 4.5vw + .5rem, 4rem); font-weight: 800; margin-bottom: 1rem; }
+    /* Crystal shimmer — chrome → cyan → chrome, like light through glass */
+    .hero h1 .grad {
+      background: linear-gradient(95deg,
+        var(--chrome)    0%,
+        var(--cyan-pale) 35%,
+        var(--cyan)      55%,
+        var(--chrome)    80%,
+        var(--cyan-pale) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      background-size: 200% 100%;
+      animation: shimmer 9s linear infinite;
+    }
+    @keyframes shimmer { to { background-position: 200% 0; } }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 640px; margin: 0 auto 1.5rem; }
+    .hero-btns { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .72rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-display);
+      font-size: .88rem;
+      font-weight: 700;
+      border: 1px solid var(--glass-border);
+      color: var(--txt);
+      background: var(--glass);
+      cursor: pointer;
+      transition: transform .12s, background .2s, box-shadow .2s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-2px); background: var(--glass-hover); box-shadow: var(--shadow-lift); color: var(--txt); }
+
+    /* Cyan — primary action */
+    .btn.cyan {
+      background: linear-gradient(100deg, var(--cyan-dim), var(--cyan));
+      border-color: transparent;
+      color: #0a0b0f;
+      box-shadow: 0 4px 20px rgba(125,216,240,.2);
+    }
+    .btn.cyan:hover { box-shadow: 0 8px 30px rgba(125,216,240,.35); color: #0a0b0f; }
+
+    /* Chrome — secondary action */
+    .btn.chrome {
+      background: linear-gradient(135deg, rgba(196,208,228,.14), rgba(196,208,228,.07));
+      border-color: rgba(196,208,228,.2);
+      color: var(--chrome);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .btn.chrome:hover { box-shadow: 0 6px 24px rgba(196,208,228,.16), inset 0 1px 0 rgba(255,255,255,.08); color: #fff; }
+
+    /* Crystal — glass with cyan edge */
+    .btn.crystal {
+      background: rgba(125,216,240,.08);
+      border-color: var(--cyan-edge);
+      color: var(--cyan);
+    }
+    .btn.crystal:hover { background: rgba(125,216,240,.14); box-shadow: var(--shadow-cyan); color: var(--cyan-pale); }
+
+    /* DEPRECATED prism aliases — kept as chrome/cyan fallbacks so old template refs don't break */
+    .btn.prism-b { background: linear-gradient(100deg,var(--cyan-dim),var(--cyan)); border-color:transparent; color:#0a0b0f; box-shadow:0 4px 20px rgba(125,216,240,.2); }
+    .btn.prism-b:hover { box-shadow:0 8px 30px rgba(125,216,240,.35); color:#0a0b0f; }
+    .btn.prism-y { background:linear-gradient(135deg,rgba(196,208,228,.14),rgba(196,208,228,.07)); border-color:rgba(196,208,228,.2); color:var(--chrome); }
+    .btn.prism-y:hover { box-shadow:0 6px 24px rgba(196,208,228,.16); color:#fff; }
+    .btn.prism-g { background:rgba(125,216,240,.08); border-color:var(--cyan-edge); color:var(--cyan); }
+    .btn.prism-g:hover { background:rgba(125,216,240,.14); color:var(--cyan-pale); }
+    .btn.prism-v { background:linear-gradient(135deg,rgba(196,208,228,.14),rgba(196,208,228,.07)); border-color:rgba(196,208,228,.2); color:var(--chrome); }
+    .btn.prism-v:hover { box-shadow:0 6px 24px rgba(196,208,228,.16); color:#fff; }
+    .btn.prism-r { background:linear-gradient(100deg,var(--cyan-dim),var(--cyan)); border-color:transparent; color:#0a0b0f; }
+    .btn.prism-r:hover { box-shadow:0 8px 30px rgba(125,216,240,.35); color:#0a0b0f; }
+
+    .btn.ghost { background: transparent; color: var(--muted); }
+    .btn.ghost:hover { color: var(--txt); background: var(--glass); }
+
+    /* ============================================================
+       SECTIONS
+    ============================================================ */
+    .section { margin: 2.25rem 0; }
+    .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+    .section-header h2 { margin: 0; font-size: clamp(1.2rem,2vw,1.6rem); font-weight: 800; white-space: nowrap; }
+    /* Cyan crystal rule under section headers */
+    .section-header h2::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 2.5rem;
+      margin-top: .3rem;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      border-radius: 1px;
+    }
+    .section-header .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--chrome-edge), transparent);
+      min-width: 20px;
+    }
+
+    /* ============================================================
+       CARDS — glass morphism with chrome edges
+    ============================================================ */
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow .25s, border-color .25s, transform .15s;
+    }
+    .card:hover { box-shadow: var(--shadow-lift); }
+    .card.b-cyan:hover   { border-color: var(--cyan-edge); }
+    .card.b-chrome:hover { border-color: rgba(196,208,228,.18); }
+
+    /* ============================================================
+       STATS
+    ============================================================ */
+    .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
+    .stat-box {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .15s, border-color .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--prism-streak);
+      opacity: .3;
+    }
+    .stat-box:hover { transform: translateY(-2px); border-color: var(--chrome-edge); }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--chrome), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .stat-label { font-size: .74rem; color: var(--muted); font-family: var(--font-display); margin-top: .2rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ============================================================
+       LINK GRID
+    ============================================================ */
+    .link-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: .85rem; }
+    .link-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      cursor: pointer;
+      transition: transform .18s, box-shadow .2s, border-color .2s;
+      text-decoration: none;
+      color: var(--txt);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Prismatic top-edge shimmer on hover */
+    .link-card::before {
+      content: '';
+      position: absolute; top: 0; left: -100%; right: 0;
+      height: 1px;
+      background: var(--rainbow);
+      opacity: 0;
+      transition: opacity .3s, left .4s;
+    }
+    .link-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lift); color: var(--txt); }
+    .link-card:hover::before { opacity: .7; left: 0; }
+    .link-card.b-cy:hover { border-color: var(--cyan-edge); }
+    .link-card .lc-icon   { font-size: 1.8rem; }
+    .link-card .lc-label  { font-size: .62rem; font-family: var(--font-display); font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+    .link-card h3         { font-family: var(--font-display); font-size: 1rem; font-weight: 800; margin: 0; }
+    .link-card p          { color: var(--muted); font-size: .82rem; line-height: 1.5; margin: 0; flex: 1; }
+    .link-card .lc-arrow  { font-size: .82rem; color: var(--muted2); transition: color .2s; margin-top: auto; }
+    .link-card:hover .lc-arrow { color: var(--cyan); }
+
+    /* ============================================================
+       FEATURE CARDS — Metaversery, Arcade, LeadSeer
+    ============================================================ */
+    .feature-card {
+      border-radius: var(--radius);
+      padding: 1.75rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: var(--radius);
+      padding: 1px;
+      background: var(--rainbow);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: .25;
+      pointer-events: none;
+    }
+
+    .fc-arcade {
+      background: linear-gradient(135deg, rgba(196,208,228,.05), rgba(125,216,240,.04), rgba(196,208,228,.02));
+      border: 1px solid rgba(125,216,240,.18);
+      box-shadow: 0 8px 40px rgba(125,216,240,.06);
+    }
+    .fc-arcade::before { content:"🕹️"; position:absolute; right:1.5rem; top:50%; transform:translateY(-50%); font-size:6rem; opacity:.07; pointer-events:none; }
+
+    .fc-meta {
+      background: linear-gradient(135deg, rgba(125,216,240,.07), rgba(125,216,240,.05), rgba(196,208,228,.03));
+      border: 1px solid rgba(125,216,240,.18);
+      box-shadow: 0 8px 40px rgba(125,216,240,.06);
+    }
+    .fc-meta::before { content:"🌐"; position:absolute; right:1.5rem; top:50%; transform:translateY(-50%); font-size:6rem; opacity:.07; pointer-events:none; }
+
+    .fc-lead {
+      background: linear-gradient(135deg, rgba(125,216,240,.07), rgba(125,216,240,.05), rgba(196,208,228,.03));
+      border: 1px solid rgba(125,216,240,.18);
+      box-shadow: 0 8px 40px rgba(125,216,240,.06);
+    }
+    .fc-lead::before { content:"🎯"; position:absolute; right:1.5rem; top:50%; transform:translateY(-50%); font-size:6rem; opacity:.07; pointer-events:none; }
+
+    .fc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-family: var(--font-display);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      padding: .24rem .75rem;
+      border-radius: 999px;
+      margin-bottom: .85rem;
+    }
+    .fc-badge.cy { background: rgba(125,216,240,.10); border: 1px solid rgba(125,216,240,.25); color: var(--cyan); }
+    .fc-badge.ch { background: rgba(196,208,228,.08); border: 1px solid rgba(196,208,228,.20); color: var(--chrome); }
+
+    .feature-card h3 { font-family: var(--font-display); font-size: clamp(1.3rem,2.5vw,2rem); font-weight: 800; margin-bottom: .5rem; }
+    .feature-card p  { color: var(--muted); font-size: .92rem; max-width: 640px; }
+    .meta-features   { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .85rem; }
+    .meta-feat {
+      border-radius: 9px;
+      padding: .4rem .8rem;
+      font-size: .8rem;
+      background: rgba(125,216,240,.07);
+      border: 1px solid rgba(125,216,240,.15);
+    }
+    .meta-feat::before { content: "✦ "; color: var(--cyan); font-weight: 800; }
+
+    /* ============================================================
+       TILES
+    ============================================================ */
+    .tiles { display: grid; grid-template-columns: repeat(4,1fr); gap: .9rem; }
+    .tile {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .18s, box-shadow .2s, border-color .2s;
+    }
+    .tile:hover { transform: translateY(-5px); box-shadow: var(--shadow-lift); border-color: var(--chrome-edge); }
+    .tile .thumb {
+      height: 150px;
+      background: #0d0d18 center/contain no-repeat;
+      background-color: #0a0a14;
+      position: relative;
+    }
+    .tile .thumb::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(9,9,15,.85), transparent 60%);
+    }
+    .tile .tbody { padding: .9rem; }
+    .tile h3 { font-family: var(--font-display); font-size: .9rem; font-weight: 700; margin-bottom: .3rem; }
+    .tile p   { color: var(--muted); font-size: .8rem; line-height: 1.5; }
+
+    /* ============================================================
+       GRIDS
+    ============================================================ */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .9rem; }
+
+    /* ============================================================
+       MANIFESTO / PULL QUOTE
+    ============================================================ */
+    .manifesto-pull {
+      font-size: clamp(1.15rem, 2vw, 1.6rem);
+      font-style: italic;
+      font-family: var(--font-display);
+      color: var(--txt);
+      border-left: 2px solid var(--chrome);
+      padding-left: 1.2rem;
+      margin: 1.35rem 0;
+      line-height: 1.45;
+    }
+    .manifesto-pull.b { border-color: var(--cyan); }
+    .manifesto-pull.g { border-color: var(--cyan); }
+    .manifesto-pull.v { border-color: var(--chrome); }
+
+    /* ============================================================
+       ICP LIST
+    ============================================================ */
+    .icp-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+    .icp-list li { display: flex; align-items: flex-start; gap: .7rem; font-size: .9rem; }
+    .icp-list li::before { content: "→"; color: var(--cyan); font-weight: 700; flex-shrink: 0; }
+
+    /* ============================================================
+       TAGS / CHIPS
+    ============================================================ */
+    .tags { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; margin: .75rem 0; }
+    .tag {
+      font-size: .72rem;
+      background: rgba(200,212,232,.07);
+      border: 1px solid var(--chrome-edge);
+      color: var(--chrome);
+      padding: .16rem .55rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-weight: 600;
+    }
+    .chip {
+      display: inline-block;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: .3rem .7rem;
+      border-radius: 999px;
+      color: var(--chrome-mid);
+      font-family: var(--font-display);
+      font-size: .8rem;
+      font-weight: 600;
+      transition: background .2s, color .2s;
+    }
+    .chip:hover { background: rgba(200,212,232,.1); color: var(--chrome); }
+
+    /* ============================================================
+       PORTAL TABS
+    ============================================================ */
+    .portal-tabs { display: flex; gap: .45rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .portal-tab {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .48rem .95rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: .78rem;
+      font-weight: 700;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .portal-tab:hover { color: var(--txt); background: var(--glass-hover); }
+    .portal-tab.active {
+      color: var(--chrome);
+      background: rgba(200,212,232,.08);
+      border-color: var(--chrome-edge);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .portal-tab .tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px; height: 20px;
+      padding: 0 5px;
+      background: rgba(255,255,255,.08);
+      border-radius: 999px;
+      font-size: .68rem;
+      font-weight: 800;
+    }
+    .portal-panel { display: none; animation: fadeUp .3s ease; }
+    .portal-panel.visible { display: block; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+    .portal-banner {
+      border-radius: var(--radius);
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-banner::before { content: attr(data-icon); position:absolute; right:1.5rem; top:50%; transform:translateY(-50%); font-size:5rem; opacity:.07; pointer-events:none; }
+    .portal-banner::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--rainbow);
+      opacity: .3;
+    }
+    .portal-banner.blue   { background: linear-gradient(135deg,rgba(125,216,240,.08),transparent); border-color: rgba(125,216,240,.15); }
+    .portal-banner.red    { background: linear-gradient(135deg,rgba(125,216,240,.07),transparent); border-color: rgba(196,208,228,.12); }
+    .portal-banner.green  { background: linear-gradient(135deg,rgba(125,216,240,.08),transparent);  border-color: rgba(125,216,240,.15); }
+    .portal-banner.gold   { background: linear-gradient(135deg,rgba(125,216,240,.07),transparent); border-color: rgba(125,216,240,.14); }
+    .portal-banner.violet { background: linear-gradient(135deg,rgba(125,216,240,.07),transparent); border-color: rgba(125,216,240,.14); }
+    .portal-banner h3 { font-family: var(--font-display); font-size: clamp(1.1rem,2vw,1.5rem); font-weight: 800; margin-bottom: .4rem; }
+    .portal-banner p  { color: var(--muted); font-size: .88rem; margin: 0; max-width: 580px; }
+
+    .service-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
+    .svc-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.1rem;
+      transition: transform .15s, border-color .2s, background .2s;
+    }
+    .svc-card:hover { transform: translateY(-3px); background: var(--glass-hover); }
+    .svc-card.h-b:hover { border-color: rgba(125,216,240,.22); }
+    .svc-card.h-r:hover { border-color: rgba(196,208,228,.22); }
+    .svc-card.h-g:hover { border-color: rgba(125,216,240,.22); }
+    .svc-card.h-y:hover { border-color: rgba(125,216,240,.20); }
+    .svc-card.h-v:hover { border-color: rgba(125,216,240,.20); }
+    .svc-title { font-family: var(--font-display); font-size: .88rem; font-weight: 700; margin-bottom: .35rem; display: flex; align-items: flex-start; gap: .5rem; }
+    .svc-icon  { font-size: 1.1rem; flex-shrink: 0; }
+    .svc-meta  { font-size: .75rem; color: var(--muted); line-height: 1.5; }
+    .svc-badge {
+      display: inline-block; font-size: .62rem;
+      font-family: var(--font-display); font-weight: 800;
+      padding: .08rem .42rem; border-radius: 999px;
+      margin-top: .4rem; text-transform: uppercase; letter-spacing: .08em;
+    }
+    .bd-b { background: rgba(125,216,240,.12); color: var(--cyan); }
+    .bd-g { background: rgba(125,216,240,.12);  color: var(--cyan); }
+    .bd-y { background: rgba(125,216,240,.12); color: var(--cyan); }
+    .bd-v { background: rgba(125,216,240,.12); color: var(--chrome); }
+    .bd-hot { background: linear-gradient(90deg,var(--cyan),var(--cyan-dim)); color:#fff; }
+
+    /* ============================================================
+       TIERS
+    ============================================================ */
+    .tiers-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: .8rem; margin-top: 1rem; }
+    .tier-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1rem;
+      text-align: center;
+      transition: transform .15s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .tier-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--rainbow);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .tier-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+    .tier-card:hover::before { opacity: .5; }
+    .tier-card.featured { border-color: var(--chrome-edge); background: rgba(200,212,232,.05); }
+    .tier-name  { font-family: var(--font-display); font-weight: 800; font-size: 1rem; margin-bottom: .3rem; }
+    .tier-price { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin: .4rem 0; }
+    .tier-desc  { color: var(--muted); font-size: .76rem; line-height: 1.5; }
+    .tier-card ul { list-style: none; text-align: left; margin: .75rem 0 0; padding: 0; font-size: .76rem; color: var(--muted); display: flex; flex-direction: column; gap: .35rem; }
+    .tier-card ul li::before { content: "✓ "; color: var(--cyan); font-weight: 800; }
+
+    /* ============================================================
+       SEARCH
+    ============================================================ */
+    .search-wrap { position: relative; margin-bottom: 1.25rem; }
+    .search-wrap input {
+      width: 100%;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: .75rem 1rem .75rem 2.75rem;
+      color: var(--txt);
+      font-family: var(--font-body);
+      font-size: .9rem;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    .search-wrap input:focus { border-color: rgba(125,216,240,.28); box-shadow: 0 0 0 3px rgba(125,216,240,.07); }
+    .search-wrap input::placeholder { color: var(--muted2); }
+    .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+
+    /* ============================================================
+       PORTAL ITEM LIST
+    ============================================================ */
+    .portal-list { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; }
+    .portal-item {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: transform .15s, border-color .2s, box-shadow .2s;
+      text-decoration: none;
+      color: var(--txt);
+    }
+    .portal-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); color: var(--txt); }
+    .portal-item.i-b:hover  { border-color: rgba(125,216,240,.28); }
+    .portal-item.i-y:hover  { border-color: rgba(125,216,240,.28); }
+    .portal-item.i-r:hover  { border-color: rgba(196,208,228,.18); }
+    .portal-item.i-g:hover  { border-color: rgba(125,216,240,.22); }
+    .portal-item.i-v:hover  { border-color: rgba(125,216,240,.25); }
+    .portal-item-icon { font-size: 2.2rem; flex-shrink: 0; }
+    .portal-item-body h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 800; margin-bottom: .3rem; }
+    .portal-item-body p  { color: var(--muted); font-size: .82rem; line-height: 1.5; margin: 0; }
+    .portal-item-badge {
+      font-size: .62rem; font-family: var(--font-display); font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .16rem .55rem; border-radius: 999px;
+      margin-top: .45rem; display: inline-block;
+    }
+
+    /* ============================================================
+       PORTFOLIO GRID
+    ============================================================ */
+    .portfolio-filters {
+      display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+    }
+    .pf-filter {
+      padding: .38rem .8rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: .74rem;
+      font-weight: 700;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .pf-filter:hover { color: var(--txt); background: var(--glass-hover); }
+    .pf-filter.active {
+      background: rgba(200,212,232,.1);
+      border-color: var(--chrome-edge);
+      color: var(--chrome);
+    }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; }
+    .pf-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.1rem;
+      transition: transform .15s, border-color .2s, background .2s;
+      cursor: default;
+    }
+    .pf-card:hover { transform: translateY(-3px); background: var(--glass-hover); }
+    .pf-card[data-link]:hover { cursor: pointer; }
+    .pf-card.zengine:hover  { border-color: rgba(125,216,240,.20); }
+    .pf-card.sympolar:hover { border-color: rgba(125,216,240,.18); }
+    .pf-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .4rem; }
+    .pf-title { font-family: var(--font-display); font-size: .88rem; font-weight: 800; }
+    .pf-status {
+      font-size: .58rem; font-family: var(--font-display); font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .1rem .45rem; border-radius: 999px; flex-shrink: 0;
+    }
+    .st-shipped  { background: rgba(125,216,240,.12);  color: var(--cyan);  border: 1px solid rgba(125,216,240,.22); }
+    .st-inprog   { background: rgba(125,216,240,.12); color: var(--cyan);  border: 1px solid rgba(125,216,240,.22); }
+    .st-concept  { background: rgba(200,212,232,.07); color: var(--chrome-mid); border: 1px solid var(--chrome-edge); }
+    .pf-desc { font-size: .76rem; color: var(--muted); line-height: 1.5; margin-bottom: .5rem; }
+    .pf-tags { display: flex; gap: .3rem; flex-wrap: wrap; }
+    .pf-tag {
+      font-size: .6rem; padding: .1rem .4rem; border-radius: 999px;
+      font-family: var(--font-display); font-weight: 700;
+    }
+    .pf-tag.ze { background: rgba(125,216,240,.10); color: var(--cyan); border: 1px solid rgba(125,216,240,.15); }
+    .pf-tag.sy { background: rgba(125,216,240,.10);  color: var(--cyan); border: 1px solid rgba(125,216,240,.15); }
+    .pf-tag.hw { background: rgba(125,216,240,.09); color: var(--cyan); border: 1px solid rgba(125,216,240,.14); }
+    .pf-tag.gm { background: rgba(125,216,240,.08); color: var(--cyan); border: 1px solid rgba(196,208,228,.12); }
+    .pf-tag.ai { background: rgba(125,216,240,.09); color: var(--chrome); border: 1px solid rgba(125,216,240,.14); }
+    .pf-tag.cr { background: rgba(125,216,240,.09); color: var(--cyan); border: 1px solid rgba(125,216,240,.13); }
+    .pf-brand-strip {
+      display: flex; gap: .35rem; align-items: center;
+      font-size: .62rem; font-family: var(--font-display); font-weight: 700;
+      color: var(--muted2); text-transform: uppercase; letter-spacing: .1em;
+      margin-bottom: .5rem;
+    }
+    .pf-brand-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .pf-brand-dot.ze { background: var(--cyan); }
+    .pf-brand-dot.sy { background: var(--chrome-mid); }
+
+    /* ============================================================
+       CONTACT FORM
+    ============================================================ */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block; font-family: var(--font-display); font-size: .76rem;
+      font-weight: 700; color: var(--muted); margin-bottom: .4rem;
+      text-transform: uppercase; letter-spacing: .1em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: .75rem 1rem;
+      color: var(--txt); font-family: var(--font-body); font-size: .9rem;
+      transition: border-color .2s, box-shadow .2s; outline: none;
+      -webkit-appearance: none; appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: rgba(125,216,240,.28); box-shadow: 0 0 0 3px rgba(125,216,240,.07); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--muted2); }
+    .form-group select option { background: #0d0d18; color: var(--txt); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-success { display: none; background: rgba(125,216,240,.07); border: 1px solid rgba(125,216,240,.22); border-radius: var(--radius-sm); padding: 1.5rem; text-align: center; }
+    .form-success h4 { font-family: var(--font-display); margin-bottom: .3rem; color: var(--cyan); }
+    .form-success p  { color: var(--muted); font-size: .88rem; margin: 0; }
+
+    /* ============================================================
+       CTA BLOCK
+    ============================================================ */
+    .cta-block {
+      border-radius: var(--radius);
+      padding: 2.25rem 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-lift);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(125,216,240,.06), rgba(196,208,228,.04));
+      border: 1px solid var(--chrome-edge);
+    }
+    .cta-block::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--rainbow);
+      opacity: .4;
+    }
+    .cta-block h2 { font-size: clamp(1.3rem,2.5vw,2rem); margin-bottom: .75rem; }
+    .cta-block p  { color: var(--muted); max-width: 520px; margin: 0 auto 1.5rem; }
+
+    /* ============================================================
+       WATERMARK
+    ============================================================ */
+    .zengine-watermark {
+      font-family: var(--font-display);
+      font-size: .66rem;
+      font-weight: 700;
+      color: var(--muted2);
+      letter-spacing: .1em;
+      text-align: center;
+      padding: .4rem 0;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      max-width: 1280px;
+      margin: 2.5rem auto 1.5rem;
+      padding: 1.5rem 1rem 1rem;
+      border-top: 1px solid rgba(200,212,232,.06);
+    }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 960px) {
+      .link-grid      { grid-template-columns: 1fr 1fr; }
+      .tiles          { grid-template-columns: repeat(2,1fr); }
+      .service-grid   { grid-template-columns: 1fr 1fr; }
+      .tiers-grid     { grid-template-columns: 1fr 1fr; }
+      .portal-list    { grid-template-columns: 1fr; }
+      .form-row       { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      main          { padding: .75rem; }
+      .hero         { min-height: 50vh; border-radius: 16px; }
+      .hero-content { padding: 2rem .75rem; }
+      .card         { padding: 1rem; border-radius: 16px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .stats-row    { grid-template-columns: 1fr 1fr; }
+      .link-grid    { grid-template-columns: 1fr 1fr; gap: .7rem; }
+      .tiles        { grid-template-columns: 1fr 1fr; gap: .7rem; }
+      .service-grid { grid-template-columns: 1fr; }
+      .tiers-grid   { grid-template-columns: 1fr 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .section      { margin: 1.65rem 0; }
+      .portal-tabs  { gap: .3rem; }
+      .portal-tab   { font-size: .72rem; padding: .38rem .75rem; }
+      .cta-block    { padding: 1.5rem 1rem; }
+      .meta-features { flex-direction: column; }
+    }
+    @media (max-width: 400px) {
+      .tiers-grid, .link-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER / NAV
+============================================================ -->
+<header>
+  <div class="nav-wrap">
+    <div class="nav-rail"></div>
+    <div class="nav-inner">
+      <a class="brand" href="#/home" aria-label="Zengine home">
+        <img src="img-z-ideal.png" alt="Zengine ZG mark"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+        <span class="brand-zg" style="display:none">ZG</span>
+        <b>Zengine</b>
+      </a>
+      <nav class="nav-menu" aria-label="Primary navigation">
+        <a href="#/home"      data-link>Home</a>
+        <a href="#/about"     data-link>About</a>
+        <a href="#/arcade"    data-link>Arcade</a>
+        <a href="#/portfolio" data-link>Portfolio</a>
+        <a href="#/projects"  data-link>Projects</a>
+        <a href="#/services"  data-link>Services</a>
+        <a href="#/contact"   data-link>Contact</a>
+        <a href="https://zengineco.github.io/zenginesite2/portfolio.html"
+           class="btn-nav-portfolio" rel="noopener noreferrer" target="_blank"
+           onclick="this.opener=null">Portfolio ↗</a>
+        <a href="https://zengin.es"
+           class="btn-nav-arcade" rel="noopener noreferrer" target="_blank"
+           onclick="this.opener=null">Zengin.es ↗</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- AdSense slot — centered below header -->
+<div class="ad-slot">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-8826956454892311"
+       data-ad-slot="auto"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<main id="app" tabindex="-1" role="main" aria-live="polite"></main>
+
+<div class="zengine-watermark">www.zengine.site | © <span class="wm-year"></span> Zengine™</div>
+
+<footer>
+  <div class="footer-inner">
+    <small style="color:var(--muted);font-family:var(--font-display);font-size:.78rem;">
+      © <span id="year"></span> Zengine™ — Apps · Games · Hardware ·
+      <a href="https://zengin.es" rel="noopener noreferrer" target="_blank"
+         onclick="this.opener=null" style="color:var(--cyan)">Zengin.es</a>
+    </small>
+    <div class="footer-links">
+      <a class="chip" href="mailto:team@zengine.site">team@zengine.site</a>
+      <a class="chip" href="https://zengine.shop" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Shop ↗</a>
+      <a class="chip" href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Zengin.es ↗</a>
+      <a class="chip" href="https://zengineco.github.io/zenginesite2/portfolio.html" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Full Portfolio ↗</a>
+      <a class="chip" href="#/services">Services</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     TEMPLATES
+============================================================ -->
+
+<!-- HOME -->
+<template id="tpl-home">
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Digital Architect · Apps · Games · Hardware</span>
+    <h1>Build Smarter.<br><span class="grad">Your Idea Deserves an Architect.</span></h1>
+    <p>Zengine delivers results. Structured execution across apps, games, hardware, and AI — for clients who won't settle.</p>
+    <div class="hero-btns">
+      <a class="btn chrome" href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Enter Zengin.es ↗</a>
+      <a class="btn cyan" href="#/arcade">The Arcade</a>
+      <a class="btn ghost"   href="#/portfolio">53 Projects →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card b-chrome">
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">53</div><div class="stat-label">Total Projects</div></div>
+      <div class="stat-box"><div class="stat-num">21</div><div class="stat-label">Shipped</div></div>
+      <div class="stat-box"><div class="stat-num">13</div><div class="stat-label">In Progress</div></div>
+    </div>
+    <p style="text-align:center;color:var(--muted);margin:1rem 0 0;font-size:.88rem">Two builders. One disciplined creative tech studio. Apps, games, hardware, and AI tools — scoped precisely, executed without ambiguity, shipped to hold up.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="feature-card fc-meta">
+    <div class="fc-badge cy">🌐 In Construction — zengin.es</div>
+    <h3>🕹️ Zengin.es — The Metaversery</h3>
+    <p>A digital world in its own right. Part gaming arcade where players drop in and compete on Zengine originals, part open social hub — spatial hangouts, open mic auditoria for performers and their crowds. Think Discord meets a real arcade meets a stage.</p>
+    <div class="meta-features">
+      <div class="meta-feat">Multiplayer Arcade Games</div>
+      <div class="meta-feat">Open Mic Auditoria</div>
+      <div class="meta-feat">Digital Hangout Spaces</div>
+      <div class="meta-feat">Live Performer + Viewer Rooms</div>
+      <div class="meta-feat">Community Infrastructure</div>
+    </div>
+    <div style="margin-top:1.25rem;display:flex;gap:.7rem;flex-wrap:wrap">
+      <a class="btn cyan" href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Visit Zengin.es ↗</a>
+      <a class="btn ghost" href="#/arcade">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="feature-card fc-arcade">
+    <div class="fc-badge cy">⚡ Arcade Launch Title</div>
+    <h3>♟️ Steed Trek: A Knight's Tail</h3>
+    <p>Chess-punk sci-fi adventure starring Ziggy the zebracorn knight across neon star rails and techno-chess labyrinths. An original Zengine IP platforming at Zengin.es Arcade alongside other titles in active development.</p>
+    <div style="margin-top:1.1rem;display:flex;gap:.7rem;flex-wrap:wrap">
+      <a class="btn chrome" href="#/project/steedtrek">See the Game →</a>
+      <a class="btn ghost"   href="#/arcade">All Arcade Titles</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="feature-card fc-lead">
+    <div class="fc-badge cy">🚀 Released 02/2026</div>
+    <h3>🔎 LeadSeer — Stop Guessing. Start Closing.</h3>
+    <p>Lead generation for your business shouldn't require an agency retainer. LeadSeer finds, qualifies, and delivers prospects directly — so you spend time closing, not hunting.</p>
+    <div style="margin-top:1.1rem;display:flex;gap:.7rem;flex-wrap:wrap">
+      <a class="btn chrome" href="#/project/findleads">Learn More →</a>
+      <a class="btn ghost"   href="#/contact">Request Early Access</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header"><h2>What We Build</h2><div class="line"></div></div>
+  <div class="link-grid">
+    <a class="link-card b-cy" href="#/arcade">
+      <div class="lc-icon">🕹️</div><div class="lc-label">Flagship Platform</div>
+      <h3>Zengin.es Arcade</h3>
+      <p>Digital hangouts, open mic stages, and multiplayer originals. A metaversery built from the ground up — in construction now.</p>
+      <div class="lc-arrow">Enter →</div>
+    </a>
+    <a class="link-card b-cy" href="#/portfolio">
+      <div class="lc-icon">📁</div><div class="lc-label">53 Projects</div>
+      <h3>Full Portfolio</h3>
+      <p>Games, apps, hardware, AI tools, and client work — the complete build history across Zengine and SymPolar.</p>
+      <div class="lc-arrow">Browse →</div>
+    </a>
+    <a class="link-card b-cy" href="#/services">
+      <div class="lc-icon">⚙️</div><div class="lc-label">109+ Offerings</div>
+      <h3>All Services</h3>
+      <p>App architecture, AI automation, prompt engineering, game design, 3D modeling, legal docs — one roof.</p>
+      <div class="lc-arrow">Browse →</div>
+    </a>
+    <a class="link-card b-cy" href="#/project/findleads">
+      <div class="lc-icon">🎯</div><div class="lc-label">New Project</div>
+      <h3>LeadSeer</h3>
+      <p>Fine-tuned lead generation for businesses that need qualified prospects — not just a bigger list.</p>
+      <div class="lc-arrow">Preview →</div>
+    </a>
+  </div>
+</section>
+
+<section class="section card b-chrome">
+  <div class="section-header"><h2>About Zengine</h2><div class="line"></div></div>
+  <p>Zengine is a creative team that changes the game with top-quality products across a diverse array of disciplines. Software: 2D/mobile game design, application architecture, AI, prompt engineering. Hardware — 3D printing, IoT, Pi iterations, Stream Sniper — is on the roadmap.</p>
+  <p>We don't overcommit and underdeliver. We scope precisely, execute without ambiguity, and ship deliverables that hold up.</p>
+  <div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap">
+    <a class="btn chrome"   href="#/about">Full Story →</a>
+    <a class="btn cyan"  href="#/services">All Services →</a>
+    <a class="btn ghost" href="https://zengineco.github.io/zenginesite2/portfolio.html" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Portfolio ↗</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="cta-block">
+    <h2>Your Idea Deserves an Architect.</h2>
+    <p>We're actively onboarding clients. Bring your project — we'll align it, build it, and deliver it right.</p>
+    <a class="btn cyan" href="#/contact">Start the Conversation →</a>
+  </div>
+</section>
+</template>
+
+<!-- ABOUT -->
+<template id="tpl-about">
+<section class="page">
+  <div class="section-header"><h2>About Zengine</h2><div class="line"></div></div>
+  <div class="grid-2">
+    <article class="card b-cyan">
+      <h3>The Studio</h3>
+      <p><strong>Zengine</strong> is a creative technology team specializing in high-end digital products — apps, games, and hardware — designed with discipline and executed without ambiguity.</p>
+      <p>Current output: professional digital consultation, documentation, 2D/mobile game design, application architecture, and prompt engineering. Hardware — server, Pi iterations, Stream Sniper — follows on the active roadmap.</p>
+      <p>Operating through <a href="https://zengine.site" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">zengine.site</a>, <a href="https://zengine.shop" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">zengine.shop</a>, and the <a href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Zengin.es Metaversery</a>.</p>
+    </article>
+    <article class="card b-chrome">
+      <h3>Where We Started</h3>
+      <p>Two people. Years immersed in gaming, digital media, and systems thinking — not as observers, but as students of craft who studied what worked and why.</p>
+      <p>Late-night analysis of mechanics, design decisions, and audience behavior evolved into a production practice built on discipline and specificity. We don't consult vaguely. We build precisely.</p>
+      <div class="manifesto-pull">"We care deeply about digital craft — and we approach it with discipline, not ego."</div>
+    </article>
+  </div>
+
+  <article class="card b-cyan" style="margin-top:1rem">
+    <h3>Philosophy &amp; Operating Principle</h3>
+    <div class="grid-2">
+      <div>
+        <p><strong>We serve the client. We design for the end user.</strong></p>
+        <div class="manifesto-pull b" style="font-size:1.05rem">"Will this increase meaningful engagement while preserving the integrity of the experience?"</div>
+        <p style="color:var(--muted)">If yes, we build it. If not, we say so — and explain exactly why. That's not a constraint. That's a competitive advantage.</p>
+      </div>
+      <div>
+        <h4 style="margin:0 0 .65rem;font-family:var(--font-display)">Who We Serve Best</h4>
+        <ul class="icp-list">
+          <li>A developer building a realistic simulation who needs a sharp external perspective</li>
+          <li>A creative founder protecting product integrity while scaling it</li>
+          <li>A designer who wants refinement without dilution</li>
+          <li>A creator who values depth and specificity over volume and noise</li>
+          <li>A business looking for digital products with staying power</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <article class="card" style="margin-top:1rem">
+    <h3>Products &amp; Hardware Roadmap</h3>
+    <div class="grid-2">
+      <div>
+        <h4 style="font-family:var(--font-display);margin:0 0 .5rem">Hardware &amp; Tools</h4>
+        <ul>
+          <li><strong>PlumHUD</strong> — mobile-first real-time monitoring dashboard.</li>
+          <li><strong>Moonbeam</strong> — Bitcoin nerdminer and blockchain learning device.</li>
+          <li><strong>Stream Sniper</strong> — projector module with built-in ASIC for autonomous stream capture.</li>
+          <li><strong>Rhubarb Pi</strong> — honeypot security system. Looks vulnerable. Bites back.</li>
+          <li><strong>Servers &amp; Pi Devices</strong> — on the active roadmap.</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:var(--font-display);margin:0 0 .5rem">Platforms &amp; Games</h4>
+        <ul>
+          <li><strong>Zengin.es Metaversery</strong> — digital hangouts, open mic auditoria, multiplayer arcade.</li>
+          <li><strong>Steed Trek: A Knight's Tail</strong> — chess-punk sci-fi adventure. Arcade launch title.</li>
+          <li><strong>FoosFriends</strong> — physics-driven mobile multiplayer.</li>
+          <li><strong>TeleGaming</strong> — live audience gaming platform.</li>
+          <li><strong>MicDrop</strong> — public comedy forum and performance platform.</li>
+          <li><strong>LeadSeer</strong> — automated lead generation. Released 02/2026.</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <div class="section-header" style="margin-top:2rem"><h2>Manifesto</h2><div class="line"></div></div>
+  <div class="card" style="max-width:740px">
+    <div class="manifesto-pull v">Zengine doesn't wait for the industry to make room. We build the room.</div>
+    <p>Every release is a proof point. Hardware, games, platforms, growth systems — each one demonstrates that creative integrity and business performance are not opposites.</p>
+    <p>We act as a calibrated external lens — bringing structure, realism, and controlled scalability to creative projects without compromising their core.</p>
+    <h4 style="font-family:var(--font-display);margin:1.25rem 0 .65rem">Where We're Going</h4>
+    <p>Zengine scales from digital services into hardware and technology — servers, Pi devices, ASIC-integrated hardware. <strong>Zengin.es is in construction. LeadSeer is live.</strong></p>
+  </div>
+
+  <div class="section-header" style="margin-top:2rem"><h2>Credits</h2><div class="line"></div></div>
+  <div class="card" style="max-width:560px">
+    <p>Built by two people who started from the floor and refused to stay there. Craft, discipline, and specificity over noise — every time.</p>
+    <p style="color:var(--muted)">"Blah blah yada yada yada, roll credits."</p>
+    <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+      <a class="chip" href="https://zengine.site" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">zengine.site</a>
+      <a class="chip" href="https://zengine.shop" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">zengine.shop</a>
+      <a class="chip" href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">zengin.es</a>
+      <a class="chip" href="https://zengineco.github.io/zenginesite2/portfolio.html" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Portfolio ↗</a>
+      <a class="chip" href="mailto:team@zengine.site">team@zengine.site</a>
+    </div>
+  </div>
+
+  <div class="cta-block" style="margin-top:1.5rem">
+    <h2>Let's work together.</h2>
+    <p>App, game consulting, hardware project, or something we haven't built yet — bring it.</p>
+    <a class="btn cyan" href="#/contact">Reach Out →</a>
+  </div>
+</section>
+</template>
+
+<!-- ARCADE -->
+<template id="tpl-arcade">
+<section class="page">
+  <div class="section-header"><h2>Zengin.es — The Metaversery</h2><div class="line"></div></div>
+  <p style="color:var(--muted);margin-bottom:1.75rem;max-width:680px;font-size:.9rem">
+    A digital world under construction at <a href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null" style="color:var(--cyan)">zengin.es</a>. Part multiplayer game arcade, part open social hub — spatial hangout rooms, open mic auditoria for live performers and their audiences, and community infrastructure that works more like a real place than a feed.
+  </p>
+
+  <div class="feature-card fc-meta" style="margin-bottom:1.5rem">
+    <div class="fc-badge cy">🌐 In Construction — zengin.es</div>
+    <h3>🌐 What Is the Metaversery?</h3>
+    <p>Zengin.es is a unified digital destination with distinct zones. The Arcade is where players drop in and compete on Zengine original titles. The Auditoria is where performers take the stage and crowds actually show up. The Hangout is the connective social tissue — persistent rooms, proximity presence, and a reason to stay.</p>
+    <div class="meta-features">
+      <div class="meta-feat">Multiplayer Arcade Games</div>
+      <div class="meta-feat">Open Mic / Live Auditoria</div>
+      <div class="meta-feat">Spatial Hangout Rooms</div>
+      <div class="meta-feat">Performer + Viewer Infrastructure</div>
+      <div class="meta-feat">Community Infrastructure</div>
+      <div class="meta-feat">Original Zengine IP</div>
+    </div>
+    <div style="margin-top:1.25rem;display:flex;gap:.7rem;flex-wrap:wrap">
+      <a class="btn cyan" href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Visit Zengin.es ↗</a>
+      <a class="btn ghost"   href="#/contact">Get Notified at Launch</a>
+    </div>
+  </div>
+
+  <div class="section-header"><h2>Arcade Titles</h2><div class="line"></div></div>
+  <div class="portal-list">
+    <a class="portal-item i-cy" href="#/project/steedtrek">
+      <div class="portal-item-icon">♟️</div>
+      <div class="portal-item-body">
+        <h3>Steed Trek: A Knight's Tail</h3>
+        <p>Neon-western meets chess-punk. Ziggy the zebracorn knight across star rails and techno-chess labyrinths. Original Zengine IP — featured at Arcade launch.</p>
+        <span class="portal-item-badge bd-cy">Launch Title · In Dev</span>
+      </div>
+    </a>
+    <a class="portal-item i-ch" href="#/project/telegaming">
+      <div class="portal-item-icon">📡</div>
+      <div class="portal-item-body">
+        <h3>TeleGaming</h3>
+        <p>Live rooms. Games. Crowd energy. Spatial lobbies where audience participation directly changes the outcome. Arcade meets broadcast.</p>
+        <span class="portal-item-badge bd-cy">In Dev · Live Platform</span>
+      </div>
+    </a>
+    <a class="portal-item i-cy" href="#/project/micdrop">
+      <div class="portal-item-icon">🎤</div>
+      <div class="portal-item-body">
+        <h3>MicDrop — Open Mic Auditoria</h3>
+        <p>Public comedy and performance forum. Jokes land — or bomb — in real time, scored by the crowd. The Auditoria zone of Zengin.es.</p>
+        <span class="portal-item-badge bd-cy">In Dev · Auditoria Zone</span>
+      </div>
+    </a>
+    <a class="portal-item i-cy" href="#/project/lamp">
+      <div class="portal-item-icon">🌐</div>
+      <div class="portal-item-body">
+        <h3>LAMP — Large Area Multiverse Protocol</h3>
+        <p>Proximity-based social metaverse. Your position determines what you see, hear, and who you meet. The spatial backbone of the Metaversery concept.</p>
+        <span class="portal-item-badge bd-cy">Concept · Metaverse Engine</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section" style="margin-top:2rem">
+    <div class="section-header"><h2>Other Portals</h2><div class="line"></div></div>
+    <div class="portal-list">
+      <a class="portal-item i-cy" href="#/project/plumhud">
+        <div class="portal-item-icon">📊</div>
+        <div class="portal-item-body">
+          <h3>PlumHUD</h3>
+          <p>Real-time dashboard built for clarity. Every element earns its place on screen. Pairs with Moonberry Pi for embedded hardware deployments.</p>
+          <span class="portal-item-badge bd-cy">Live · Dashboard App</span>
+        </div>
+      </a>
+      <a class="portal-item i-cy" href="#/project/retailtrader">
+        <div class="portal-item-icon">📈</div>
+        <div class="portal-item-body">
+          <h3>Retail Trader</h3>
+          <p>Full-suite market terminal for the independent investor. Real-time data, backtesting, trade journaling — Bloomberg-grade tooling built for retail.</p>
+          <span class="portal-item-badge bd-cy">In Dev · Finance Platform</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+</template>
+
+<!-- PORTFOLIO PAGE -->
+<template id="tpl-portfolio">
+<section class="page">
+  <div class="section-header"><h2>Portfolio</h2><div class="line"></div></div>
+  <p style="color:var(--muted);margin-bottom:.5rem;max-width:680px;font-size:.9rem">
+    53 projects across Zengine and SymPolar — games, apps, hardware, AI tools, and client work. Full interactive version at
+    <a href="https://zengineco.github.io/zenginesite2/portfolio.html" rel="noopener noreferrer" target="_blank" onclick="this.opener=null" style="color:var(--cyan)">zengineco.github.io ↗</a>
+  </p>
+
+  <!-- Brand legend -->
+  <div style="display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:.4rem;font-size:.76rem;font-family:var(--font-display);font-weight:700;color:var(--cyan)">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--cyan);display:inline-block"></span>Zengine — Apps · Games · Hardware
+    </div>
+    <div style="display:flex;align-items:center;gap:.4rem;font-size:.76rem;font-family:var(--font-display);font-weight:700;color:var(--cyan)">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--chrome-mid);display:inline-block"></span>SymPolar — Web Design · Hosting
+    </div>
+  </div>
+
+  <div class="portfolio-filters" id="pfFilters">
+    <button class="pf-filter active" data-filter="all">All <span style="opacity:.5;font-size:.8em">53</span></button>
+    <button class="pf-filter" data-filter="shipped">Shipped</button>
+    <button class="pf-filter" data-filter="inprog">In Progress</button>
+    <button class="pf-filter" data-filter="concept">Concept</button>
+    <button class="pf-filter" data-filter="game">Games</button>
+    <button class="pf-filter" data-filter="saas">SaaS / Tools</button>
+    <button class="pf-filter" data-filter="hardware">Hardware</button>
+    <button class="pf-filter" data-filter="sympolar">SymPolar</button>
+    <button class="pf-filter" data-filter="creative">Creative</button>
+  </div>
+
+  <div class="portfolio-grid" id="pfGrid"></div>
+
+  <div style="margin-top:1.5rem;text-align:center">
+    <a class="btn cyan" href="https://zengineco.github.io/zenginesite2/portfolio.html" rel="noopener noreferrer" target="_blank" onclick="this.opener=null">Open Full Interactive Portfolio ↗</a>
+  </div>
+</section>
+</template>
+
+<!-- PROJECTS GRID -->
+<template id="tpl-projects">
+<section class="page">
+  <div class="section-header"><h2>Projects</h2><div class="line"></div></div>
+  <p style="color:var(--muted);margin-bottom:1.5rem;max-width:620px;font-size:.9rem">Hardware experiments, software prototypes, and creative builds in active development. Every project here is a future portal or product line. <a href="#/arcade" style="color:var(--cyan)">See Zengin.es Arcade →</a></p>
+  <div class="tiles" id="proj-tiles"></div>
+</section>
+</template>
+
+<!-- PROJECT DETAIL -->
+<template id="tpl-project">
+<section class="page">
+  <div id="projHeroWrap" style="position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--chrome-edge);box-shadow:var(--shadow-lift);margin-bottom:1rem">
+    <div id="projBgBlur" style="position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(32px) saturate(120%);opacity:.3;transform:scale(1.1)"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,15,.4) 0%,rgba(9,9,15,.88) 100%)"></div>
+    <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5rem 1.5rem;min-height:50vh">
+      <img id="projLogo" alt="" style="max-width:min(280px,60vw);max-height:260px;width:auto;height:auto;object-fit:contain;margin:0 auto 1.5rem;filter:drop-shadow(0 12px 40px rgba(0,0,0,.8));border-radius:16px">
+      <h2 id="projTitle" style="font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2.4rem);font-weight:800;margin-bottom:.6rem"></h2>
+      <p id="projDesc" style="color:var(--muted);max-width:520px;font-size:.95rem;margin-bottom:.85rem"></p>
+      <div id="projTags" class="tags" style="justify-content:center;margin-bottom:.85rem"></div>
+      <div id="projLinks" style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap"></div>
+    </div>
+  </div>
+  <article class="card b-cyan" id="projBody"></article>
+  <div style="margin-top:1rem;text-align:center;display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap">
+    <a class="btn ghost" href="#/projects">← All Projects</a>
+    <a class="btn ghost" href="#/arcade">Arcade →</a>
+  </div>
+</section>
+</template>
+
+<!-- SERVICES -->
+<template id="tpl-services">
+<section class="page">
+  <div class="section-header"><h2>Services</h2><div class="line"></div></div>
+  <p style="color:var(--muted);margin-bottom:1.5rem;max-width:680px;font-size:.9rem">109+ services across 7 categories. Professional documentation, 2D/mobile game design, application architecture, prompt engineering, AI automation, and more.</p>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="svcSearch" placeholder="Search services... (e.g. prompt engineering, game design, automation)" autocomplete="off" />
+  </div>
+  <div id="searchResults" style="display:none;margin-bottom:1rem"></div>
+  <div class="portal-tabs" id="portalTabs"></div>
+  <div id="portalPanels"></div>
+  <div class="section-header" style="margin-top:2rem"><h2>Engagement Tiers</h2><div class="line"></div></div>
+  <div class="tiers-grid">
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--muted)">Starter</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--muted),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent">Essentials</div>
+      <div class="tier-desc">One deliverable. Scoped precisely, executed on time.</div>
+      <ul><li>1 core service</li><li>Fixed deliverable</li><li>Fast turnaround</li><li>Email support</li></ul>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-name" style="color:var(--cyan)">Builder</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--cyan),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent">Growth</div>
+      <div class="tier-desc">Multi-service bundles for businesses actively expanding.</div>
+      <ul><li>3–5 services bundled</li><li>Strategy session included</li><li>Monthly check-ins</li><li>Priority support</li></ul>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--cyan)">Architect</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--cyan),var(--cyan-dim));-webkit-background-clip:text;background-clip:text;color:transparent">Systems</div>
+      <div class="tier-desc">Full-stack integration. 10+ services wired into one system.</div>
+      <ul><li>10+ services integrated</li><li>Dedicated strategist</li><li>Quarterly roadmaps</li><li>KPI dashboarding</li></ul>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--cyan)">Master</div>
+      <div class="tier-price" style="background:linear-gradient(90deg,var(--cyan),var(--cyan-dim));-webkit-background-clip:text;background-clip:text;color:transparent">Retainer</div>
+      <div class="tier-desc">Digital Architect Subscription. Ongoing builds — monthly.</div>
+      <ul><li>Unlimited scope</li><li>First-in-queue priority</li><li>AI-augmented ops</li><li>Revenue-sharing options</li></ul>
+    </div>
+  </div>
+  <div class="cta-block" style="margin-top:2rem">
+    <h2>Your Idea Deserves an Architect.</h2>
+    <p>We're actively onboarding clients. Tell us what you need built.</p>
+    <a class="btn cyan" href="#/contact">Get in Touch →</a>
+  </div>
+</section>
+</template>
+
+<!-- CONTACT -->
+<template id="tpl-contact">
+<section class="page">
+  <div class="section-header"><h2>Get in Touch</h2><div class="line"></div></div>
+  <p style="color:var(--muted);margin-bottom:1.75rem;max-width:580px;font-size:.9rem">App, game consulting, hardware project, or early access to LeadSeer — tell us what you're building. We respond within one business day.</p>
+  <div class="grid-2" style="align-items:start">
+    <div class="card b-cyan">
+      <h3 style="margin-bottom:1.25rem">Start a Project</h3>
+      <div id="contactFormWrap">
+        <div class="form-row">
+          <div class="form-group"><label for="cf-name">Full Name</label><input type="text" id="cf-name" placeholder="Your name" autocomplete="name" /></div>
+          <div class="form-group"><label for="cf-email">Email Address</label><input type="email" id="cf-email" placeholder="you@example.com" autocomplete="email" /></div>
+        </div>
+        <div class="form-group"><label for="cf-business">Business / Project Name</label><input type="text" id="cf-business" placeholder="What are we building?" /></div>
+        <div class="form-group">
+          <label for="cf-service">Primary Service Needed</label>
+          <select id="cf-service">
+            <option value="" disabled selected>Select a category...</option>
+            <option value="game">2D / Mobile Game Design</option>
+            <option value="app">Application Development</option>
+            <option value="prompt">Prompt Engineering</option>
+            <option value="docs">Professional Documentation</option>
+            <option value="ai">AI &amp; Growth Automation</option>
+            <option value="legal">Legal &amp; Compliance</option>
+            <option value="creative">Creative &amp; Design</option>
+            <option value="realestate">Real Estate Media</option>
+            <option value="leadseer">LeadSeer — Early Access</option>
+            <option value="arcade">Zengin.es / Arcade Inquiry</option>
+            <option value="hardware">Hardware / Pi Projects</option>
+            <option value="other">Something Else</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cf-budget">Approximate Budget</label>
+          <select id="cf-budget">
+            <option value="" disabled selected>Select a range...</option>
+            <option>Under $500</option>
+            <option>$500 – $1,500</option>
+            <option>$1,500 – $5,000</option>
+            <option>$5,000 – $15,000</option>
+            <option>$15,000+</option>
+            <option>Prefer to Discuss</option>
+          </select>
+        </div>
+        <div class="form-group"><label for="cf-message">Tell Us About Your Project</label><textarea id="cf-message" placeholder="What do you need built? What's the timeline? Any existing assets or constraints we should know about?"></textarea></div>
+        <div class="form-group" style="margin-bottom:0">
+          <button class="btn cyan" id="cf-submit" style="width:100%;justify-content:center;font-size:.95rem;padding:.85rem 1.25rem">Send Message →</button>
+          <p id="cf-error" style="display:none;color:var(--cyan);font-size:.82rem;margin-top:.6rem;text-align:center"></p>
+        </div>
+      </div>
+      <div class="form-success" id="contactSuccess">
+        <div style="font-size:2rem;margin-bottom:.5rem">✅</div>
+        <h4>Message Received</h4>
+        <p>We'll review your submission and follow up within one business day.</p>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:.9rem">
+      <div class="card b-chrome">
+        <h4 style="font-family:var(--font-display);margin-bottom:.6rem">Direct Contact</h4>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:.75rem">For urgent inquiries or if you'd prefer to reach us directly:</p>
+        <a class="btn cyan" href="mailto:team@zengine.site" style="width:100%;justify-content:center">📧 team@zengine.site</a>
+      </div>
+      <div class="card b-cyan">
+        <h4 style="font-family:var(--font-display);margin-bottom:.6rem">What Happens Next</h4>
+        <ul class="icp-list">
+          <li>We review your submission and scope the request</li>
+          <li>Response within 1 business day</li>
+          <li>We align on deliverables, timeline, and pricing</li>
+          <li>Work begins — no ambiguity, no runaround</li>
+        </ul>
+      </div>
+      <div class="feature-card fc-lead" style="padding:1.25rem 1.2rem">
+        <div class="fc-badge cy" style="font-size:.6rem;padding:.18rem .55rem;margin-bottom:.5rem">🎯 Live 02/2026</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:.35rem">Interested in LeadSeer?</h4>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:.75rem">Select "LeadSeer — Early Access" above to get on the priority list before public launch.</p>
+        <a class="btn chrome" href="#/project/findleads" style="font-size:.8rem;padding:.5rem .9rem">Learn More →</a>
+      </div>
+      <div class="feature-card fc-meta" style="padding:1.25rem 1.2rem">
+        <div class="fc-badge cy" style="font-size:.6rem;padding:.18rem .55rem;margin-bottom:.5rem">🌐 In Construction</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:.35rem">Zengin.es Arcade Inquiry?</h4>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:.75rem">Select "Zengin.es / Arcade Inquiry" above to get on the early access and notification list.</p>
+        <a class="btn cyan" href="https://zengin.es" rel="noopener noreferrer" target="_blank" onclick="this.opener=null" style="font-size:.8rem;padding:.5rem .9rem">Visit zengin.es ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+</template>
+
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+// Author: Vincent Gonzalez | © 2026 Zengine™ | www.zengine.site
+// Version: v1.1.0
+
+/* ===== BOOT ORDER =====
+   1. PROJECTS data object
+   2. PORTFOLIO_ITEMS array
+   3. PORTALS_DATA array (services)
+   4. navigate() on hashchange + DOMContentLoaded
+   5. render* view function dispatched from navigate()
+   6. Contact form listener attached by renderContact()
+   7. Services tab/search listeners attached by renderServices()
+   8. Portfolio filter listener attached by renderPortfolio()
+===== END BOOT ORDER ===== */
+
+// ─── PROJECTS DATA ───────────────────────────────────────────
+// READS: (static — no runtime state)
+// WRITES: (none)
+var PROJECTS = {
+  steedtrek: {
+    id: 'steedtrek', isArcade: true,
+    title: "Steed Trek — A Knight's Tail",
+    logo: 'img-steed-logo.jpg', hero: 'img-steed-logo.jpg',
+    desc: "Neon-western meets chess-punk. Whimsical sci-fi adventure starring Ziggy the zebracorn knight — original Zengine IP, Zengin.es Arcade launch title.",
+    tags: ['Game','Indie','Sci-Fi','Arcade'],
+    links: [{label:'Zengin.es Arcade', href:'#/arcade'}],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">About the Game</h3><p><strong>Steed Trek: A Knight\'s Tail</strong> follows Ziggy — a knightly zebracorn — across bizarre star rails and techno-chess labyrinths. Medieval chivalry collides with neon-lit science fiction across 30+ levels of exploration, puzzle combat, and stylized set-pieces.</p><p style="color:var(--muted);margin-top:.75rem">Art direction: neon-western chess-punk · Platforms: PC first, web demo via Zengin.es · Featured at <strong>Zengin.es Arcade</strong> launch.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎮 Indie Game</span><span style="background:rgba(125,216,240,.08);border:1px solid rgba(196,208,228,.12);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🌌 Sci-Fi Adventure</span><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🕹️ Arcade Launch Title</span></div>'
+  },
+  findleads: {
+    id: 'findleads',
+    title: 'LeadSeer',
+    logo: 'findleads.png', hero: 'findleads.png',
+    desc: 'Automated lead generation for businesses that need qualified prospects — not just a bigger list.',
+    tags: ['Lead Gen','Automation','Sales','Live 02/2026'],
+    links: [{label:'Request Early Access', href:'#/contact'}],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Stop Guessing. Start Closing.</h3><p><strong>LeadSeer</strong> is a purpose-built lead generation tool that eliminates the manual grind of prospecting. It finds, qualifies, and delivers prospects based on your defined criteria — so you spend time closing, not digging through lists hoping something lands.</p><p style="color:var(--muted);margin-top:.75rem">Built for small businesses, freelancers, and sales teams who need a consistent top-of-funnel without hiring an SDR or paying for databases that deliver bulk noise instead of targeted signal.</p><h4 style="font-family:var(--font-display);margin:1.1rem 0 .5rem">What LeadSeer Does</h4><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.5rem"><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.16);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎯 Targeted Prospect Discovery</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">✅ Lead Qualification Filters</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📤 Clean, Actionable Output</span><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">⚙️ Workflow Integration</span></div><p style="color:var(--muted);font-size:.88rem;margin-top:1.1rem">LeadSeer released February 2026. Early access is open now.</p>'
+  },
+  retailtrader: {
+    id: 'retailtrader',
+    title: 'Retail Trader',
+    logo: 'img-moonman.png', hero: 'img-moonman.png',
+    desc: 'Full-suite market terminal for the independent investor. Real-time data, backtesting, trade journaling.',
+    tags: ['Finance','Terminal','Analytics'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">The Trader\'s Command Center</h3><p><strong>Retail Trader</strong> is a full-suite market terminal built for the independent investor. Bloomberg-grade tooling designed for retail: clean, fast, and purpose-built for how real traders work.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📊 Market Terminal</span><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔄 Strategy Backtester</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📓 Trade Journal</span></div>'
+  },
+  telegaming: {
+    id: 'telegaming', isArcade: true,
+    title: 'TeleGaming',
+    logo: 'img-telegaming.jpg', hero: 'img-telegaming.jpg',
+    desc: 'Live rooms. Games. Crowd energy. Spatial lobbies where audience participation changes the outcome.',
+    tags: ['Platform','Live','Gaming','Arcade'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Where the Crowd Becomes the Game</h3><p><strong>TeleGaming</strong> is a live social gaming platform where spatial lobbies, spectator energy, and real-time crowd participation collide. Anyone can host, anyone can watch, and the audience directly changes the outcome.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎮 Live Gaming</span><span style="background:rgba(125,216,240,.08);border:1px solid rgba(196,208,228,.12);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📡 Broadcast Platform</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">👥 Crowd Interaction</span></div>'
+  },
+  plumhud: {
+    id: 'plumhud',
+    title: 'PlumHUD',
+    logo: 'img-plumhud.png', hero: 'img-plumhud.png',
+    desc: 'Real-time dashboard engineered for clarity. Every element earns its place on screen.',
+    tags: ['Dashboard','App','Hardware','Utility'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Data at a Glance</h3><p><strong>PlumHUD</strong> is a mobile-first real-time dashboard for monitoring metrics, devices, and live system overlays without clutter. Every element earns its place or it doesn\'t ship. Pairs natively with <strong>Moonberry Pi</strong> hardware.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📊 Live Dashboard</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔌 Hardware-Ready</span><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.16);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📱 Mobile-First</span></div>'
+  },
+  streamsniper: {
+    id: 'streamsniper',
+    title: 'Stream Sniper',
+    logo: 'ChatGPT_Image_Sep_2__2025__12_00_27_AM.png', hero: 'ChatGPT_Image_Sep_2__2025__12_00_27_AM.png',
+    desc: 'Raspberry Pi-powered appliance that monitors Twitch, wakes the display when the target goes live, returns to standby when offline.',
+    tags: ['Hardware','RPi5','Streaming','Automation'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Always-On Stream Intelligence</h3><p><strong>Stream Sniper</strong> is a Raspberry Pi 5 hardware appliance that monitors a Twitch channel and automatically wakes the display when the streamer goes live — then returns to standby when they go offline. Full Python app with Setup Wizard, systemd service, and one-command installer. Also available in an N100 mini PC variant using Streamlink + VLC + pygame.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎯 Auto-Detection</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">💾 On-Device Recording</span><span style="background:rgba(125,216,240,.08);border:1px solid rgba(196,208,228,.12);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">⚡ RPi 5 Powered</span></div>'
+  },
+  moonberrypi: {
+    id: 'moonberrypi',
+    title: 'Moonberry Pi',
+    logo: 'b0205791-f019-4f7a-b21a-9f394c78caf2.png', hero: 'b0205791-f019-4f7a-b21a-9f394c78caf2.png',
+    desc: 'Raspberry Pi hardware layer built for PlumHUD. Compact, modular, always-on.',
+    tags: ['Hardware','Raspberry Pi','Embedded'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">The Hardware Behind the HUD</h3><p><strong>Moonberry Pi</strong> is a Raspberry Pi-based platform engineered to pair directly with PlumHUD. Lightweight, modular bridge between physical hardware and real-time data visualization. Deploy anywhere.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.08);border:1px solid rgba(196,208,228,.12);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🍓 Raspberry Pi Native</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📊 PlumHUD Ready</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔋 Low-Power</span></div>'
+  },
+  micdrop: {
+    id: 'micdrop', isArcade: true,
+    title: 'MicDrop',
+    logo: 'mic-drop-logo.png', hero: 'mic-drop-logo.png',
+    desc: 'Open mic auditoria platform. Where performers take the stage and crowds score the set — in real time.',
+    tags: ['Platform','Comedy','Auditoria','Arcade'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">The Stage is Open</h3><p><strong>MicDrop</strong> is the Auditoria zone of the Zengin.es Metaversery — a digital open mic where jokes, bits, and crowd reactions collide in real time. Performers take the stage. Crowds show up and score. Content rises through genuine engagement, not algorithmic gatekeeping.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.08);border:1px solid rgba(196,208,228,.12);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎤 Live Performance</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">😂 Comedy Forum</span><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📣 Crowd Scoring</span></div>'
+  },
+  wildlettuce: {
+    id: 'wildlettuce',
+    title: 'Wild Lettuce Pi',
+    logo: 'ChatGPT_Image_Aug_30__2025__05_35_13_PM.png', hero: 'ChatGPT_Image_Aug_30__2025__05_35_13_PM.png',
+    desc: 'Automated digital growth system powered by Raspberry Pi 5.',
+    tags: ['Hardware','Automation','Growth','RPi5'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Grow Smarter, Not Louder</h3><p><strong>Wild Lettuce Pi</strong> is an automation-driven engagement system built on Raspberry Pi 5. Schedules posts, monitors signals, and responds based on predefined strategies. No brute-force spam — measured, deliberate expansion.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🌿 Growth Engine</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">⚙️ RPi 5 Powered</span><span style="background:rgba(125,216,240,.08);border:1px solid rgba(196,208,228,.12);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📅 Smart Scheduling</span></div>'
+  },
+  piforge: {
+    id: 'piforge',
+    title: 'PiForge',
+    logo: 'Screenshot_2025-08-23_152928.png', hero: 'Screenshot_2025-08-23_152928.png',
+    desc: 'DIY OS customization platform. Deep system control made approachable.',
+    tags: ['Software','OS','Customization','DIY'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Forge Your System</h3><p><strong>PiForge</strong> makes operating system customization approachable without stripping out depth. Beginners configure workflows without touching a terminal. Power users push deeper without hitting artificial ceilings.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔧 OS Customization</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">⚡ Streamlined Automation</span><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.16);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🧩 Modular</span></div>'
+  },
+  rhubarbpi: {
+    id: 'rhubarbpi',
+    title: 'Rhubarb Pi',
+    logo: '3741acce-5282-4312-89e1-de853706321d.png', hero: '3741acce-5282-4312-89e1-de853706321d.png',
+    desc: 'Deceptive honeypot security system. Looks vulnerable. Bites back.',
+    tags: ['Security','Hardware','Honeypot','Cyber'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Sweet on the Outside. Sour Within.</h3><p><strong>Rhubarb Pi</strong> is a security honeypot that weaponizes expectation. Presents as a vulnerable target — while logging, monitoring, and analyzing every intrusion attempt behind the scenes.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.08);border:1px solid rgba(196,208,228,.12);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🕵️ Honeypot</span><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">📋 Behavioral Logging</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🛡️ Low-Cost Security</span></div>'
+  },
+  lamp: {
+    id: 'lamp', isArcade: true,
+    title: 'LAMP — Large Area Multiverse Protocol',
+    logo: 'Untitled.png', hero: 'Untitled.png',
+    desc: 'Proximity-based social metaverse. Your position determines what you see, hear, and who you meet.',
+    tags: ['Platform','Metaverse','Social','Spatial'],
+    links: [],
+    body: '<h3 style="font-family:var(--font-display);margin-bottom:.75rem">Presence Over Presence</h3><p><strong>LAMP</strong> is the spatial backbone concept behind the Zengin.es Metaversery — a proximity-driven virtual environment where your location determines what you see, hear, and who you interact with. The way the real world actually works.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem"><span style="background:rgba(125,216,240,.09);border:1px solid rgba(125,216,240,.16);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🌐 Spatial Metaverse</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🔊 Proximity Audio</span><span style="background:rgba(125,216,240,.10);border:1px solid rgba(125,216,240,.18);border-radius:9px;padding:.45rem .85rem;font-size:.82rem">🎬 Shared Experiences</span></div>'
+  }
+};
+
+var PROJECT_GRID_IDS = [
+  'findleads','steedtrek','telegaming','micdrop','lamp',
+  'plumhud','retailtrader','streamsniper','moonberrypi',
+  'wildlettuce','piforge','rhubarbpi'
+];
+
+// ─── PORTFOLIO DATA ───────────────────────────────────────────
+// Full 53-project build history across Zengine + SymPolar
+// status: 'shipped' | 'inprog' | 'concept'
+// cats:   array of filter keys
+// brand:  'ze' (Zengine) | 'sy' (SymPolar)
+// READS: (static)
+// WRITES: (none)
+var PORTFOLIO_ITEMS = [
+  // ── ZENGINE GAMES ─────────────────────────────────────────
+  {title:"Steed Trek: A Knight's Tail", status:'inprog', brand:'ze', cats:['game'],
+   desc:"Chess-punk sci-fi adventure. Ziggy the zebracorn knight across neon star rails and techno-chess labyrinths. 30+ levels, gravity flips, fog of war, boss system.", tags:['ze','gm'],
+   link:'#/project/steedtrek'},
+  {title:'Wall Class (WALL CLASS)', status:'inprog', brand:'ze', cats:['game'],
+   desc:'Browser-based trailer-loading puzzle game. Zengine splash, cartoon freight renderer, corrected ZG polygon. Versions WC5/WC6 with major visual polish.', tags:['ze','gm']},
+  {title:'STACKER / LOAD METHODS', status:'inprog', brand:'ze', cats:['game'],
+   desc:'Freight training simulator series. Cardboard wall structural integrity mechanics. COG system, Bulkhead Lock, Brick Lock bonuses, Avalanche collapse, Panic Load mode at 82%.', tags:['ze','gm']},
+  {title:'FoosFriends', status:'concept', brand:'ze', cats:['game'],
+   desc:'Physics-driven mobile multiplayer. Fast-paced, casual competitive format.', tags:['ze','gm']},
+  {title:'TeleGaming', status:'inprog', brand:'ze', cats:['game','saas'],
+   desc:'Live audience gaming platform. Spatial lobbies where crowd participation changes the outcome in real time.', tags:['ze','gm'], link:'#/project/telegaming'},
+  {title:'MicDrop', status:'inprog', brand:'ze', cats:['game','saas'],
+   desc:'Public comedy forum and open mic auditoria. Jokes land — or bomb — scored by crowd reaction, not algorithm. Zengin.es Auditoria zone.', tags:['ze','gm'], link:'#/project/micdrop'},
+  {title:'Wanna Bet?', status:'shipped', brand:'ze', cats:['game'],
+   desc:'Synchronized spectator casino app. 12-file static GitHub Pages deployment, Mulberry32 seeded PRNG, 1990s Wendy\'s aesthetic, 8 games with cascading intervals.', tags:['ze','gm']},
+  // ── ZENGINE APPS / SAAS ───────────────────────────────────
+  {title:'LeadSeer (FindLeads)', status:'shipped', brand:'ze', cats:['saas'],
+   desc:'Google Places API lead generation. Finds local businesses without websites. Electron + React desktop app, dark navy/cyan/gold design system.', tags:['ze','ai'], link:'#/project/findleads'},
+  {title:'PlumHUD', status:'shipped', brand:'ze', cats:['saas'],
+   desc:'Mobile-first real-time monitoring dashboard. Every element earns its place on screen. Pairs with Moonberry Pi.', tags:['ze'], link:'#/project/plumhud'},
+  {title:'Retail Trader', status:'inprog', brand:'ze', cats:['saas'],
+   desc:'Full-suite market terminal for independent investors. Real-time data, strategy backtesting, trade journaling.', tags:['ze'], link:'#/project/retailtrader'},
+  {title:'LAMP — Large Area Multiverse Protocol', status:'concept', brand:'ze', cats:['saas'],
+   desc:'Proximity-based social metaverse engine. Spatial backbone of the Zengin.es Metaversery concept.', tags:['ze'], link:'#/project/lamp'},
+  {title:'Key-J', status:'shipped', brand:'ze', cats:['saas','creative'],
+   desc:'Electron system-wide keystroke-to-audio engine. C Major scale, WAV export, Melody Lock feature. Full desktop app.', tags:['ze','cr']},
+  {title:'Pixel Staff', status:'shipped', brand:'ze', cats:['saas','creative'],
+   desc:'Infinite scrolling piano roll. NES aesthetic, WAV/.m4r export. Standalone music notation tool.', tags:['ze','cr']},
+  {title:'PROMPT Discord Bot', status:'shipped', brand:'ze', cats:['saas'],
+   desc:'Discord bot for the PROMPT party game. Full Git/GitHub setup, command system, game logic.', tags:['ze']},
+  {title:'Zengine Arcade (Zengin.es)', status:'inprog', brand:'ze', cats:['saas'],
+   desc:'Unified gaming metaversery. Digital hangouts, open mic auditoria, multiplayer originals at zengin.es.', tags:['ze'], link:'#/arcade'},
+  {title:'Affiliate Review Generator', status:'shipped', brand:'ze', cats:['saas','ai'],
+   desc:'Gemini 2.0 Flash-powered product review generator for zyngyn.com. Expert-toned top-5 lists, ~20 review pages/day, affiliate link integration.', tags:['ze','ai']},
+  {title:'Windows 3.1 UI Wrapper', status:'shipped', brand:'ze', cats:['saas','creative'],
+   desc:'Retro windowed UI template for running apps in a Windows 3.1 aesthetic. Desktop environment simulation.', tags:['ze','cr']},
+  // ── ZENGINE HARDWARE ──────────────────────────────────────
+  {title:'Stream Sniper', status:'shipped', brand:'ze', cats:['hardware'],
+   desc:'Raspberry Pi 5 appliance monitoring Twitch. Wakes display when streamer goes live, returns to standby when offline. Python app, Setup Wizard, systemd service, one-command installer.', tags:['ze','hw'], link:'#/project/streamsniper'},
+  {title:'Stream Sniper N100', status:'shipped', brand:'ze', cats:['hardware'],
+   desc:'N100 mini PC variant of Stream Sniper using Streamlink + VLC + pygame. Alternative to RPi build for higher-performance targets.', tags:['ze','hw']},
+  {title:'Moonberry Pi', status:'inprog', brand:'ze', cats:['hardware'],
+   desc:'Raspberry Pi hardware platform engineered to pair with PlumHUD. Low-power, modular, always-on data bridge.', tags:['ze','hw'], link:'#/project/moonberrypi'},
+  {title:'Rhubarb Pi', status:'concept', brand:'ze', cats:['hardware'],
+   desc:'Deceptive honeypot security system. Presents as a vulnerable target while logging and analyzing every intrusion attempt.', tags:['ze','hw'], link:'#/project/rhubarbpi'},
+  {title:'Wild Lettuce Pi', status:'concept', brand:'ze', cats:['hardware'],
+   desc:'Automated digital growth system on Raspberry Pi 5. Smart scheduling, signal monitoring, deliberate engagement automation.', tags:['ze','hw'], link:'#/project/wildlettuce'},
+  {title:'PiForge', status:'concept', brand:'ze', cats:['hardware','saas'],
+   desc:'DIY OS customization platform. Deep system control made approachable for beginners; full depth available for power users.', tags:['ze','hw'], link:'#/project/piforge'},
+  {title:'Moonbeam', status:'concept', brand:'ze', cats:['hardware'],
+   desc:'Bitcoin nerdminer and blockchain learning device. Educational mining hardware for understanding proof-of-work.', tags:['ze','hw']},
+  // ── ZENGINE CREATIVE / AI TOOLS ───────────────────────────
+  {title:'Custom Gaming Mouse', status:'inprog', brand:'ze', cats:['hardware','creative'],
+   desc:'Customized PC gaming-focused mouse. Ergonomic modification and custom firmware project — not an OEM product.', tags:['ze','hw','cr']},
+  {title:'Zengine Services Portal', status:'shipped', brand:'ze', cats:['saas'],
+   desc:'This site. Single-file HTML SPA with hash router, prismatic glass design system, 109+ services, portfolio attribution, and Zengin.es integration.', tags:['ze']},
+  {title:'Zengine Review Site (zyngyn.com)', status:'inprog', brand:'ze', cats:['saas','ai'],
+   desc:'Affiliate/ad revenue site targeting ~20 expert review pages per day. Gemini-powered content generation pipeline.', tags:['ze','ai']},
+  // ── SYMPOLAR CLIENT WORK ──────────────────────────────────
+  {title:'Lady J Tattoo Parlor', status:'shipped', brand:'sy', cats:['sympolar'],
+   desc:'Single-page HTML site for Lady J Tattoo Parlor, Columbus OH. SymPolar client build under brand standards.', tags:['sy']},
+  {title:'SymPolar Client Intake Form', status:'shipped', brand:'sy', cats:['sympolar'],
+   desc:'10-section progressive intake form with E-SIGN legal agreement. Google Apps Script backend, FileReader race condition fix, Promise-wrapped base64 pipeline.', tags:['sy']},
+  {title:'SymPolar Landing Page (sympolar.github.io/new)', status:'shipped', brand:'sy', cats:['sympolar'],
+   desc:'Main SymPolar brand page. Mobile optimization, broken vertical flow fixes, Cloudflare obfuscation removal, form/signup widget cleanup.', tags:['sy']},
+  {title:'SymPolar PowerPoint Deck', status:'shipped', brand:'sy', cats:['sympolar','creative'],
+   desc:'Branded presentation deck for SymPolar LLC. Client-facing pitch and services overview.', tags:['sy','cr']},
+  {title:'SymPolar Two-Tier Intake System', status:'shipped', brand:'sy', cats:['sympolar'],
+   desc:'Level 1 quote capture + Level 2 full onboarding with 11 steps, state privacy law checkboxes, and E-SIGN authorization.', tags:['sy']}
+];
+
+// ─── SERVICES DATA ───────────────────────────────────────────
+// READS: (static)
+// WRITES: (none)
+var PORTALS_DATA = [
+  {id:'docs', label:'Documentation & Prompt', icon:'📝', bannerClass:'violet', hoverClass:'h-cy', badgeClass:'bd-cy',
+   desc:'Professional documentation, technical writing, prompt engineering, and AI workflow systems.',
+   services:[
+    {icon:'📄',title:'Professional Documentation',        meta:'Technical manuals, SOPs, onboarding guides. Clear, structured, built to scale.',                                    badge:'Core',badgeClass:'bd-cy'},
+    {icon:'🤖',title:'Custom Prompt Engineering',         meta:'LLM instruction logic and constraint engineering. Production-grade prompt libraries for consistent results.'},
+    {icon:'🧠',title:'Prompt Library Licensing',          meta:'White-label AI instruction packs. Branded, licensed prompt sets for resale or internal deployment.'},
+    {icon:'📑',title:'AI-Driven Business Plan Generation',meta:'20–30 page professional plans: executive summary, SWOT, market analysis, financial projections.'},
+    {icon:'📝',title:'AI Prompt Optimization',            meta:'Help businesses refine AI use for internal reports, customer responses, and automated workflows.'},
+    {icon:'📚',title:'Training Manual Development',       meta:'SOP and onboarding documentation with visuals, checklists, and step-by-step flows.'},
+    {icon:'📖',title:'Technical Writing & API Docs',      meta:'Developer-facing docs, API references, and integration guides. Written for engineers.'},
+    {icon:'✍️',title:'Ghost-Writing (Reports & Whitepapers)',meta:'Executive-grade written content. Ready-to-publish reports and thought leadership pieces.'}
+   ]},
+  {id:'appgame', label:'Games & Apps', icon:'🎮', bannerClass:'green', hoverClass:'h-cy', badgeClass:'bd-cy',
+   desc:'2D/mobile game design, application architecture, interactive experience development, and consulting for indie studios.',
+   services:[
+    {icon:'🎯',title:'2D Game Design & Concept Development',  meta:'Full design documentation — mechanics, progression, narrative structure, level design briefs.',badge:'Core',badgeClass:'bd-cy'},
+    {icon:'📱',title:'Mobile Game Architecture',              meta:'Design and technical scoping for mobile-first games. Touch mechanics, monetization, retention loops.'},
+    {icon:'🕹️',title:'Game Scenario & Level Design',         meta:'Simulation realism consulting. Narrative coherence audits, mechanic refinement, immersion assessment.'},
+    {icon:'🔬',title:'Creative Systems Audit',               meta:'Deep audit of engagement loops, narrative integrity, mechanic consistency, and competitive gaps.'},
+    {icon:'🎪',title:'Application UX/UI Design Consulting',  meta:'User flow architecture and interface design consulting for web and mobile applications.'},
+    {icon:'🚀',title:'App Feature Scoping & Roadmapping',    meta:'Structured product roadmap. Feature prioritization, MVP definition, phased delivery planning.'},
+    {icon:'📊',title:'Creator Analytics Dashboard',          meta:'Custom KPI tracking for content creators and game developers. Growth and revenue attribution.'},
+    {icon:'🎮',title:'Game Kickstarter Launch Strategy',     meta:'Campaign planning, backer tiers, stretch goal design, and day-one momentum frameworks.'},
+    {icon:'💬',title:'Discord Community System Build',       meta:'Roles, bots, engagement loops, and moderation infrastructure for game communities.'},
+    {icon:'📺',title:'Patreon / Membership Architecture',    meta:'Recurring creator revenue structuring. Tier design, content calendar, community engagement.'}
+   ]},
+  {id:'growth', label:'Growth & AI', icon:'📈', bannerClass:'green', hoverClass:'h-cy', badgeClass:'bd-cy',
+   desc:'AI integration, marketing automation, paid media, analytics, and growth systems that scale without adding headcount.',
+   services:[
+    {icon:'⚙️',title:'AI Workflow Automation (Zapier/Make)',meta:'Inter-app connectivity. Automated lead→CRM→follow-up chains. Eliminate 80% of manual tasks.'},
+    {icon:'🦾',title:'Simple AI Agent Build',               meta:'Task-specific autonomous logic. Prompt-driven agents running independently 24/7.'},
+    {icon:'♻️',title:'AI Content Repurposing Engine',       meta:'One asset → 10+ repurposed pieces across Reels, X threads, TikToks, newsletters.'},
+    {icon:'🕵️',title:'Competitor Intelligence Package',     meta:'Real-time market gap and sentiment analysis. Pricing shifts, content gaps, weakness mapping.'},
+    {icon:'📢',title:'Paid Media Strategy',                 meta:'Campaign activation and creative iteration across Search, Social, and Programmatic.'},
+    {icon:'🔄',title:'Conversion Rate Optimization (CRO)', meta:'Audits, A/B testing frameworks, user flow analysis, and conversion growth modeling.'},
+    {icon:'📊',title:'P&L Dashboarding',                   meta:'Visual revenue and KPI analytics. Real-time interactive dashboard — margins, burn rate, forecasts.'},
+    {icon:'📉',title:'Sales Funnel Audit',                  meta:'Friction point and leak detection with fixes and prioritized roadmap for revenue recovery.'},
+    {icon:'📩',title:'Newsletter System Setup',             meta:'Owned audience retention funnel via Beehiiv/Substack. Welcome sequences and segmentation.'},
+    {icon:'💬',title:'SMS Marketing Funnels',              meta:'High-open-rate text campaign architecture. Welcome, nurture, promo — 98%+ open rates.'},
+    {icon:'🎯',title:'Ad Creative Concepting',             meta:'5–10 ad concepts for Meta/Google. Copy, visuals, targeting notes to lower CPC and boost ROAS.'},
+    {icon:'🔎',title:'Lead Research & Enrichment',         meta:'Prospect profiling and outreach prep. Enriched spreadsheets with emails, LinkedIn, pain points.'}
+   ]},
+  {id:'legal', label:'Legal & Compliance', icon:'⚖️', bannerClass:'blue', hoverClass:'h-cy', badgeClass:'bd-cy',
+   desc:'Independent legal document preparation, e-notary, registered agent services, bookkeeping, and compliance management.',
+   services:[
+    {icon:'📄',title:'Independent Legal Document Prep',      meta:'Submission-ready Pro Se forms, contracts, LLCs, trademarks — without $5k+ attorney bills.'},
+    {icon:'✍️',title:'Remote Notary Public (E-Notary)',      meta:'Secure biometric identity verification and remote signing. Legally binding with audit trail.'},
+    {icon:'🏢',title:'Virtual Registered Agent Services',    meta:'Corporate privacy proxy. Dedicated address keeping personal info off public records.'},
+    {icon:'🔍',title:'Regulatory Compliance Review',         meta:'Plain-language gap analysis with recommended rewrites for T&Cs, policies, and docs.'},
+    {icon:'📅',title:'Annual Corporate Filing Management',   meta:'Recurring good standing automation. State annual reports, franchise taxes, renewals.'},
+    {icon:'📜',title:'Operating Agreement Engineering',      meta:'Governance mapping. Custom LLC/Corp agreements with built-in dispute protections.'},
+    {icon:'🔐',title:'NDA Vaulting',                         meta:'IP protection shield. Tailored, enforceable NDAs — mutual or one-way.'},
+    {icon:'📒',title:'Certified Bookkeeping',                meta:'Financial data integrity. Balanced monthly ledgers, categorized transactions.'},
+    {icon:'⚠️',title:'Legal Disclaimer Drafting',            meta:'Site-specific liability protection. Custom disclaimers for medical, financial, and IP pages.'},
+    {icon:'📋',title:'Compliance Consulting',                meta:'Annual filings, permit renewals, and state-specific good standing for small businesses.'}
+   ]},
+  {id:'creative', label:'Creative & Design', icon:'🎨', bannerClass:'red', hoverClass:'h-ch', badgeClass:'bd-cy',
+   desc:'Brand identity, content creation, AI image libraries, faceless YouTube strategy, presentation design, and creative systems.',
+   services:[
+    {icon:'✏️',title:'Brand Identity Design (Logo & System)',meta:'Full kit: logos, palette, typography, icons, mood board, usage guide. Digital-first.'},
+    {icon:'📋',title:'CV/Resume Architecture',               meta:'ATS-optimized personal branding. Keyword-rich resume and visual variants for different roles.'},
+    {icon:'💼',title:'LinkedIn Profile Optimization',        meta:'Rewritten headline, bio, experience, custom banner, featured section, keyword strategy.'},
+    {icon:'📹',title:'Faceless Scripting & YouTube Strategy',meta:'Hook library, bridges, CTAs, upload roadmap, thumbnail ideas, SEO titles. No on-camera required.'},
+    {icon:'🎞️',title:'Presentation Design (Decks)',          meta:'Polished 20–40 slide decks. One-idea-per-slide flow, visuals, and speaker notes.'},
+    {icon:'📦',title:'Digital Product Packaging',            meta:'eBooks, template packs, checklist suites, mini-course outlines. Turn expertise into passive income.'},
+    {icon:'🖼️',title:'AI Image Prompt Libraries',           meta:'Niche-specific visual asset generation prompts for Midjourney and Stable Diffusion.'},
+    {icon:'🎙️',title:'Podcast-to-Shorts Conversion',        meta:'5–15 edited shorts with captions, hooks, B-roll suggestions from one episode.'},
+    {icon:'🔊',title:'Personal Brand Voice Frameworks',      meta:"Voice bible with tone, phrasing, dos/don'ts, and sample posts. Scales without losing authenticity."},
+    {icon:'🎬',title:'Influencer Media Kits',               meta:'Branded PDF/digital kits with stats, case studies, rates, and testimonials.'}
+   ]},
+  {id:'realestate', label:'Real Estate Media', icon:'🏠', bannerClass:'gold', hoverClass:'h-cy', badgeClass:'bd-cy',
+   desc:'HDR photography, cinematic walkthroughs, drone aerials, 3D virtual tours, and Airbnb-optimized shoot packages.',
+   services:[
+    {icon:'📷',title:'Real Estate Photography (HDR)',         meta:'MLS-ready edited interior/exterior image sets.',                                                     badge:'Popular',badgeClass:'bd-cy'},
+    {icon:'🎬',title:'Real Estate Videography (Walkthrough)', meta:'60–120 sec cinematic walkthrough optimized for Zillow and Reels.'},
+    {icon:'🚁',title:'Drone Aerial Property Capture',        meta:'FAA-compliant 4K aerial photos/video. Expands perceived property scale.'},
+    {icon:'🏛️',title:'3D Virtual Tour Setup',                meta:'Spatial digital twin capture. Clickable 3D walk-throughs.'},
+    {icon:'🛋️',title:'Short-Term Rental Optimization Shoot', meta:'Airbnb conversion imagery. Listing-optimized photo and copy combo.'},
+    {icon:'📸',title:'Realtor Personal Brand Shoot',         meta:'Authority positioning visual kit. Headshots, lifestyle, and banner-ready images.'},
+    {icon:'📐',title:'Real Estate Floor Plan Digitization',  meta:'Physical measurements → digital floor plan PDF.'},
+    {icon:'🏗️',title:'Construction Progress Documentation',  meta:'Timeline visual archiving. Before/after portfolio and milestone albums for builders.'},
+    {icon:'🏡',title:'Builder Portfolio Development',        meta:'Full online portfolio and image set for architects and contractors.'},
+    {icon:'🗺️',title:'Small Business Location Photography',  meta:'Google-ready images for GBP. Improves local ranking and trust instantly.'},
+    {icon:'🏘️',title:'Property Description Engine',         meta:'Lifestyle-focused high-conversion listing copy. SEO-optimized descriptions.'}
+   ]},
+  {id:'systems', label:'Systems & Ops', icon:'⚙️', bannerClass:'violet', hoverClass:'h-cy', badgeClass:'bd-cy',
+   desc:'Project management, workspace architecture, database ops, customer service systems, reputation management, SaaS audits.',
+   services:[
+    {icon:'📋',title:'Notion Workspace Architecture',       meta:'Custom Notion hub with databases, templates, and automations. Centralize ops.'},
+    {icon:'🗄️',title:'Airtable Database Management',       meta:'Relational data tracking and automation. CRM and inventory interfaces.'},
+    {icon:'📱',title:'Project Management Coordination',    meta:'Trello, Asana, Monday.com — keeping creative teams on track, on budget, on time.'},
+    {icon:'💬',title:'Customer Service Flow Scripting',    meta:'Logic trees for support automation. Flowcharts and scripts for chatbots and email.'},
+    {icon:'⭐',title:'Online Review Acquisition System',   meta:'Automated feedback loop. SMS/email review flow to increase 5-star frequency.'},
+    {icon:'🛡️',title:'Crisis Messaging Strategy',         meta:'Public narrative containment. Response framework to protect brand perception.'},
+    {icon:'📡',title:'Reputation Monitoring Dashboard',    meta:'Brand sentiment tracking dashboard to prevent surprise backlash.'},
+    {icon:'💰',title:'Digital Decluttering (SaaS Audit)',  meta:'Subscription rationalization. Cost-saving report cutting $500–$2000/month waste.'},
+    {icon:'📐',title:'Course Module Architecture',         meta:'Structured online learning. Module breakdown, lesson templates, quizzes, progression.'},
+    {icon:'📖',title:'E-book Formatting (KDP)',            meta:'Technical publishing setup for Amazon KDP. Ready-to-publish files.'},
+    {icon:'💻',title:'SWOT Intelligence Reports',         meta:'Competitive vulnerability deep-dive. Evidence-based threats and opportunities.'}
+   ]}
+];
+
+// ─── ROUTER ──────────────────────────────────────────────────
+// READS: location.hash
+// WRITES: app.innerHTML, nav aria-current attributes
+var app = document.getElementById('app');
+
+function navigate() {
+  var hash = location.hash || '#/home';
+  var path = hash.slice(1);
+
+  if (path.startsWith('/project/')) {
+    renderProject({id: path.split('/')[2]});
+    setActive(null);
+    return;
+  }
+
+  var views = {
+    '/home':      renderHome,
+    '/about':     renderAbout,
+    '/arcade':    renderArcade,
+    '/portfolio': renderPortfolio,
+    '/projects':  renderProjects,
+    '/services':  renderServices,
+    '/contact':   renderContact
+  };
+
+  var fn = views[path] || renderHome;
+  fn();
+  setActive(path);
+  window.scrollTo(0, 0);
+  app.focus();
+}
+
+function setActive(raw) {
+  document.querySelectorAll('.nav-menu a[data-link]').forEach(function(a) {
+    a.setAttribute('aria-current', a.getAttribute('href') === ('#' + raw) ? 'page' : 'false');
+  });
+}
+
+window.addEventListener('hashchange', navigate);
+window.addEventListener('DOMContentLoaded', function() {
+  var year = new Date().getFullYear();
+  document.getElementById('year').textContent = year;
+  document.querySelectorAll('.wm-year').forEach(function(el) { el.textContent = year; });
+  navigate();
+});
+
+// ─── VIEWS ───────────────────────────────────────────────────
+
+// READS: tpl-home template
+// WRITES: app.innerHTML
+function renderHome() {
+  app.innerHTML = document.getElementById('tpl-home').innerHTML;
+}
+
+// READS: tpl-about template
+// WRITES: app.innerHTML
+function renderAbout() {
+  app.innerHTML = document.getElementById('tpl-about').innerHTML;
+}
+
+// READS: tpl-arcade template
+// WRITES: app.innerHTML
+function renderArcade() {
+  app.innerHTML = document.getElementById('tpl-arcade').innerHTML;
+}
+
+// READS: tpl-portfolio template, PORTFOLIO_ITEMS
+// WRITES: app.innerHTML, pfGrid innerHTML
+function renderPortfolio() {
+  app.innerHTML = document.getElementById('tpl-portfolio').innerHTML;
+
+  var activeFilter = 'all';
+  var grid = document.getElementById('pfGrid');
+  var filters = document.getElementById('pfFilters');
+
+  function buildGrid(filter) {
+    var items = PORTFOLIO_ITEMS;
+    if (filter !== 'all') {
+      items = PORTFOLIO_ITEMS.filter(function(item) {
+        if (filter === 'shipped') return item.status === 'shipped';
+        if (filter === 'inprog')  return item.status === 'inprog';
+        if (filter === 'concept') return item.status === 'concept';
+        if (filter === 'sympolar') return item.brand === 'sy';
+        return item.cats.indexOf(filter) !== -1;
+      });
+    }
+    var html = '';
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var stClass = item.status === 'shipped' ? 'st-shipped' : (item.status === 'inprog' ? 'st-inprog' : 'st-concept');
+      var stLabel = item.status === 'shipped' ? 'Shipped' : (item.status === 'inprog' ? 'In Progress' : 'Concept');
+      var brandClass = item.brand === 'ze' ? 'zengine' : 'sympolar';
+      var isLink = item.link ? 'data-link="' + escH(item.link) + '"' : '';
+      html += '<div class="pf-card ' + brandClass + '" ' + isLink + '>';
+      html += '<div class="pf-brand-strip"><span class="pf-brand-dot ' + item.brand + '"></span>';
+      html += item.brand === 'ze' ? 'Zengine' : 'SymPolar';
+      html += '</div>';
+      html += '<div class="pf-header"><div class="pf-title">' + escH(item.title) + '</div>';
+      html += '<span class="pf-status ' + stClass + '">' + stLabel + '</span></div>';
+      html += '<div class="pf-desc">' + escH(item.desc) + '</div>';
+      html += '<div class="pf-tags">';
+      for (var t = 0; t < item.tags.length; t++) {
+        var tClass = item.tags[t];
+        html += '<span class="pf-tag ' + tClass + '">' + tagLabel(tClass) + '</span>';
+      }
+      html += '</div></div>';
+    }
+    grid.innerHTML = html || '<p style="color:var(--muted);padding:2rem 0">No projects in this category yet.</p>';
+    // Wire clickable cards
+    grid.querySelectorAll('.pf-card[data-link]').forEach(function(card) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function() {
+        var dest = card.getAttribute('data-link');
+        if (dest.charAt(0) === '#') {
+          location.hash = dest;
+        } else {
+          var win = window.open(dest, '_blank', 'noopener,noreferrer');
+          if (win) win.opener = null;
+        }
+      });
+    });
+  }
+
+  buildGrid('all');
+
+  filters.addEventListener('click', function(e) {
+    var btn = e.target.closest('.pf-filter');
+    if (!btn) return;
+    var f = btn.dataset.filter;
+    if (f === activeFilter) return;
+    activeFilter = f;
+    filters.querySelectorAll('.pf-filter').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    buildGrid(f);
+  });
+}
+
+// Map short tag codes to readable labels
+// READS: code string
+// WRITES: (returns string)
+function tagLabel(code) {
+  var map = {ze:'Zengine',sy:'SymPolar',hw:'Hardware',gm:'Game',ai:'AI',cr:'Creative'};
+  return map[code] || code;
+}
+
+// READS: tpl-projects template, PROJECTS, PROJECT_GRID_IDS
+// WRITES: app.innerHTML, proj-tiles innerHTML
+function renderProjects() {
+  app.innerHTML = document.getElementById('tpl-projects').innerHTML;
+  var el = document.getElementById('proj-tiles');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < PROJECT_GRID_IDS.length; i++) {
+    var p = PROJECTS[PROJECT_GRID_IDS[i]];
+    if (!p) continue;
+    html += '<article class="tile" data-nav="#/project/' + escH(p.id) + '" title="View ' + escH(p.title) + '">';
+    html += '<div class="thumb" style="background-image:url(\'' + p.logo + '\')"></div>';
+    html += '<div class="tbody"><h3>' + escH(p.title) + '</h3><p>' + escH(p.desc) + '</p></div>';
+    html += '</article>';
+  }
+  el.innerHTML = html;
+  el.querySelectorAll('.tile').forEach(function(t) {
+    t.addEventListener('click', function() { location.hash = t.dataset.nav; });
+  });
+}
+
+// READS: tpl-project template, PROJECTS[id]
+// WRITES: app.innerHTML, multiple child elements
+function renderProject(opts) {
+  var p = PROJECTS[opts.id];
+  if (!p) {
+    app.innerHTML = '<section class="page card"><p>Project not found. <a href="#/projects" class="btn cyan" style="display:inline-flex;margin-top:.75rem">← All Projects</a></p></section>';
+    return;
+  }
+  app.innerHTML = document.getElementById('tpl-project').innerHTML;
+
+  var bgBlur = document.getElementById('projBgBlur');
+  if (bgBlur) bgBlur.style.backgroundImage = 'url(\'' + p.hero + '\')';
+
+  var logo = document.getElementById('projLogo');
+  if (logo) { logo.src = p.logo; logo.alt = p.title + ' logo'; }
+
+  var titleEl = document.getElementById('projTitle');
+  if (titleEl) titleEl.textContent = p.title;
+
+  var descEl = document.getElementById('projDesc');
+  if (descEl) descEl.textContent = p.desc;
+
+  var tagsEl = document.getElementById('projTags');
+  if (tagsEl) {
+    var tagHtml = '';
+    var tags = p.tags || [];
+    for (var i = 0; i < tags.length; i++) {
+      tagHtml += '<span class="tag">' + escH(tags[i]) + '</span>';
+    }
+    tagsEl.innerHTML = tagHtml;
+  }
+
+  var linksEl = document.getElementById('projLinks');
+  if (linksEl) {
+    var linkHtml = '';
+    var links = p.links || [];
+    for (var j = 0; j < links.length; j++) {
+      linkHtml += '<a class="btn cyan" href="' + escH(links[j].href) + '">' + escH(links[j].label) + ' →</a>';
+    }
+    linksEl.innerHTML = linkHtml;
+  }
+
+  var bodyEl = document.getElementById('projBody');
+  if (bodyEl) bodyEl.innerHTML = p.body || '';
+}
+
+// READS: tpl-services template, PORTALS_DATA
+// WRITES: app.innerHTML, portal tabs, panels, search
+function renderServices() {
+  app.innerHTML = document.getElementById('tpl-services').innerHTML;
+
+  var tabsEl    = document.getElementById('portalTabs');
+  var panelsEl  = document.getElementById('portalPanels');
+  var activePortal = PORTALS_DATA[0].id;
+
+  var tabHtml = '';
+  for (var i = 0; i < PORTALS_DATA.length; i++) {
+    var p = PORTALS_DATA[i];
+    tabHtml += '<button class="portal-tab' + (i === 0 ? ' active' : '') + '" data-portal="' + p.id + '" aria-pressed="' + (i === 0) + '">';
+    tabHtml += '<span>' + p.icon + '</span> ' + p.label + ' <span class="tab-count">' + p.services.length + '</span></button>';
+  }
+  tabsEl.innerHTML = tabHtml;
+
+  var panelHtml = '';
+  for (var pi = 0; pi < PORTALS_DATA.length; pi++) {
+    var portal = PORTALS_DATA[pi];
+    panelHtml += '<div class="portal-panel' + (pi === 0 ? ' visible' : '') + '" id="panel-' + portal.id + '">';
+    panelHtml += '<div class="portal-banner ' + portal.bannerClass + '" data-icon="' + portal.icon + '">';
+    panelHtml += '<h3>' + portal.icon + ' ' + portal.label + '</h3><p>' + portal.desc + '</p></div>';
+    panelHtml += '<div class="service-grid">';
+    for (var si = 0; si < portal.services.length; si++) {
+      var svc = portal.services[si];
+      panelHtml += '<div class="svc-card ' + portal.hoverClass + '">';
+      panelHtml += '<div class="svc-title"><span class="svc-icon">' + svc.icon + '</span>' + escH(svc.title) + '</div>';
+      panelHtml += '<div class="svc-meta">' + escH(svc.meta) + '</div>';
+      if (svc.badge) panelHtml += '<span class="svc-badge ' + (svc.badgeClass || portal.badgeClass) + '">' + svc.badge + '</span>';
+      panelHtml += '</div>';
+    }
+    panelHtml += '</div></div>';
+  }
+  panelsEl.innerHTML = panelHtml;
+
+  tabsEl.addEventListener('click', function(e) {
+    var btn = e.target.closest('.portal-tab');
+    if (!btn) return;
+    var id = btn.dataset.portal;
+    if (id === activePortal) return;
+    activePortal = id;
+    tabsEl.querySelectorAll('.portal-tab').forEach(function(t) { t.classList.remove('active'); t.setAttribute('aria-pressed','false'); });
+    btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+    panelsEl.querySelectorAll('.portal-panel').forEach(function(panel) { panel.classList.remove('visible'); });
+    var target = document.getElementById('panel-' + id);
+    if (target) target.classList.add('visible');
+  });
+
+  var searchInput   = document.getElementById('svcSearch');
+  var searchResults = document.getElementById('searchResults');
+
+  searchInput.addEventListener('input', function() {
+    var q = searchInput.value.trim().toLowerCase();
+    if (!q) {
+      searchResults.style.display = 'none';
+      tabsEl.style.display = '';
+      panelsEl.style.display = '';
+      return;
+    }
+    tabsEl.style.display   = 'none';
+    panelsEl.style.display  = 'none';
+    searchResults.style.display = '';
+
+    var matches = [];
+    for (var pi = 0; pi < PORTALS_DATA.length; pi++) {
+      var portal = PORTALS_DATA[pi];
+      for (var si = 0; si < portal.services.length; si++) {
+        var svc = portal.services[si];
+        if (svc.title.toLowerCase().indexOf(q) !== -1 || svc.meta.toLowerCase().indexOf(q) !== -1) {
+          matches.push({portal: portal, svc: svc});
+        }
+      }
+    }
+
+    if (!matches.length) {
+      searchResults.innerHTML = '<div class="card" style="text-align:center;padding:2rem"><p style="color:var(--muted)">No services found for "<strong>' + escH(q) + '</strong>"</p><a class="btn cyan" href="#/contact">Request a Custom Service →</a></div>';
+    } else {
+      var rHtml = '<p style="color:var(--muted);font-size:.84rem;margin-bottom:.85rem">' + matches.length + ' result' + (matches.length !== 1 ? 's' : '') + ' for "<strong style=\'color:var(--txt)\'>' + escH(q) + '</strong>"</p><div class="service-grid">';
+      for (var mi = 0; mi < matches.length; mi++) {
+        var m = matches[mi];
+        rHtml += '<div class="svc-card ' + m.portal.hoverClass + '">';
+        rHtml += '<div style="font-size:.66rem;color:var(--muted);font-family:var(--font-display);font-weight:700;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.08em">' + m.portal.icon + ' ' + m.portal.label + '</div>';
+        rHtml += '<div class="svc-title"><span class="svc-icon">' + m.svc.icon + '</span>' + escH(m.svc.title) + '</div>';
+        rHtml += '<div class="svc-meta">' + escH(m.svc.meta) + '</div></div>';
+      }
+      rHtml += '</div>';
+      searchResults.innerHTML = rHtml;
+    }
+  });
+}
+
+// READS: tpl-contact template
+// WRITES: app.innerHTML, contact form state
+// DEPENDS ON: escH
+function renderContact() {
+  app.innerHTML = document.getElementById('tpl-contact').innerHTML;
+
+  var submit   = document.getElementById('cf-submit');
+  var errEl    = document.getElementById('cf-error');
+  var formWrap = document.getElementById('contactFormWrap');
+  var success  = document.getElementById('contactSuccess');
+
+  if (!submit) return;
+
+  // DECISION: Contact form is client-side only — no backend wired.
+  // Shows success UI on valid submission but does NOT transmit data.
+  // Wire to GAS or mailto backend in next iteration.
+  submit.addEventListener('click', function() {
+    var name    = document.getElementById('cf-name').value.trim();
+    var email   = document.getElementById('cf-email').value.trim();
+    var service = document.getElementById('cf-service').value;
+    var msg     = document.getElementById('cf-message').value.trim();
+
+    if (!name || !email || !service || !msg) {
+      errEl.textContent = 'Please fill in all required fields before submitting.';
+      errEl.style.display = 'block';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errEl.textContent = 'Please enter a valid email address.';
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display  = 'none';
+    formWrap.style.display = 'none';
+    success.style.display  = 'block';
+  });
+}
+
+// ─── UTILITIES ───────────────────────────────────────────────
+
+// Escape HTML entities — prevents XSS in dynamic innerHTML
+// READS: s (string)
+// WRITES: (returns escaped string)
+function escH(s) {
+  var map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+  return String(s || '').replace(/[&<>"']/g, function(c) { return map[c]; });
+}
+
+// Konami code easter egg — prismatic flash
+(function() {
+  var seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  var buf = [];
+  window.addEventListener('keydown', function(e) {
+    buf.push(e.key);
+    buf.splice(-(seq.length) - 1, buf.length - seq.length);
+    var match = true;
+    for (var i = 0; i < seq.length; i++) {
+      if (!buf[i] || buf[i].toLowerCase() !== seq[i].toLowerCase()) { match = false; break; }
+    }
+    if (match) {
+      document.body.style.transition = 'filter .4s';
+      document.body.style.filter = 'hue-rotate(180deg) saturate(200%) brightness(1.1)';
+      setTimeout(function() { document.body.style.filter = ''; }, 2000);
+    }
+  });
+})();
+</script>
+</body>
+</html>
